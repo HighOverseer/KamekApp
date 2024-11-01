@@ -38,4 +38,13 @@
     <string name="riwayat_diagnosis">Riwayat Diagnosis</string>
     <string name="kalender">Kalender</string>
     <string name="berita_mingguan_kamek">Berita Mingguan Kamek</string>
+    <string name="ambil_foto_penyakit_pada_tanaman">Ambil Foto Penyakit Pada tanaman</string>
+    <string name="tekan_gambar_di_atas">Tekan Gambar di Atas untuk memfoto tanaman dan biarkan aplikasi menganalisis serta memberikan solusinya.</string>
+    <string name="cari_histori_hasil_diagnosis">Cari Histori Hasil Diagnosis dan Harga Jual Disini</string>
+    <string name="masukkan_password_kamu_disini">Masukkan Password Kamu disini</string>
+    <string name="semua">Semua</string>
+    <string name="hari_ini">Hari Ini</string>
+    <string name="minggu_ini">Minggu Ini</string>
+    <string name="bulan_ini">Bulan Ini</string>
+    <string name="rp17_000">Rp17.000</string>
 </resources>

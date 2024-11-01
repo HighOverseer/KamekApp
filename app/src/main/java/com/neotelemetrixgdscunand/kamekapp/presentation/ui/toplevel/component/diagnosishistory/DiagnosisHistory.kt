@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,22 +37,23 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 
 @Composable
-fun WeeklyNews(
+fun DiagnosisHistory(
     modifier: Modifier = Modifier,
-    item: WeeklyNewsItem
+    item: DiagnosisHistoryItem
 ) {
     val cardModifier = remember {
         modifier
             .fillMaxWidth()
+            //.height(110.dp)
             .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            .height(110.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-            .padding(12.dp)
+            .padding(16.dp)
     }
 
     val imageModifier = remember {
         Modifier
-            .width(104.dp)
+            .width(103.dp)
+            .height(92.dp)
             .clip(RoundedCornerShape(8.dp))
     }
 
@@ -84,13 +86,18 @@ fun WeeklyNews(
             Column {
                 Text(
                     item.title,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        lineHeight = 16.sp,
-                        letterSpacing = 0.01.sp
-                    ),
+                    style = MaterialTheme.typography.titleMedium,
                     color = Black10,
-                    maxLines = 3,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    text = item.predictedPrice,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Black10
                 )
 
                 Spacer(
@@ -102,7 +109,7 @@ fun WeeklyNews(
                 ) {
                     Image(
                         imageVector = ImageVector
-                            .vectorResource(R.drawable.ic_clock),
+                            .vectorResource(R.drawable.ic_calendar),
                         contentDescription = null
                     )
 
@@ -123,9 +130,9 @@ fun WeeklyNews(
 
 @Preview
 @Composable
-private fun WeeklyNewsPreview() {
+private fun DiagnosisHistoryPreview() {
     KamekAppTheme {
-        WeeklyNews(item = getDummyWeeklyNewsItems().first())
+        DiagnosisHistory(item = getDummyDiagnosisHistoryItems().first())
     }
 
 }

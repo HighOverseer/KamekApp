@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,11 +35,13 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItem
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.getDummyDiagnosisHistoryItems
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiagnosisHistory(
+fun HomeDiagnosisHistory(
     modifier: Modifier = Modifier,
     item: DiagnosisHistoryItem
 ) {
@@ -125,7 +125,7 @@ fun DiagnosisHistory(
 private fun DiagnosisHistoryPreview() {
     KamekAppTheme {
         val items = getDummyDiagnosisHistoryItems()
-        DiagnosisHistory(item = items[0])
+        HomeDiagnosisHistory(item = items[0])
     }
 
 }

@@ -134,6 +134,7 @@ fun LoginContent(
                 title = stringResource(R.string.email),
                 interactionSource = usernameInteractionSource,
                 onValueChange = onUsernameChange,
+                hintText = stringResource(R.string.masukan_email_kamu_disini),
                 value = username,
                 isFocused = isUsernameTextFieldFocused
             )
@@ -147,6 +148,7 @@ fun LoginContent(
                 interactionSource = passwordInteractionSource,
                 onValueChange = onPasswordChange,
                 value = password,
+                hintText = stringResource(R.string.masukkan_password_kamu_disini),
                 isFocused = isPasswordTextFieldFocused,
                 visualTransformation = if(isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
