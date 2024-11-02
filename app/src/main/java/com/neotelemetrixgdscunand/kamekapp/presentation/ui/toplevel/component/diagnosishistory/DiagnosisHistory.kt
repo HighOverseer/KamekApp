@@ -43,9 +43,6 @@ fun DiagnosisHistory(
 ) {
     val cardModifier = remember {
         modifier
-            .fillMaxWidth()
-            //.height(110.dp)
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(16.dp)
     }

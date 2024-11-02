@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon50
@@ -134,9 +135,10 @@ fun HomeHeaderSection(modifier: Modifier = Modifier) {
                 Box(
                     modifier = circleImageModifier
                 ){
-                    Image(
+                    AsyncImage(
                         alignment = Alignment.Center,
-                        painter = painterResource(R.drawable.dummy_profile),
+                        model = R.drawable.dummy_profile,
+                        placeholder = painterResource(R.drawable.ic_camera),
                         contentDescription = stringResource(R.string.profile_photo),
                         contentScale = ContentScale.Crop
                     )

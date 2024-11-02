@@ -46,8 +46,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
     LazyColumn(
         modifier = modifier
-            .background(Grey90)
-            .fillMaxSize(),
+            .background(Grey90),
         state = parentListState
     ) {
 
@@ -55,7 +54,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             HomeHeaderSection()
 
             Spacer(Modifier.height(32.dp))
+        }
 
+        item {
             ExplorationSection()
 
             Spacer(Modifier.height(32.dp))
@@ -88,8 +89,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 state = diagnosisHistoryListState
             ) {
-
-                items(diagnosisHistoryItems, { it.id}){ item ->
+                items(diagnosisHistoryItems, {it.id}){ item ->
                     HomeDiagnosisHistory(item = item)
                 }
             }

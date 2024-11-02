@@ -1,82 +1,66 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.screen
 
-import android.widget.Space
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey68
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistory
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchHistoryCategory
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.TakePhotoSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.getDummyDiagnosisHistoryItems
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.dashedBorder
-import kotlin.math.max
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun DiagnosisScreen(modifier: Modifier = Modifier) {
+fun DiagnosisScreen(
+    modifier: Modifier = Modifier,
+    navigateToTakePhoto:() -> Unit = {},
+) {
 
     var searchQuery by remember {
         mutableStateOf("")
-    }
-
-    var isSearchBarActive by remember {
-        mutableStateOf(false)
     }
 
     val selectedSearchHistoryCategory by remember {
@@ -87,6 +71,12 @@ fun DiagnosisScreen(modifier: Modifier = Modifier) {
         getDummyDiagnosisHistoryItems()
     }
 
+    val diagnosisHistoryModifier = remember {
+        Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp)
+    }
+
     val listCategoryState = rememberLazyListState()
     val parentListState = rememberLazyListState()
 
@@ -95,6 +85,12 @@ fun DiagnosisScreen(modifier: Modifier = Modifier) {
     val firstCardToTitleRatio = 0.057f
 
     val secondHeadlineToCardMarginRatio = 0.0422f
+
+    val searchBarInteractionSource = remember {
+        MutableInteractionSource()
+    }
+
+    val isSearchBarFocused by searchBarInteractionSource.collectIsFocusedAsState()
 
     val cardModifier = remember {
         Modifier
@@ -116,12 +112,20 @@ fun DiagnosisScreen(modifier: Modifier = Modifier) {
             )
     }
 
-    BoxWithConstraints {
+    val stickyHeaderModifier = remember {
+        Modifier
+            .fillMaxWidth()
+            .background(color = Grey90)
+            .padding(horizontal =  16.dp)
+    }
+
+    BoxWithConstraints(
+        modifier = modifier
+    ){
         val maxHeight = this.maxHeight
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier,
             state = parentListState
         ) {
 
@@ -151,63 +155,14 @@ fun DiagnosisScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
-                    Card(
-                        modifier = cardModifier,
-                        shape = RoundedCornerShape(8.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White,
-                            contentColor = Color.White
-                        ),
-
-                        ) {
-
-                        Column(
-                            Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        shape = CircleShape,
-                                        color = Maroon55
-                                    )
-                                    .defaultMinSize(60.dp, 60.dp)
-                            ) {
-                                Image(
-                                    modifier = Modifier.align(Alignment.Center),
-                                    imageVector = ImageVector
-                                        .vectorResource(R.drawable.ic_open_camera),
-                                    contentDescription = null
-                                )
-                            }
-
-                            Spacer(Modifier.height(16.dp))
-
-                            Text(
-                                text = stringResource(R.string.ambil_foto_penyakit_pada_tanaman),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Maroon55
-                            )
-
-                            Spacer(Modifier.height(8.dp))
-
-                            Text(
-                                stringResource(R.string.tekan_gambar_di_atas),
-                                textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Grey60
-                            )
-                        }
-                    }
+                    TakePhotoSection(modifier = cardModifier, onClick = navigateToTakePhoto)
                 }
 
             }
 
-            item {
+            stickyHeader {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal =  16.dp)
+                    modifier = stickyHeaderModifier
                 ) {
 
                     Spacer(Modifier.height(maxHeight * secondHeadlineToCardMarginRatio))
@@ -225,43 +180,38 @@ fun DiagnosisScreen(modifier: Modifier = Modifier) {
                         onQueryChange = {
                             searchQuery = it
                         },
-                        isActive = isSearchBarActive,
+                        interactionSource = searchBarInteractionSource,
+                        isActive = isSearchBarFocused,
                     )
 
                     Spacer(Modifier.height(12.dp))
                 }
 
-            }
-
-            item {
                 LazyRow(
                     state = listCategoryState,
-                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier
+                        .background(color = Grey90),
+                    contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(SearchHistoryCategory.entries, key = { it.ordinal }){
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    color = if(it == selectedSearchHistoryCategory) Maroon55 else Color.White,
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                                .padding(horizontal = 16.dp, vertical = 4.dp)
-                        ){
-                            Text(
-                                text = stringResource(it.textResId),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = if(it == selectedSearchHistoryCategory) Color.White else Grey68
-                            )
-                        }
-
+                        DiagnosisHistoryCategory(
+                            isSelected = it == selectedSearchHistoryCategory,
+                            text = stringResource(it.textResId)
+                        )
                     }
                 }
+
             }
 
-            items(diagnosisHistories, { it.id }){
+            itemsIndexed(diagnosisHistories, { _, it -> it.id }){ index, item ->
+                Spacer(Modifier.height(
+                    if(index == 0) 8.dp else 16.dp
+                ))
+
                 DiagnosisHistory(
-                    item = it,
+                    modifier = diagnosisHistoryModifier,
+                    item = item,
                 )
             }
 

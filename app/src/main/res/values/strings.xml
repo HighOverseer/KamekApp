@@ -47,4 +47,10 @@
     <string name="minggu_ini">Minggu Ini</string>
     <string name="bulan_ini">Bulan Ini</string>
     <string name="rp17_000">Rp17.000</string>
+    <string name="fitur_tidak_bisa_diakses">Fitur tidak bisa diakses karena memerlukan perizinan untuk menggunakan kamera</string>
+    <string name="cancel_action">Cancel Action</string>
+    <string name="switch_camera">Switch Camera</string>
+    <string name="get_image_from_gallery">Get Image From Gallery</string>
+    <string name="selesai">Selesai</string>
+    <string name="upload">Upload</string>
 </resources>

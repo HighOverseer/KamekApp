@@ -29,3 +29,6 @@ sealed class BottomBarRoute:Route(){
     @Serializable
     data object Account:BottomBarRoute()
 }
+
+@Serializable
+data object TakePhotoRoute:Route()

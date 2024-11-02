@@ -8,10 +8,13 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.3"
 composeBom = "2023.08.00"
+material = "1.12.0"
 navigation_version =  "2.8.3"
 kotlin_serialization = "1.9.0"
 core_serialization = "1.6.2"
 coil_version = "2.7.0"
+cameraX_version = "1.4.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,6 +34,12 @@ kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil_version" }
+camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX_version"}
+camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX_version"}
+camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX_version"}
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX_version"}
+
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

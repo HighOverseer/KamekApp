@@ -41,7 +41,6 @@ fun SearchBar(
     isActive:Boolean = false,
     query:String = "",
     onQueryChange:(String) -> Unit = {},
-
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
 ) {
     val modifierLocal = remember {
@@ -72,8 +71,9 @@ fun SearchBar(
                     tint = if (isActive) Black10 else Grey60
                 )
 
+                Spacer(Modifier.width(8.dp))
+
                 if(!isActive && query.isEmpty()){
-                    Spacer(Modifier.width(8.dp))
                     Text(
                         text = stringResource(R.string.cari_histori_hasil_diagnosis),
                         style = MaterialTheme.typography.labelMedium,
