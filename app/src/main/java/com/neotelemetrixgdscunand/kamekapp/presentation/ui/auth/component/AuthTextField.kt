@@ -41,6 +41,7 @@ fun AuthTextField(
 ) {
 
     Text(
+        modifier = modifier,
         text = title,
         style = MaterialTheme.typography.titleMedium,
         color = Color.Black
@@ -48,63 +49,20 @@ fun AuthTextField(
 
     Spacer(Modifier.height(8.dp))
 
-    BasicTextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                color = if (isFocused) Maroon55 else Grey70,
-                width = 1.dp,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(horizontal = 16.dp, vertical = 14.dp),
+    PrimaryTextField(
+        isFocused = isFocused,
         value = value,
         onValueChange = onValueChange,
-        visualTransformation = visualTransformation,
+        hintText = hintText,
         interactionSource = interactionSource,
-        decorationBox = @Composable { innerTextField : @Composable () -> Unit ->
-            Row {
-                if(leadingIcon != null){
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 2.dp),
-                        contentAlignment = Alignment.Center
-                    ){
-                        leadingIcon.invoke()
-                    }
-                }
-
-                if(!isFocused && value.isEmpty()){
-                    Text(
-                        text = hintText,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Grey50
-                    )
-                }
-                Box(
-                    modifier = Modifier.weight(1f)
-                ){
-                    innerTextField()
-                }
-
-                if(trailingIcon != null){
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 2.dp),
-                        contentAlignment = Alignment.Center
-                    ){
-                        trailingIcon.invoke()
-                    }
-                }
-
-            }
-        },
-        textStyle = MaterialTheme.typography.labelMedium,
-        maxLines = 1,
-        singleLine = true,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        visualTransformation = visualTransformation
     )
+
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun AuthTextFieldPreview() {
     KamekAppTheme {

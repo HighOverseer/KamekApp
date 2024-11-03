@@ -32,3 +32,6 @@ sealed class BottomBarRoute:Route(){
 
 @Serializable
 data object TakePhotoRoute:Route()
+
+@Serializable
+data object DiagnosisResultRoute:Route()

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -217,7 +218,11 @@ fun RegisterContent(
                 modifier = Modifier.fillMaxHeight(buttonToFormMarginRatio)
             )
 
-            PrimaryButton(text = stringResource(R.string.daftar))
+            PrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = stringResource(R.string.daftar)
+            )
 
         }
 

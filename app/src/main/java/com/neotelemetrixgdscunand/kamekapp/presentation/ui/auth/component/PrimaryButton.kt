@@ -19,14 +19,14 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun PrimaryButton(
     modifier: Modifier = Modifier, text:String = "",
-    onNavigate:() -> Unit = {}
+    onClick:() -> Unit = {},
+    contentPadding: PaddingValues = PaddingValues(vertical = 14.dp)
 ) {
     ElevatedButton(
-        modifier = modifier
-            .fillMaxWidth(),
-        contentPadding = PaddingValues(vertical = 14.dp),
+        modifier = modifier,
+        contentPadding = contentPadding,
         shape = RoundedCornerShape(8.dp),
-        onClick = onNavigate,
+        onClick = onClick,
         colors = ButtonDefaults.elevatedButtonColors(
             containerColor = Maroon55,
             disabledContentColor = Grey70,

@@ -30,7 +30,9 @@ import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.DiagnosisResultRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.TakePhotoRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.DiagnosisResultScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.TakePhotoScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.BottomNavigationBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.getBottomBarItems
@@ -148,7 +150,21 @@ fun TopLevelPage(
                                 duration = SnackbarDuration.Short
                             )
                         }
+                    },
+                    navigateUp = navHostController::navigateUp,
+                    navigateToResult = {
+                        navHostController.navigate(DiagnosisResultRoute){
+                            popUpTo<BottomBarRoute.Diagnosis>{
+                                inclusive = false
+                            }
+                        }
                     }
+                )
+            }
+
+            composable<DiagnosisResultRoute> {
+                DiagnosisResultScreen(
+                    navigateUp = navHostController::navigateUp
                 )
             }
         }
