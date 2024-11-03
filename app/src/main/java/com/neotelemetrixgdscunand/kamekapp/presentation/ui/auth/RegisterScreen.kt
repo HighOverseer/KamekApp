@@ -52,10 +52,11 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
     var isConfirmationPassswordVisible by remember { mutableStateOf(false) }
     val textMaxLength = 30
 
-    LoginContent(
+    RegisterContent(
         modifier = modifier,
         username = username,
         password = password,
+        confirmationPassword = confirmationPassword,
         onUsernameChange = {
             if(it.length <= textMaxLength){
                 username = it
@@ -67,12 +68,23 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
                 password = it
             }
         },
+        onConfirmationPasswordChange = {
+            if(it.length <= textMaxLength){
+                confirmationPassword = it
+            }
+        },
         usernameInteractionSource = usernameInteractionSource,
         passwordInteractionSource = passwordInteractionSource,
+        confirmationPasswordInteractionSource = confirmationPasswordInteractionSource,
         isPasswordVisible = isPasswordVisible,
+        isConfirmationPasswordVisible = isConfirmationPassswordVisible,
         changePasswordVisibility = {
             isPasswordVisible = it
+        },
+        changeConfirmationPasswordVisibility = {
+            isConfirmationPassswordVisible = it
         }
+
     )
 }
 
