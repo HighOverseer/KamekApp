@@ -21,7 +21,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey70
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme

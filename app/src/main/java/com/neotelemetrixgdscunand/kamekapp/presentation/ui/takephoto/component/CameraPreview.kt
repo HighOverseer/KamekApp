@@ -1,19 +1,14 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component
 
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.CameraSelector.LensFacing
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext

@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
 
-import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
