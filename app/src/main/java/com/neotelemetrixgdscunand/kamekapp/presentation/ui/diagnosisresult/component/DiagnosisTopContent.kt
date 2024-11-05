@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
 
-import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

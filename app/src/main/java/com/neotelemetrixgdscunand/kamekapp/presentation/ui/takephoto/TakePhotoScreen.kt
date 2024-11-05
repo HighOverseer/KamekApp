@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.net.toFile
 import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
@@ -32,7 +31,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.T
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.FileManager
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
 fun TakePhotoScreen(
