@@ -1,5 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
 
+import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +45,61 @@ fun DiagnosisTopContent(modifier: Modifier = Modifier) {
         SecondaryDescription(
             title = stringResource(R.string.kondisi_biji),
             description = stringResource(R.string.dummy_seed_condition)
+        )
+    }
+}
+
+@Composable
+fun DiagnosisTopContentLoading(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
+            .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+            .padding(16.dp),
+    ) {
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.3f
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lineCount = 2,
+            lastLineWidthRatio = 0.7f
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.3f
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lineCount = 3,
+            lastLineWidthRatio = 0.7f
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.4f
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lineCount = 5,
+            lastLineWidthRatio = 0.7f
         )
     }
 }

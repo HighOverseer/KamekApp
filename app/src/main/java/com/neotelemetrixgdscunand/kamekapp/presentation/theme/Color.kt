@@ -21,6 +21,10 @@ val Grey70= Color(0xFFD5D5D5)
 val Grey90 = Color(0xFFF5F5F5)
 val Grey55 = Color(0xFF9A9A9A)
 val Grey50 = Color(0xFF9C9191)
+
+val Grey67 = Color(0xFFCACACA)
+val Grey63 = Color(0xFFB0B0B0)
+
 val Black10 = Color(0xFF1E1E1E)
 val Orange90 = Color(0xFFF1991E)
 val Shadow = Color(0x0D000000)

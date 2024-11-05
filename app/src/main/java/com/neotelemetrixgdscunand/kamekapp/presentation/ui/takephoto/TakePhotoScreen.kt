@@ -1,5 +1,9 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.ImageCapture
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,12 +14,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toFile
 import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
@@ -23,6 +29,9 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.B
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.CameraPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.InputPhotoNameDialog
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.TopBarTakePhoto
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.FileManager
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
+import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
@@ -34,6 +43,18 @@ fun TakePhotoScreen(
     navigateToResult:() -> Unit = {}
 ) {
 
+    val context = LocalContext.current
+
+    val imageCompressor = remember {
+        ImageCompressor(context)
+    }
+
+    val fileManager = remember {
+        FileManager(context)
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+
     var isDialogShowed by remember { mutableStateOf(false) }
     var sessionName by remember { mutableStateOf("") }
 
@@ -42,12 +63,9 @@ fun TakePhotoScreen(
         ImageCapture.Builder()
             .build()
     }
-    var capturedPhotoFile: File? by remember {
+    var capturedPhotoUri: Uri? by remember {
         mutableStateOf(null)
     }
-
-
-    val context = LocalContext.current
 
     LaunchedEffect(true) {
         if(isCameraPermissionGranted == null && context is MainActivity){
@@ -75,6 +93,16 @@ fun TakePhotoScreen(
     if(isCameraPermissionGranted == true){
 
         var isCameraOpen by remember { mutableStateOf(true) }
+        val photoPickerLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) {
+            capturedPhotoUri = it
+            if(capturedPhotoUri != null){
+                isDialogShowed = true
+                isCameraOpen = false
+            }
+        }
+
 
         Column(
             modifier.fillMaxSize()
@@ -102,8 +130,8 @@ fun TakePhotoScreen(
                     captureImage(
                         imageCapture,
                         context,
-                        onSuccess = { file ->
-                            capturedPhotoFile = file
+                        onSuccess = { uri ->
+                            capturedPhotoUri = uri
                             isDialogShowed = true
                             isCameraOpen = false
                         },
@@ -117,6 +145,13 @@ fun TakePhotoScreen(
                         }
                     )
                 },
+                onGetImageFromGallery = {
+                    photoPickerLauncher.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
+                    )
+                },
                 bottomBarStartMarginRatio = bottomBarStartMarginRatio,
                 bottomBarEndMarginRatio = bottomBarEndMarginRatio
             )
@@ -124,13 +159,17 @@ fun TakePhotoScreen(
         }
 
         val invalidNameMessage = stringResource(R.string.nama_yang_dimasukkan_tidak_valid)
-        val onSubmit by rememberUpdatedState{
+        val onSubmit:() -> Unit by rememberUpdatedState{
             if(sessionName.isBlank()){
                 showSnackBar(invalidNameMessage)
             }else{
-                capturedPhotoFile = renameFile(capturedPhotoFile, sessionName)
-                println(capturedPhotoFile?.name)
-                navigateToResult()
+                coroutineScope.launch {
+                    val compressedImage = imageCompressor.compressImage(capturedPhotoUri)
+                    fileManager.saveImage(capturedPhotoUri, compressedImage, sessionName)
+
+                    isDialogShowed = false
+                    navigateToResult()
+                }
             }
         }
 
@@ -143,14 +182,17 @@ fun TakePhotoScreen(
                 }
             },
             onDismiss = {
+                coroutineScope.launch {
+                    fileManager.deleteFile(capturedPhotoUri)
+                }
                 isDialogShowed = false
                 isCameraOpen = true
             },
             onSubmit = onSubmit
-
         )
     }
 }
+
 
 @Preview
 @Composable

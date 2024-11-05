@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,11 +25,16 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContent
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisResultHeaderSection
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisResultHeaderSectionLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisResultTabSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisTopContent
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisTopContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.NavigateUpButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContent
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContentLoading
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -36,6 +42,10 @@ fun DiagnosisResultScreen(
     modifier: Modifier = Modifier,
     navigateUp:() -> Unit = {}
 ) {
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+
     val imageAspectRatio = 1.26f
     val topToArrowMarginRatio = 0.04571f
     val listState = rememberLazyListState()
@@ -51,6 +61,12 @@ fun DiagnosisResultScreen(
 
     val preventionsDummy = remember {
         getPreventionsDummy()
+    }
+
+
+    LaunchedEffect(Unit) {
+        delay(3000L)
+        isLoading = false
     }
 
     Box{
@@ -79,7 +95,9 @@ fun DiagnosisResultScreen(
             }
 
             item {
-                DiagnosisResultHeaderSection()
+                if(isLoading){
+                    DiagnosisResultHeaderSectionLoading()
+                }else DiagnosisResultHeaderSection()
             }
 
             stickyHeader {
@@ -93,21 +111,19 @@ fun DiagnosisResultScreen(
 
             if(isDiagnosisTabSelected){
                 item {
-                    DiagnosisTopContent()
+                    if(isLoading) DiagnosisTopContentLoading() else DiagnosisTopContent()
                 }
 
                 item {
-                    DiagnosisBottomContent(
+                    if(isLoading) DiagnosisBottomContentLoading() else DiagnosisBottomContent(
                         preventionsList = preventionsDummy
                     )
                 }
             }else{
                 item {
-                    PriceAnalysisContent()
+                    if(isLoading) PriceAnalysisContentLoading() else PriceAnalysisContent()
                 }
             }
-
-
         }
 
         NavigateUpButton(

@@ -1,5 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -58,6 +59,96 @@ fun PriceAnalysisContent(modifier: Modifier = Modifier) {
             description = stringResource(R.string.dummy_attack_rate)
         )
     }
+}
+
+@Composable
+fun PriceAnalysisContentLoading(modifier: Modifier = Modifier) {
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+            .padding(16.dp),
+    ){
+
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.3f,
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lastLineWidthRatio = 1f,
+            lineCount = 1
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.2f,
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lastLineWidthRatio = 1f,
+            lineCount = 1
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.3f,
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lastLineWidthRatio = 0.7f,
+            lineCount = 3
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.5f,
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lastLineWidthRatio = 0.7f,
+            lineCount = 2
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        TitleShimmeringLoading(
+            height = 17.dp,
+            widthRatio = 0.6f,
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lastLineWidthRatio = 1f,
+            lineCount = 1
+        )
+
+
+    }
+
 }
 
 @Preview

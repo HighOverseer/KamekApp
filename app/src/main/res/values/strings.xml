@@ -75,9 +75,9 @@
     <string name="varietas">Varietas</string>
     <string name="dummy_variety">Criollo: Premium, rentan penyakit</string>
     <string name="bobot_buah">Bobot Buah</string>
-    <string name="dummy_fruit_weight">Sehat: 400 - 600 gram.\nTerdampak: Bobot turun hingga 50% karena pembusukan.</string>
+    <string name="dummy_fruit_weight">Sehat: 400 – 600 gram.\nTerdampak: Bobot turun hingga 50% karena pembusukan.</string>
     <string name="tingkat_kerusakan">Tingkat Kerusakan</string>
     <string name="dummy_level_of_damage">Sedang: Sebagian buah membusuk, biji rusak sebagian.</string>
     <string name="tingkat_serangan_penyakit">Tingkat Serangan Penyakit</string>
-    <string name="dummy_attack_rate">Sedang: 10-30% buah rusak.</string>
+    <string name="dummy_attack_rate">Sedang: 10–30% buah rusak.</string>
 </resources>

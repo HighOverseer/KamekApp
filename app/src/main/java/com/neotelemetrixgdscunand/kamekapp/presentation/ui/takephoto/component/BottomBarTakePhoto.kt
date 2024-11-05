@@ -41,6 +41,7 @@ fun BottomBarTakePhoto(
     bottomBarStartMarginRatio:Float = 0.11864f,
     bottomBarEndMarginRatio:Float = 0.09864f,
     onCaptureImage:() -> Unit = {},
+    onGetImageFromGallery:() -> Unit = {}
 ) {
     val parentModifier = remember {
         modifier
@@ -68,6 +69,8 @@ fun BottomBarTakePhoto(
                 )
 
                 Column(
+                    modifier = Modifier
+                        .clickable(onClick = onGetImageFromGallery),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ){

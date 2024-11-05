@@ -48,11 +48,52 @@ fun DiagnosisResultHeaderSection(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+fun DiagnosisResultHeaderSectionLoading(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, top = 24.dp, end = 16.dp)
+    ){
+
+        Text(
+            stringResource(R.string.dummy_image_name),
+            style = MaterialTheme.typography.headlineSmall,
+            color = Black10
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        TitleShimmeringLoading(
+            widthRatio = 0.2f,
+            height = 19.dp
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        DescriptionShimmeringLoading(
+            lineHeight = 17.dp,
+            lastLineWidthRatio = 0.7f,
+            lineCount = 2
+        )
+    }
+}
+
+
 @Preview
 @Composable
 private fun DiagnosisResultHeaderSectionPreview() {
     KamekAppTheme {
         DiagnosisResultHeaderSection()
+    }
+
+}
+
+@Preview
+@Composable
+private fun DiagnosisResultHeaderSectionLoadingPreview() {
+    KamekAppTheme {
+        DiagnosisResultHeaderSectionLoading()
     }
 
 }
