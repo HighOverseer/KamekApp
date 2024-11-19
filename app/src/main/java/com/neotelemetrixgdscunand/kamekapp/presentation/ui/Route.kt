@@ -16,6 +16,9 @@ data object Login:Route()
 data object Register:Route()
 
 @Serializable
+data object OnBoarding:Route()
+
+@Serializable
 data object TopLevelPage:Route()
 
 @Serializable
@@ -34,4 +37,20 @@ sealed class BottomBarRoute:Route(){
 data object TakePhotoRoute:Route()
 
 @Serializable
-data object DiagnosisResultRoute:Route()
+data class DiagnosisResultRoute(
+    val imagePath:String,
+    val outputId:Int?
+):Route()
+
+@Serializable
+data object News:Route()
+
+@Serializable
+data object NewsDetail:Route()
+
+@Serializable
+data object Shop:Route()
+
+@Serializable
+data object Weather:Route()
+

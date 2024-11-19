@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -15,9 +16,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.formatDamageLevelEstimation
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.formatSellPriceEstimation
 
 @Composable
-fun PriceAnalysisContent(modifier: Modifier = Modifier) {
+fun PriceAnalysisContent(
+    modifier: Modifier = Modifier,
+    sellPrice:Float = 0f,
+    damageLevel:Float = 0f
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -27,21 +34,23 @@ fun PriceAnalysisContent(modifier: Modifier = Modifier) {
     ){
         PrimaryDescription(
             title = stringResource(R.string.harga_jual),
-            description = stringResource(R.string.dummy_selling_price)
+            description = remember {
+                formatSellPriceEstimation(sellPrice)
+            }
         )
 
         Spacer(Modifier.height(24.dp))
 
         PrimaryDescription(
             title = stringResource(R.string.varietas),
-            description = stringResource(R.string.dummy_variety)
+            description = stringResource(R.string.strip)
         )
 
         Spacer(Modifier.height(24.dp))
 
         SecondaryDescription(
             title = stringResource(R.string.bobot_buah),
-            description = stringResource(R.string.dummy_fruit_weight)
+            description = stringResource(R.string.strip)
         )
 
         Spacer(Modifier.height(24.dp))
@@ -55,7 +64,9 @@ fun PriceAnalysisContent(modifier: Modifier = Modifier) {
 
         SecondaryDescription(
             title = stringResource(R.string.tingkat_serangan_penyakit),
-            description = stringResource(R.string.dummy_attack_rate)
+            description = remember {
+                formatDamageLevelEstimation(damageLevel)
+            }
         )
     }
 }

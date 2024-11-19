@@ -18,8 +18,8 @@ class FileManager(
         imageUri: Uri?,
         imageBytes:ByteArray?,
         fileName:String = "image"
-    ){
-        withContext(Dispatchers.IO) {
+    ):String?{
+        return withContext(Dispatchers.IO) {
             if (imageBytes == null) return@withContext null
 
             if (imageUri == null) return@withContext null
@@ -40,11 +40,7 @@ class FileManager(
             val fullFileName = "$fileName.$extension"
             val renameFileUri = renameFile(file, fullFileName)
 
-            println(
-                """
-                    ${renameFileUri.path.toString()}
-                """.trimIndent()
-            )
+            return@withContext renameFileUri.path
         }
 
     }
@@ -60,7 +56,7 @@ class FileManager(
         return newFile.toUri()
     }
 
-    suspend fun deleteFile(fileUri: Uri?){
+    fun deleteFile(fileUri: Uri?){
         if(fileUri == null) return
 
         if(fileUri.scheme == "file"){

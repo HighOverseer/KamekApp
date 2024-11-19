@@ -1,6 +1,9 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
@@ -19,7 +22,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 fun PrimaryButton(
     modifier: Modifier = Modifier, text:String = "",
     onClick:() -> Unit = {},
-    contentPadding: PaddingValues = PaddingValues(vertical = 14.dp)
+    contentPadding: PaddingValues = PaddingValues(vertical = 14.dp),
+    trailingIcon: (@Composable () -> Unit)? = null
 ) {
     ElevatedButton(
         modifier = modifier,
@@ -36,6 +40,11 @@ fun PrimaryButton(
             style = MaterialTheme.typography.titleMedium,
             color = Color.White
         )
+
+        if(trailingIcon != null){
+            Spacer(Modifier.width(8.dp))
+            trailingIcon()
+        }
     }
 }
 

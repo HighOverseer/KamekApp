@@ -17,7 +17,12 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 
 @Composable
-fun DiagnosisTopContent(modifier: Modifier = Modifier) {
+fun DiagnosisTopContent(
+    modifier: Modifier = Modifier,
+    diseaseCause:String = "-",
+    diseaseSymptoms:String = "-",
+    seedCondition:String = "-"
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -29,21 +34,21 @@ fun DiagnosisTopContent(modifier: Modifier = Modifier) {
 
         PrimaryDescription(
             title = stringResource(R.string.penyebab),
-            description = stringResource(R.string.dummy_cause)
+            description = diseaseCause
         )
 
         Spacer(Modifier.height(24.dp))
 
         PrimaryDescription(
             title = stringResource(R.string.gejala),
-            description = stringResource(R.string.dummy_cause)
+            description = diseaseSymptoms
         )
 
         Spacer(Modifier.height(24.dp))
 
         SecondaryDescription(
             title = stringResource(R.string.kondisi_biji),
-            description = stringResource(R.string.dummy_seed_condition)
+            description = seedCondition
         )
     }
 }

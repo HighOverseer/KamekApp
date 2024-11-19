@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,11 +34,12 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.formatSellPriceEstimationForHistory
 
 @Composable
 fun DiagnosisHistory(
     modifier: Modifier = Modifier,
-    item: DiagnosisHistoryItem
+    item: DiagnosisHistoryItemData
 ) {
     val cardModifier = remember {
         modifier
@@ -69,7 +71,7 @@ fun DiagnosisHistory(
                 AsyncImage(
                     modifier = Modifier
                         .align(Alignment.Center),
-                    model = item.pictureResId,
+                    model = item.imageUrlOrPath,
                     contentScale = ContentScale.Crop,
                     contentDescription = item.title,
                     placeholder = painterResource(R.drawable.ic_camera)
@@ -90,7 +92,7 @@ fun DiagnosisHistory(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = item.predictedPrice,
+                    text = formatSellPriceEstimationForHistory(sellPrice = item.predictedPrice),
                     style = MaterialTheme.typography.labelMedium,
                     color = Black10
                 )
@@ -127,7 +129,14 @@ fun DiagnosisHistory(
 @Composable
 private fun DiagnosisHistoryPreview() {
     KamekAppTheme {
-        DiagnosisHistory(item = getDummyDiagnosisHistoryItems().first())
+        DiagnosisHistory(item = DiagnosisHistoryItemData(
+            id = 0,
+            title = "Kakao Pak Tono",
+            imageUrlOrPath = "https://drive.google.com/file/d/1SXCPCoMzRjZEpemeT-mLOUTD2mzbGee_/view?usp=drive_link",
+            date = "12-11-2024",
+            predictedPrice = 700f,
+            outputId = 0
+        ))
     }
 
 }

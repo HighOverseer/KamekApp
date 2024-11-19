@@ -31,6 +31,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.T
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.FileManager
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
 import kotlinx.coroutines.launch
+import java.io.File
 
 @Composable
 fun TakePhotoScreen(
@@ -38,7 +39,7 @@ fun TakePhotoScreen(
     isCameraPermissionGranted:Boolean?,
     showSnackBar:(String) -> Unit = {},
     navigateUp:() -> Unit = {},
-    navigateToResult:() -> Unit = {}
+    navigateToResult:(String) -> Unit = {_->}
 ) {
 
     val context = LocalContext.current
@@ -163,10 +164,16 @@ fun TakePhotoScreen(
             }else{
                 coroutineScope.launch {
                     val compressedImage = imageCompressor.compressImage(capturedPhotoUri)
-                    fileManager.saveImage(capturedPhotoUri, compressedImage, sessionName)
+                    val imagePath = fileManager.saveImage(capturedPhotoUri, compressedImage, sessionName)
 
-                    isDialogShowed = false
-                    navigateToResult()
+                    if(imagePath == null){
+                        capturedPhotoUri = null
+                        isDialogShowed = false
+                        isCameraOpen = true
+                    }else{
+                        isDialogShowed = false
+                        navigateToResult(imagePath)
+                    }
                 }
             }
         }
@@ -180,9 +187,7 @@ fun TakePhotoScreen(
                 }
             },
             onDismiss = {
-                coroutineScope.launch {
-                    fileManager.deleteFile(capturedPhotoUri)
-                }
+                fileManager.deleteFile(capturedPhotoUri)
                 isDialogShowed = false
                 isCameraOpen = true
             },

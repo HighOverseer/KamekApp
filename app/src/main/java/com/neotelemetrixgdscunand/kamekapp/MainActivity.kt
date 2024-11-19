@@ -15,7 +15,9 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var windowInsetController:WindowInsetsControllerCompat

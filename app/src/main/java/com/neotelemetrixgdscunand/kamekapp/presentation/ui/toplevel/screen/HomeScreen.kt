@@ -1,6 +1,7 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,35 +14,78 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.getDummyDiagnosisHistoryItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItemData
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.ExplorationSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.HomeDiagnosisHistory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.HomeHeaderSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.SectionHeadline
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.WeeklyNews
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.getDummyWeeklyNewsItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToNews:()->Unit = {},
+    navigateToShop:()->Unit = {},
+    navigateToWeather:()->Unit = {},
+    navigateToNewsDetail:()->Unit = {},
+    navigateToDiagnosisResult:(Int, String)->Unit = {_, _ -> },
+    showSnackbar:(String)->Unit = {}
+) {
 
+    val diagnosisHistories by viewModel.diagnosisHistory.collectAsState()
+
+    HomeContent(
+        modifier = modifier,
+        navigateToNews = navigateToNews,
+        navigateToShop = navigateToShop,
+        navigateToWeather = navigateToWeather,
+        navigateToNewsDetail = navigateToNewsDetail,
+        diagnosisHistories = diagnosisHistories,
+        navigateToDiagnosisResult = navigateToDiagnosisResult,
+        showSnackbar = showSnackbar
+    )
+}
+
+@Composable
+fun HomeContent(
+    modifier: Modifier = Modifier,
+    navigateToNews:()->Unit = {},
+    navigateToShop:()->Unit = {},
+    navigateToWeather:()->Unit = {},
+    navigateToNewsDetail:()->Unit = {},
+    diagnosisHistories:List<DiagnosisHistoryItemData> = emptyList(),
+    navigateToDiagnosisResult: (Int, String) -> Unit = { _, _ -> },
+    showSnackbar:(String)->Unit = {}
+){
     val parentListState = rememberLazyListState()
     val diagnosisHistoryListState = rememberLazyListState()
 
-    val diagnosisHistoryItems = remember {
-        getDummyDiagnosisHistoryItems()
-    }
 
     val weeklyNewsItems = remember {
         getDummyWeeklyNewsItems()
     }
+
+    val weeklyItemModifier = remember {
+        Modifier
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            .clickable(onClick = navigateToNewsDetail)
+    }
+
 
     LazyColumn(
         modifier = modifier
@@ -52,13 +96,18 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         item {
             HomeHeaderSection()
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(24.dp))
         }
 
         item {
-            ExplorationSection()
+            ExplorationSection(
+                navigateToNews = navigateToNews,
+                navigateToShop = navigateToShop,
+                navigateToWeather = navigateToWeather,
+                showSnackbar = showSnackbar
+            )
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(24.dp))
         }
 
         item {
@@ -81,15 +130,20 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             )
         }
 
-
         item {
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 state = diagnosisHistoryListState
             ) {
-                items(diagnosisHistoryItems, {it.id}){ item ->
-                    HomeDiagnosisHistory(item = item)
+                items(diagnosisHistories, {it.id}){ item ->
+                    HomeDiagnosisHistory(
+                        modifier = Modifier
+                            .clickable{
+                                navigateToDiagnosisResult(item.outputId, item.imageUrlOrPath)
+                            },
+                        item = item
+                    )
                 }
             }
         }
@@ -97,7 +151,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         item {
             Spacer(
-                Modifier.height(32.dp)
+                Modifier.height(24.dp)
             )
         }
 
@@ -113,7 +167,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         }
 
         items(weeklyNewsItems, { it.id }){ item ->
-            WeeklyNews(item = item)
+            WeeklyNews(
+                modifier = weeklyItemModifier,
+                item = item
+            )
         }
 
         item {
@@ -122,13 +179,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 
     }
-    
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {
     KamekAppTheme {
-        HomeScreen()
+        HomeContent()
     }
 }

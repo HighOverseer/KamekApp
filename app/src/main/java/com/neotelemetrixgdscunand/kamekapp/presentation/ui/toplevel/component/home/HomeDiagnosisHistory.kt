@@ -35,15 +35,14 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItem
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.getDummyDiagnosisHistoryItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItemData
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeDiagnosisHistory(
     modifier: Modifier = Modifier,
-    item: DiagnosisHistoryItem
+    item: DiagnosisHistoryItemData
 ) {
 
     val cardModifier = remember {
@@ -59,7 +58,6 @@ fun HomeDiagnosisHistory(
     }
 
     Card(
-        onClick = {},
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -75,7 +73,7 @@ fun HomeDiagnosisHistory(
             AsyncImage(
                 modifier = Modifier
                     .align(Alignment.Center),
-                model = item.pictureResId,
+                model = item.imageUrlOrPath,
                 contentScale = ContentScale.Crop,
                 contentDescription = item.title,
                 placeholder = painterResource(R.drawable.ic_camera)
@@ -124,8 +122,14 @@ fun HomeDiagnosisHistory(
 @Composable
 private fun DiagnosisHistoryPreview() {
     KamekAppTheme {
-        val items = getDummyDiagnosisHistoryItems()
-        HomeDiagnosisHistory(item = items[0])
+        HomeDiagnosisHistory(item = DiagnosisHistoryItemData(
+            id = 0,
+            title = "Kakao Pak Tono",
+            imageUrlOrPath = "https://drive.google.com/file/d/1SXCPCoMzRjZEpemeT-mLOUTD2mzbGee_/view?usp=drive_link",
+            date = "12/11/2024",
+            predictedPrice = 700f,
+            outputId = 0
+        ))
     }
 
 }

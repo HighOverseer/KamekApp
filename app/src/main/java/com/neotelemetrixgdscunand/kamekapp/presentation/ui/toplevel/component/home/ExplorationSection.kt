@@ -1,5 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,10 +20,16 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 
 @Composable
-fun ExplorationSection(modifier: Modifier = Modifier) {
+fun ExplorationSection(
+    modifier: Modifier = Modifier,
+    navigateToNews:()->Unit = {},
+    navigateToShop:()->Unit = {},
+    navigateToWeather:()->Unit = {},
+    showSnackbar:(String)->Unit = {}
+) {
 
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     ) {
@@ -40,26 +47,34 @@ fun ExplorationSection(modifier: Modifier = Modifier) {
         ) {
             ExplorationMenu(
                 iconResId = R.drawable.ic_weather_menu,
-                label = stringResource(R.string.cuaca)
+                label = stringResource(R.string.cuaca),
+                onClick = navigateToWeather
             )
             ExplorationMenu(
                 iconResId = R.drawable.ic_news_menu,
-                label = stringResource(R.string.berita)
+                label = stringResource(R.string.berita),
+                onClick = navigateToNews
             )
             ExplorationMenu(
                 iconResId = R.drawable.ic_shop_menu,
-                label = stringResource(R.string.toko)
+                label = stringResource(R.string.toko),
+                onClick = navigateToShop
             )
+
+            val message = stringResource(R.string.fitur_belum_tersedia)
             ExplorationMenu(
                 iconResId = R.drawable.ic_plant_menu,
-                label = stringResource(R.string.tanaman)
+                label = stringResource(R.string.tanaman),
+                onClick = {
+                    showSnackbar(message)
+                }
             )
         }
     }
 
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ExplorationSectionPreview() {
     KamekAppTheme {

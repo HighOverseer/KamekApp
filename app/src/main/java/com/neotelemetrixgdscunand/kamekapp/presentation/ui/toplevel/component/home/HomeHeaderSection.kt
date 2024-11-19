@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +45,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink80
 
 @Composable
 fun HomeHeaderSection(modifier: Modifier = Modifier) {
@@ -94,7 +96,7 @@ fun HomeHeaderSection(modifier: Modifier = Modifier) {
                 color = Maroon60,
                 shape = RoundedCornerShape(16.dp)
             )
-            .padding(vertical = 24.dp, horizontal = 16.dp)
+            .padding(vertical = 18.dp, horizontal = 16.dp)
     }
 
     val columnModifier = remember {
@@ -135,6 +137,8 @@ fun HomeHeaderSection(modifier: Modifier = Modifier) {
                     modifier = circleImageModifier
                 ){
                     AsyncImage(
+                        modifier = Modifier
+                            .align(Alignment.Center),
                         alignment = Alignment.Center,
                         model = R.drawable.dummy_profile,
                         placeholder = painterResource(R.drawable.ic_camera),
@@ -279,6 +283,37 @@ fun HomeHeaderSection(modifier: Modifier = Modifier) {
                     }
                 }
             }
+
+            Spacer(Modifier.height(18.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Harga Buah Kakao Terkini",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
+
+
+                Spacer(Modifier.weight(1f))
+
+                Text(
+                    "Rp 2000",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = Color.White
+                )
+                Spacer(Modifier.width(8.dp))
+                Image(
+                    modifier = Modifier
+                        .width(20.dp)
+                        .height(20.dp),
+                    painter = painterResource(R.drawable.ic_up_chart),
+                    contentDescription = null
+                )
+
+            }
+
         }
 
     }

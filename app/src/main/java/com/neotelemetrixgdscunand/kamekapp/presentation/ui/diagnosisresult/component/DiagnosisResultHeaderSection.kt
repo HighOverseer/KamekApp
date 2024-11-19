@@ -18,14 +18,18 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 
 @Composable
-fun DiagnosisResultHeaderSection(modifier: Modifier = Modifier) {
+fun DiagnosisResultHeaderSection(
+    modifier: Modifier = Modifier,
+    sessionName:String = "",
+    diseaseName:String = "",
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp, top = 24.dp, end = 16.dp)
     ){
         Text(
-            stringResource(R.string.dummy_image_name),
+            sessionName,
             style = MaterialTheme.typography.headlineSmall,
             color = Black10
         )
@@ -41,7 +45,7 @@ fun DiagnosisResultHeaderSection(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(8.dp))
 
         Text(
-            stringResource(R.string.dummy_disease),
+            diseaseName,
             style = MaterialTheme.typography.titleMedium,
             color = Black10
         )
@@ -49,7 +53,10 @@ fun DiagnosisResultHeaderSection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun DiagnosisResultHeaderSectionLoading(modifier: Modifier = Modifier) {
+fun DiagnosisResultHeaderSectionLoading(
+    modifier: Modifier = Modifier,
+    sessionName: String
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -57,16 +64,18 @@ fun DiagnosisResultHeaderSectionLoading(modifier: Modifier = Modifier) {
     ){
 
         Text(
-            stringResource(R.string.dummy_image_name),
+            sessionName,
             style = MaterialTheme.typography.headlineSmall,
             color = Black10
         )
 
         Spacer(Modifier.height(16.dp))
 
-        TitleShimmeringLoading(
-            widthRatio = 0.2f,
-            height = 19.dp
+
+        Text(
+            stringResource(R.string.penyakit),
+            style = MaterialTheme.typography.labelMedium,
+            color = Grey60
         )
 
         Spacer(Modifier.height(8.dp))
@@ -93,7 +102,7 @@ private fun DiagnosisResultHeaderSectionPreview() {
 @Composable
 private fun DiagnosisResultHeaderSectionLoadingPreview() {
     KamekAppTheme {
-        DiagnosisResultHeaderSectionLoading()
+        DiagnosisResultHeaderSectionLoading(sessionName = "Kakao Kebun Pak Tono")
     }
 
 }

@@ -51,7 +51,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 @Composable
 fun DiagnosisBottomContent(
     modifier: Modifier = Modifier,
-    preventionsList:List<String> = listOf()
+    solution:String = "-",
+    preventions:List<String> = listOf()
 ) {
     Column(
         modifier = modifier
@@ -93,7 +94,7 @@ fun DiagnosisBottomContent(
 
         SecondaryDescription(
             title = stringResource(R.string.solusi),
-            description = stringResource(R.string.dummy_solution)
+            description = solution
         )
 
         Spacer(Modifier.height(24.dp))
@@ -106,7 +107,7 @@ fun DiagnosisBottomContent(
 
         Spacer(Modifier.height(8.dp))
 
-        preventionsList.forEachIndexed{ index, it ->
+        preventions.forEachIndexed{ index, it ->
             if(index != 0) {
                 Spacer(Modifier.height(16.dp))
             }

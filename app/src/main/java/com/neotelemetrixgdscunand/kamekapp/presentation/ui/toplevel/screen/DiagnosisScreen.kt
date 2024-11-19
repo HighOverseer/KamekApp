@@ -2,6 +2,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +23,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,25 +36,50 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistory
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryCategory
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItemData
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchHistoryCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.TakePhotoSection
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.getDummyDiagnosisHistoryItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.viewmodel.DiagnosisViewModel
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.dashedBorder
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun DiagnosisScreen(
     modifier: Modifier = Modifier,
+    viewModel: DiagnosisViewModel = hiltViewModel(),
     navigateToTakePhoto:() -> Unit = {},
+    navigateToDiagnosisResult: (Int, String) -> Unit = { _, _ -> }
+) {
+
+    val diagnosisHistories by viewModel.diagnosisHistory.collectAsState()
+
+    DiagnosisContent(
+        modifier = modifier,
+        navigateToTakePhoto = navigateToTakePhoto,
+        diagnosisHistories = diagnosisHistories,
+        navigateToDiagnosisResult = navigateToDiagnosisResult
+    )
+
+}
+
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun DiagnosisContent(
+    modifier: Modifier = Modifier,
+    navigateToTakePhoto:() -> Unit = {},
+    diagnosisHistories:List<DiagnosisHistoryItemData> = emptyList(),
+    navigateToDiagnosisResult: (Int, String) -> Unit = { _, _ -> }
 ) {
 
     var searchQuery by remember {
@@ -60,10 +88,6 @@ fun DiagnosisScreen(
 
     val selectedSearchHistoryCategory by remember {
         mutableStateOf(SearchHistoryCategory.ALL)
-    }
-
-    val diagnosisHistories = remember {
-        getDummyDiagnosisHistoryItems()
     }
 
     val diagnosisHistoryModifier = remember {
@@ -175,6 +199,7 @@ fun DiagnosisScreen(
                         onQueryChange = {
                             searchQuery = it
                         },
+                        hint = stringResource(R.string.cari_histori_hasil_diagnosis),
                         interactionSource = searchBarInteractionSource,
                         isActive = isSearchBarFocused,
                     )
@@ -190,7 +215,7 @@ fun DiagnosisScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(SearchHistoryCategory.entries, key = { it.ordinal }){
-                        DiagnosisHistoryCategory(
+                        SearchCategory(
                             isSelected = it == selectedSearchHistoryCategory,
                             text = stringResource(it.textResId)
                         )
@@ -205,7 +230,13 @@ fun DiagnosisScreen(
                 ))
 
                 DiagnosisHistory(
-                    modifier = diagnosisHistoryModifier,
+                    modifier = diagnosisHistoryModifier
+                        .clickable {
+                            navigateToDiagnosisResult(
+                                item.outputId,
+                                item.imageUrlOrPath
+                            )
+                        },
                     item = item,
                 )
             }
@@ -215,7 +246,6 @@ fun DiagnosisScreen(
     }
 
 }
-
 
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F5F5)

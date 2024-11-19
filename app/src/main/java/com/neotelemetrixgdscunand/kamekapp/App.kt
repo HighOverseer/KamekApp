@@ -2,17 +2,20 @@ package com.neotelemetrixgdscunand.kamekapp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Login
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.OnBoarding
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Register
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Splash
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.SplashScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.TopLevelPage
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.LoginScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.RegisterScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding.OnBoardingScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.TopLevelPage
 
 
@@ -41,7 +44,7 @@ fun App(
         composable<Login> {
             LoginScreen(
                 navigateToTopLevelPage = {
-                    navController.navigate(TopLevelPage){
+                    navController.navigate(OnBoarding){
                         popUpTo<Login> {
                             inclusive = true
                         }
@@ -51,6 +54,24 @@ fun App(
         }
         composable<Register> {
             RegisterScreen()
+        }
+
+        composable<OnBoarding>{
+            val context = LocalContext.current
+            OnBoardingScreen(
+                navigateUp = {
+                    if(context is MainActivity){
+                        context.finish()
+                    }
+                },
+                navigateToTopLevelPage = {
+                    navController.navigate(TopLevelPage){
+                        popUpTo<OnBoarding> {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         composable<TopLevelPage> {

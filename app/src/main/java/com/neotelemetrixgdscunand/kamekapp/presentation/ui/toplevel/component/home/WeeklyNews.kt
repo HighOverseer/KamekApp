@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,7 +44,6 @@ fun WeeklyNews(
     val cardModifier = remember {
         modifier
             .fillMaxWidth()
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
             .height(110.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(12.dp)
@@ -68,11 +68,12 @@ fun WeeklyNews(
             Box(
                 modifier = imageModifier
                     .align(Alignment.CenterVertically)
+                    .fillMaxSize()
             ){
                 AsyncImage(
                     modifier = Modifier
                         .align(Alignment.Center),
-                    model = item.pictureResId,
+                    model = item.imageUrl,
                     contentScale = ContentScale.Crop,
                     contentDescription = item.title,
                     placeholder = painterResource(R.drawable.ic_camera)
@@ -102,7 +103,7 @@ fun WeeklyNews(
                 ) {
                     Image(
                         imageVector = ImageVector
-                            .vectorResource(R.drawable.ic_clock),
+                            .vectorResource(R.drawable.ic_clock_2),
                         contentDescription = null
                     )
 

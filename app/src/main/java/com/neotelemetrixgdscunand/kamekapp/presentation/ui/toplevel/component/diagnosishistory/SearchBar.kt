@@ -37,7 +37,9 @@ fun SearchBar(
     isActive:Boolean = false,
     query:String = "",
     onQueryChange:(String) -> Unit = {},
+    hint:String = "",
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
+    backgroundColor: Color = Color.White
 ) {
     val modifierLocal = remember {
         modifier
@@ -47,7 +49,7 @@ fun SearchBar(
                 width = 1.dp,
                 shape = RoundedCornerShape(8.dp)
             )
-            .background(shape = RoundedCornerShape(8.dp), color = Color.White)
+            .background(shape = RoundedCornerShape(8.dp), color = backgroundColor)
             .padding(horizontal = 16.dp, vertical = 15.dp)
     }
 
@@ -71,7 +73,7 @@ fun SearchBar(
 
                 if(!isActive && query.isEmpty()){
                     Text(
-                        text = stringResource(R.string.cari_histori_hasil_diagnosis),
+                        text = hint,
                         style = MaterialTheme.typography.labelMedium,
                         color = Grey50
                     )

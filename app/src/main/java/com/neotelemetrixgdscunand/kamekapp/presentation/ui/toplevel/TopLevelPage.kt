@@ -25,13 +25,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.NewsDetail
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.DiagnosisResultRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.News
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Shop
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.TakePhotoRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Weather
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.DiagnosisResultScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsDetailScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.shop.ShopScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.TakePhotoScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.BottomNavigationBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.getBottomBarItems
@@ -39,6 +47,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.screen.Accou
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.screen.DiagnosisScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.screen.HomeScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.isInTopLevelPage
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.WeatherScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -123,13 +132,52 @@ fun TopLevelPage(
             startDestination = BottomBarRoute.Home,
         ) {
             composable<BottomBarRoute.Home> {
-                HomeScreen()
+                HomeScreen(
+                    navigateToNews = {
+                        navHostController.navigate(
+                            News
+                        )
+                    },
+                    navigateToShop = {
+                        navHostController.navigate(
+                            Shop
+                        )
+                    },
+                    navigateToWeather = {
+                        navHostController.navigate(
+                            Weather
+                        )
+                    },
+                    navigateToNewsDetail = {
+                        navHostController.navigate(
+                            NewsDetail
+                        )
+                    },
+                    navigateToDiagnosisResult = { outputId, imageUrlOrPath ->
+                        navHostController.navigate(
+                            DiagnosisResultRoute(imageUrlOrPath, outputId)
+                        )
+                    },
+                    showSnackbar = { message ->
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(message = message)
+                        }
+                    }
+                )
             }
             composable<BottomBarRoute.Diagnosis> {
                 DiagnosisScreen(
                     navigateToTakePhoto = {
                         navHostController.navigate(
                             TakePhotoRoute
+                        )
+                    },
+                    navigateToDiagnosisResult = { outputId, imagePath ->
+                        navHostController.navigate(
+                            DiagnosisResultRoute(
+                                imagePath = imagePath,
+                                outputId = outputId
+                            )
                         )
                     }
                 )
@@ -151,8 +199,8 @@ fun TopLevelPage(
                         }
                     },
                     navigateUp = navHostController::navigateUp,
-                    navigateToResult = {
-                        navHostController.navigate(DiagnosisResultRoute){
+                    navigateToResult = { imagePath ->
+                        navHostController.navigate(DiagnosisResultRoute(imagePath, null)){
                             popUpTo<BottomBarRoute.Diagnosis>{
                                 inclusive = false
                             }
@@ -162,7 +210,37 @@ fun TopLevelPage(
             }
 
             composable<DiagnosisResultRoute> {
+                val route = it.toRoute<DiagnosisResultRoute>()
                 DiagnosisResultScreen(
+                    navigateUp = navHostController::navigateUp,
+                    imagePath = route.imagePath,
+                    outputId = route.outputId
+                )
+            }
+
+            composable<News> {
+                NewsScreen(
+                    navigateUp = navHostController::navigateUp,
+                    navigateToDetail = {
+                        navHostController.navigate(NewsDetail)
+                    }
+                )
+            }
+
+            composable<NewsDetail>{
+                NewsDetailScreen(
+                    navigateUp = navHostController::navigateUp
+                )
+            }
+
+            composable<Weather>{
+                WeatherScreen(
+                    navigateUp = navHostController::navigateUp
+                )
+            }
+
+            composable<Shop> {
+                ShopScreen(
                     navigateUp = navHostController::navigateUp
                 )
             }
