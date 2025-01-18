@@ -1,7 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home
 
-import com.neotelemetrixgdscunand.kamekapp.R
-
 data class WeeklyNewsItem(
     val id:Int,
     val title:String,

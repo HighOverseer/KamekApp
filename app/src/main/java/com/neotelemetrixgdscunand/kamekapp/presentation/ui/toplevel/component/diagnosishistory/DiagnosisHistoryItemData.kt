@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory
 
-import com.neotelemetrixgdscunand.kamekapp.R
 import kotlin.random.Random
 
 data class DiagnosisHistoryItemData(

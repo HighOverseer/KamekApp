@@ -30,9 +30,9 @@ import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.NewsDetail
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.DiagnosisResultRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.News
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.NewsDetail
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Shop
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.TakePhotoRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Weather

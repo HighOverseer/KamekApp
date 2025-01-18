@@ -31,7 +31,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.T
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.FileManager
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
 fun TakePhotoScreen(
