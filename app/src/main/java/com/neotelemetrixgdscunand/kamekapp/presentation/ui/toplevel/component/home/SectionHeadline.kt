@@ -19,7 +19,7 @@ fun SectionHeadline(
     modifier: Modifier = Modifier,
     leadingIconResId: Int? = null,
     trailingIconResId:Int? = null,
-    title:String = ""
+    title:String = "Test"
 ) {
     Row(
         modifier = modifier
@@ -51,7 +51,7 @@ fun SectionHeadline(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun SectionHeadlinePreview() {
     KamekAppTheme {

@@ -1,14 +1,29 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult
 
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -18,11 +33,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -31,19 +49,24 @@ import coil.compose.rememberAsyncImagePainter
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.data.DummyUtils
 import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
+import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseDummies
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisResultHeaderSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisResultHeaderSectionLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisResultTabSection
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisTopContent
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisTopContentLoading
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisDiseaseDetails
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisDiseaseDetailsLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.NavigateUpButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ImageClassifierHelper
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.DetectedCacaoImageGrid
 import java.io.File
 
 @Composable
@@ -55,14 +78,28 @@ fun DiagnosisResultScreen(
     outputId:Int? = null,
 ) {
 
-        DiagnosisResultContent(
-            modifier = modifier,
-            navigateUp = navigateUp,
-            imagePath = imagePath,
-            onSaveDiagnosisResult = viewModel::saveDiagnosisResult,
-            outputId = outputId,
-            onGetDiagnosisOutput = viewModel::getDiagnosisResult
-        )
+    val context = LocalContext.current
+
+    val imageClassifierHelper = remember {
+        ImageClassifierHelper(context)
+    }
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+
+    DiagnosisResultContent(
+        modifier = modifier,
+        navigateUp = navigateUp,
+        imagePath = imagePath,
+        onSaveDiagnosisResult = viewModel::saveDiagnosisResult,
+        outputId = outputId,
+        classify = imageClassifierHelper::classify,
+        onGetDiagnosisOutput = viewModel::getDiagnosisResult,
+        isLoadingProvider = { isLoading },
+        setIsLoading = {
+            isLoading = it
+        }
+    )
 }
 
 
@@ -74,11 +111,12 @@ fun DiagnosisResultContent(
     imagePath:String,
     onSaveDiagnosisResult:(DiagnosisOutput, String, String) -> Unit = {_, _, _ ->},
     outputId:Int?,
+    classify: suspend (Uri) -> DiagnosisOutput,
     onGetDiagnosisOutput:(Int) -> DiagnosisOutput,
+    isLoadingProvider:()->Boolean = { false },
+    setIsLoading:(Boolean)->Unit = {_ -> }
 ) {
-    var isLoading by remember {
-        mutableStateOf(true)
-    }
+
 
     val imageAspectRatio = 1.26f
     val topToArrowMarginRatio = 0.04571f
@@ -94,17 +132,18 @@ fun DiagnosisResultContent(
     }
 
     val imageFile = remember(imagePath) {
-        if(imagePath.first() == 'h'){
+        val isInPreview = imagePath.isBlank()
+
+        if(isInPreview){
+            return@remember null
+        }
+
+        if(imagePath.first() == 'h') {
             null
-        }else File(imagePath)
+        }
+        else File(imagePath)
     }
 
-
-    val context = LocalContext.current
-
-    val imageClassifierHelper = remember {
-        ImageClassifierHelper(context)
-    }
 
     var diagnosisOutput by remember {
         mutableStateOf(
@@ -128,7 +167,9 @@ fun DiagnosisResultContent(
                 ?: DummyUtils.diagnosisDummyNameMap[outputId]
                 ?: "Dummy Session Name"
         }
+        mutableStateOf("null")
     }
+
 
     LaunchedEffect(Unit) {
         if(outputId == null){
@@ -136,7 +177,7 @@ fun DiagnosisResultContent(
             //should not null
             if(imageFile == null) return@LaunchedEffect
 
-            diagnosisOutput = imageClassifierHelper.classify(
+            diagnosisOutput = classify(
                 imageFile.toUri()
             )
             onSaveDiagnosisResult(
@@ -144,15 +185,27 @@ fun DiagnosisResultContent(
                 imagePath,
                 imageFile.nameWithoutExtension,
             )
-            isLoading = false
+            setIsLoading(false)
         }else{
             diagnosisOutput = onGetDiagnosisOutput(outputId)
-            isLoading = false
+            setIsLoading(false)
         }
+    }
 
+    val bulletNumberModifier = remember {
+        Modifier
+            .wrapContentSize()
+            .clip(CircleShape)
+            .background(color = Maroon55)
+            .sizeIn(minWidth = 24.dp, minHeight = 24.dp)
     }
 
     Box{
+
+        val detectedDisease = remember {
+            getDetectedDiseaseDummies()
+        }
+
         LazyColumn(
             modifier = modifier
                 .align(Alignment.TopCenter)
@@ -172,13 +225,13 @@ fun DiagnosisResultContent(
                             .align(Alignment.Center),
                         painter = image,
                         contentDescription = null,
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
                     )
                 }
             }
 
             item {
-                if(isLoading){
+                if(isLoadingProvider()){
                     DiagnosisResultHeaderSectionLoading(
                         sessionName = sessionName
                     )
@@ -198,16 +251,93 @@ fun DiagnosisResultContent(
             }
 
             if(isDiagnosisTabSelected){
-                item {
-                    if(isLoading) DiagnosisTopContentLoading() else DiagnosisTopContent(
-                        diseaseCause = stringResource(diagnosisOutput.disease.causeStringResId),
-                        diseaseSymptoms = stringResource(diagnosisOutput.disease.symptomStringResId),
-                        seedCondition = stringResource(diagnosisOutput.disease.seedConditionStringResId)
-                    )
+                item{
+                    Column(
+                        modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp)
+                            .background(
+                                color = Color.White,
+                                shape = RoundedCornerShape(topEnd = 8.dp, topStart = 8.dp)
+                            )
+                            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    ) {
+                        Text(
+                            stringResource(R.string.penyakit_hama_yang_terdeteksi),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Black10
+                        )
+                        Spacer(Modifier.height(16.dp))
+
+                    }
+                }
+
+                itemsIndexed(items = detectedDisease, key = { _, it -> it.id }){ index, it ->
+                    Column(
+                        modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp)
+                            .then(
+                                if (index == detectedDisease.lastIndex) {
+                                    Modifier.background(
+                                        color = Color.White,
+                                        shape = RoundedCornerShape(
+                                            bottomEnd = 8.dp,
+                                            bottomStart = 8.dp
+                                        )
+                                    )
+                                } else {
+                                    Modifier.background(
+                                        color = Color.White
+                                    )
+                                }
+                            )
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    )  {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = bulletNumberModifier
+                            ){
+                                Text(
+                                    "${index+1}",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = Color.White
+                                )
+                            }
+
+                            Spacer(Modifier.width(8.dp))
+
+                            Text(
+                                text = stringResource(it.disease.nameResId) ,
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    fontStyle = FontStyle.Italic
+                                ),
+                                color = Orange90
+                            )
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
+                        DetectedCacaoImageGrid(
+                            detectedCacaos = it.detectedCacaos
+                        )
+
+                        if(index != detectedDisease.lastIndex){
+                            Spacer(Modifier.height(8.dp))
+                        }
+
+                    }
+
                 }
 
                 item {
-                    if(isLoading) DiagnosisBottomContentLoading() else DiagnosisBottomContent(
+                    Spacer(Modifier.height(16.dp))
+
+                    val context = LocalContext.current
+                    if(isLoadingProvider()) DiagnosisBottomContentLoading() else DiagnosisBottomContent(
                         preventions = remember {
                             diagnosisOutput.disease.controlStringResId.map {
                                 context.getString(it)
@@ -216,9 +346,41 @@ fun DiagnosisResultContent(
                         solution = stringResource(diagnosisOutput.disease.solutionStringResId)
                     )
                 }
+
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        text = stringResource(R.string.rincian_penyakit),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+                }
+
+                item {
+                    if(isLoadingProvider()) DiagnosisDiseaseDetailsLoading()
+                }
+
+                if(!isLoadingProvider()){
+                    items(items = detectedDisease, key = { it.hashCode() }){
+                        val isInitiallyExpanded = it == detectedDisease.first()
+
+                        DiagnosisDiseaseDetails(
+                            initiallyExpanded = isInitiallyExpanded,
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            diseaseName = stringResource(it.disease.nameResId),
+                            detectedCacaos = it.detectedCacaos,
+                            diseaseCause = stringResource(diagnosisOutput.disease.causeStringResId),
+                            diseaseSymptoms = stringResource(diagnosisOutput.disease.symptomStringResId),
+                            seedCondition = stringResource(diagnosisOutput.disease.seedConditionStringResId)
+                        )
+                    }
+                }
             }else{
                 item {
-                    if(isLoading) PriceAnalysisContentLoading() else PriceAnalysisContent(
+                    if(isLoadingProvider()) PriceAnalysisContentLoading() else PriceAnalysisContent(
                         sellPrice = diagnosisOutput.sellPrice,
                         damageLevel = diagnosisOutput.damageLevel
                     )
@@ -234,15 +396,26 @@ fun DiagnosisResultContent(
         )
 
     }
-    
+
 }
+
+
+
+
+
 
 @Preview(showBackground = true, heightDp = 1500)
 @Composable
 private fun DiagnosisResultScreenPreview() {
     KamekAppTheme {
-        DiagnosisResultScreen(
-            imagePath = ""
+        DiagnosisResultContent(
+            modifier = Modifier,
+            navigateUp = {},
+            imagePath = "",
+            onSaveDiagnosisResult = {_, _, _ ->},
+            outputId = null,
+            classify = {_ -> DiagnosisOutput(disease = CacaoDisease.NONE, damageLevel = 0f, sellPrice = 2000f)},
+            onGetDiagnosisOutput = { _ -> DiagnosisOutput(disease = CacaoDisease.NONE, damageLevel = 0f, sellPrice = 2000f)}
         )
     }
 }

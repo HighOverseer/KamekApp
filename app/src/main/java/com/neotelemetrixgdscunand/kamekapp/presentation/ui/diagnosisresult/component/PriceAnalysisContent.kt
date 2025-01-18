@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ fun PriceAnalysisContent(
     sellPrice:Float = 0f,
     damageLevel:Float = 0f
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -35,7 +37,7 @@ fun PriceAnalysisContent(
         PrimaryDescription(
             title = stringResource(R.string.harga_jual),
             description = remember {
-                formatSellPriceEstimation(sellPrice)
+                formatSellPriceEstimation(context, sellPrice)
             }
         )
 
@@ -65,7 +67,7 @@ fun PriceAnalysisContent(
         SecondaryDescription(
             title = stringResource(R.string.tingkat_serangan_penyakit),
             description = remember {
-                formatDamageLevelEstimation(damageLevel)
+                formatDamageLevelEstimation(context, damageLevel)
             }
         )
     }

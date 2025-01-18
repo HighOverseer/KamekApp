@@ -91,9 +91,6 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.camera.lifecycle)
 
-
-
-
     implementation(libs.constraintlayout.compose)
 
     //Dependency Injection

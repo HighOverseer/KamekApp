@@ -56,16 +56,16 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    fun checkCameraPermission(){
-        val isAlreadyGranted = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if(!isAlreadyGranted){
-            cameraPermissionRequest.launch(
+        fun checkCameraPermission(){
+            val isAlreadyGranted = ContextCompat.checkSelfPermission(
+                this,
                 Manifest.permission.CAMERA
-            )
-        }else isCameraPermissionGranted = true
-    }
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if(!isAlreadyGranted){
+                cameraPermissionRequest.launch(
+                    Manifest.permission.CAMERA
+                )
+            }else isCameraPermissionGranted = true
+        }
 }

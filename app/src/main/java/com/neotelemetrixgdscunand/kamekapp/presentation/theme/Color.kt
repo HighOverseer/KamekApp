@@ -35,6 +35,7 @@ val Black10 = Color(0xFF1E1E1E)
 val Black50 = Color(0xFF4D4D4D)
 
 val Orange90 = Color(0xFFF1991E)
+val Orange80 = Color(0xFFD5881D)
 val Shadow = Color(0x0D000000)
 val Pink = Color(0xFFD7A9A9)
 val WhiteTransparent = Color.White.copy(alpha = 0.6f)

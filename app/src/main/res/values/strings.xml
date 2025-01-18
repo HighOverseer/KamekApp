@@ -137,4 +137,14 @@
     <string name="berikan_saran_kepada_kami">Berikan Saran Kepada Kami</string>
     <string name="hubungi_kami">Hubungi Kami</string>
     <string name="keluar">Keluar</string>
+    <string name="harga_buah_kakao_terkini">Harga Buah Kakao Terkini</string>
+    <string name="sekitar_buah">Sekitar %1$s - %2$s/buah</string>
+    <string name="tidak_ada">Tidak ada</string>
+    <string name="Light">Ringan</string>
+    <string name="sedang">Sedang</string>
+    <string name="berat">Berat</string>
+    <string name="buah_rusak">%1$s : %2$s - %3$s\%% buah rusak</string>
+    <string name="harga_kakao_hari_ini">Harga Kakao Hari ini</string>
+    <string name="penyakit_hama_yang_terdeteksi">Penyakit/Hama Yang Terdeteksi</string>
+    <string name="rincian_penyakit">Rincian Penyakit</string>
 </resources>

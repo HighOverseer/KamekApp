@@ -284,36 +284,6 @@ fun HomeHeaderSection(modifier: Modifier = Modifier) {
                 }
             }
 
-            Spacer(Modifier.height(18.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Harga Buah Kakao Terkini",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.White
-                )
-
-
-                Spacer(Modifier.weight(1f))
-
-                Text(
-                    "Rp 2000",
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = Color.White
-                )
-                Spacer(Modifier.width(8.dp))
-                Image(
-                    modifier = Modifier
-                        .width(20.dp)
-                        .height(20.dp),
-                    painter = painterResource(R.drawable.ic_up_chart),
-                    contentDescription = null
-                )
-
-            }
-
         }
 
     }

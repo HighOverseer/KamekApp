@@ -34,21 +34,21 @@ fun DiagnosisResultHeaderSection(
             color = Black10
         )
 
-        Spacer(Modifier.height(16.dp))
-
-        Text(
-            stringResource(R.string.penyakit),
-            style = MaterialTheme.typography.labelMedium,
-            color = Grey60
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        Text(
-            diseaseName,
-            style = MaterialTheme.typography.titleMedium,
-            color = Black10
-        )
+//        Spacer(Modifier.height(16.dp))
+//
+//        Text(
+//            stringResource(R.string.penyakit),
+//            style = MaterialTheme.typography.labelMedium,
+//            color = Grey60
+//        )
+//
+//        Spacer(Modifier.height(8.dp))
+//
+//        Text(
+//            diseaseName,
+//            style = MaterialTheme.typography.titleMedium,
+//            color = Black10
+//        )
     }
 }
 
@@ -69,22 +69,22 @@ fun DiagnosisResultHeaderSectionLoading(
             color = Black10
         )
 
-        Spacer(Modifier.height(16.dp))
-
-
-        Text(
-            stringResource(R.string.penyakit),
-            style = MaterialTheme.typography.labelMedium,
-            color = Grey60
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        DescriptionShimmeringLoading(
-            lineHeight = 17.dp,
-            lastLineWidthRatio = 0.7f,
-            lineCount = 2
-        )
+//        Spacer(Modifier.height(16.dp))
+//
+//
+//        Text(
+//            stringResource(R.string.penyakit),
+//            style = MaterialTheme.typography.labelMedium,
+//            color = Grey60
+//        )
+//
+//        Spacer(Modifier.height(8.dp))
+//
+//        DescriptionShimmeringLoading(
+//            lineHeight = 17.dp,
+//            lastLineWidthRatio = 0.7f,
+//            lineCount = 2
+//        )
     }
 }
 

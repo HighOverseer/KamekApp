@@ -1,5 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util
 
+import android.content.Context
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -15,6 +16,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
+import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey63
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey67
 
@@ -50,7 +52,7 @@ fun Modifier.shimmeringEffect() = composed{
         }
 }
 
-fun formatSellPriceEstimation(sellPrice:Float):String{
+fun formatSellPriceEstimation(context: Context, sellPrice:Float):String{
     val lowerBound = sellPrice.minus(100f).coerceAtLeast(0f)
     val upperBound = sellPrice.plus(100f).coerceAtMost(2000f)
 
@@ -58,7 +60,7 @@ fun formatSellPriceEstimation(sellPrice:Float):String{
     val lowerBoundString = formatBound(lowerBound)
     val upperBoundString = formatBound(upperBound)
 
-    return "Sekitar $lowerBoundString - $upperBoundString/buah"
+    return context.getString(R.string.sekitar_buah, lowerBoundString, upperBoundString)
 }
 
 fun formatSellPriceEstimationForHistory(sellPrice:Float):String{
@@ -138,18 +140,23 @@ fun String.checkForZeroAfterFloatingPoint(): String {
 }
 
 
-fun formatDamageLevelEstimation(damageLevel:Float):String{
+fun formatDamageLevelEstimation(context: Context, damageLevel:Float):String{
     val level = when{
-        damageLevel == 0f -> "Tidak ada"
-        damageLevel > 0 && damageLevel <= 0.3 -> "Ringan"
-        damageLevel > 0.3 && damageLevel <= 0.6 -> "Sedang"
-        else -> "Berat"
+        damageLevel == 0f -> context.getString(R.string.tidak_ada)
+        damageLevel > 0 && damageLevel <= 0.3 -> context.getString(R.string.Light)
+        damageLevel > 0.3 && damageLevel <= 0.6 -> context.getString(R.string.sedang)
+        else -> context.getString(R.string.berat)
     }
 
     val lowerBound = damageLevel.minus(0.05f).coerceAtLeast(0f) * 100
     val upperBound = damageLevel.plus(0.05f).coerceAtMost(1f) * 100
 
-    return "$level : ${lowerBound.roundOffDecimal(2).checkForZeroAfterFloatingPoint()} - ${upperBound.roundOffDecimal(2).checkForZeroAfterFloatingPoint()}% buah rusak"
+    return context.getString(
+        R.string.buah_rusak,
+        level,
+        lowerBound.roundOffDecimal(2).checkForZeroAfterFloatingPoint(),
+        upperBound.roundOffDecimal(2).checkForZeroAfterFloatingPoint()
+    )
 }
 
 fun Float.roundOffDecimal(n : Int = 3): Float {
