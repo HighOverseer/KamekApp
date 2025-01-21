@@ -37,7 +37,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey75
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.SecondaryButton
 
 @Composable
