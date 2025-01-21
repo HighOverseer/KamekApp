@@ -144,4 +144,57 @@
     <string name="sedang">Moderate</string>
     <string name="berat">Severe</string>
     <string name="buah_rusak">%1$s : %2$s - %3$s%% damaged fruit</string>
+
+
+    <string name="harga_kakao_hari_ini">Harga Kakao Hari ini</string>
+    <string name="penyakit_hama_yang_terdeteksi">Penyakit/Hama Yang Terdeteksi</string>
+    <string name="rincian_penyakit">Rincian Penyakit</string>
+    <string name="notifikasi">Notifikasi</string>
+    <string name="jumlah_terpenuhi">Jumlah Terpenuhi</string>
+    <string name="ton">%1$s/%2$s Ton</string>
+    <string name="foto_kakao">Foto Kakao</string>
+    <string name="cocoa_profile">Cocoa Profile</string>
+    <string name="warna">Warna</string>
+    <string name="kacang">Kacang</string>
+    <string name="tingkat_fermentasi">Tingkat Fermentasi</string>
+    <string name="spesifikasi_teknis">Spesifikasi Teknis</string>
+    <string name="kandungan_lemak">Kandungan Lemak</string>
+    <string name="kandungan_kelembaban">Kandungan Kelembaban</string>
+    <string name="keasaman_ph">Keasaman (pH)</string>
+    <string name="kualitas">Kualitas</string>
+    <string name="daftar_supplier_saat_ini">Daftar Supplier Saat Ini</string>
+    <string name="sanggupi">Sanggupi</string>
+    <string name="ton_terpenuhi">%1$s/%2$s Ton Terpenuhi</string>
+    <string name="cek_detail">Cek Detail</string>
+    <string name="telah_disanggupi">Telah Disanggupi</string>
+    <string name="telah_terpenuhi">Telah Terpenuhi</string>
+    <string name="berapa_jumlah_yang_dapat_kamu_penuhi">Berapa Jumlah Yang Dapat Kamu Penuhi?</string>
+    <string name="masukkan_jumlah">Masukkan Jumlah</string>
+    <string name="price_note">Prediksi Harga dibawah ini didapatkan dengan anggapan seluruh tingkat kerusakan mendapatkan  porsi yang sama.</string>
+    <string name="klik_untuk_prediksi_harga_dengan_porsi_yang_berbeda">Klik Untuk Prediksi Harga Dengan Porsi yang Berbeda</string>
+    <string name="total_buah_keseluruhan">Total Buah Keseluruhan</string>
+    <string name="rata_rata_bobot_buah">Rata-Rata Bobot Buah (Kg)</string>
+    <string name="prediksi_harga_jual">Prediksi Harga Jual</string>
+    <string name="rincian_prediksi_harga">Rincian Prediksi Harga</string>
+    <string name="sub_total_harga_jual">Sub Total Harga Jual</string>
+    <string name="sub_harga_satuan">Sub Harga Satuan</string>
+    <string name="sub_total_harga">Sub Total Harga</string>
+
+    <string name="tingkat_kerusakan_rendah">Tingkat Kerusakan Rendah</string>
+    <string name="rendah_0_30_buah_rusak">Rendah: 10-30% buah rusak.</string>
+    <string name="rendah_0_10_rusak">Rendah : 0 - 10% Rusak</string>
+    <string name="rendah_11_20_rusak">Rendah : 11-20% Rusak</string>
+    <string name="rendah_21_30_rusak">Rendah : 21-30% Rusak</string>
+
+    <string name="tingkat_kerusakan_sedang">Tingkat Kerusakan Sedang</string>
+    <string name="sedang_31_60_buah_rusak">Sedang: 31-60% buah rusak</string>
+    <string name="sedang_31_40_rusak">Sedang : 31 - 40% Rusak</string>
+    <string name="sedang_41_50_rusak">Sedang : 41 - 50% Rusak</string>
+    <string name="sedang_51_60_rusak">Sedang : 51 - 60% Rusak</string>
+
+    <string name="tingkat_kerusakan_berat">Tingkat Kerusakan Berat</string>
+    <string name="berat_61_90_buah_rusak">Berat: 61-90% buah rusak</string>
+    <string name="berat_61_70_rusak">Berat : 61 - 70% Rusak</string>
+    <string name="berat_71_80_rusak">Berat : 71 - 80% Rusak</string>
+    <string name="berat_81_90_rusak">Berat : 81 - 90% Rusak</string>
 </resources>
