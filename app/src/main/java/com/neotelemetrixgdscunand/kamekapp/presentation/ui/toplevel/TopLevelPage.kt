@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -30,15 +31,19 @@ import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.CacaoRequestRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.DiagnosisResultRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.News
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.NewsDetail
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Notification
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Shop
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.TakePhotoRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Weather
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.DiagnosisResultScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsDetailScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.CacaoRequestScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.NotificationScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.shop.ShopScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.TakePhotoScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.BottomNavigationBar
@@ -158,6 +163,11 @@ fun TopLevelPage(
                             DiagnosisResultRoute(imageUrlOrPath, outputId)
                         )
                     },
+                    navigateToNotification = {
+                        navHostController.navigate(
+                            Notification
+                        )
+                    },
                     showSnackbar = { message ->
                         coroutineScope.launch {
                             snackbarHostState.showSnackbar(message = message)
@@ -241,6 +251,23 @@ fun TopLevelPage(
 
             composable<Shop> {
                 ShopScreen(
+                    navigateUp = navHostController::navigateUp
+                )
+            }
+
+            composable<Notification> {
+                NotificationScreen(
+                    navigateUp = navHostController::navigateUp,
+                    navigateToCacaoRequestScreen = {
+                        navHostController.navigate(
+                            CacaoRequestRoute
+                        )
+                    }
+                )
+            }
+
+            composable<CacaoRequestRoute> {
+                CacaoRequestScreen(
                     navigateUp = navHostController::navigateUp
                 )
             }

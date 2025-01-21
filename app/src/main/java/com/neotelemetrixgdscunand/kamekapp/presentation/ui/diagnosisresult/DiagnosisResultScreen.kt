@@ -4,8 +4,11 @@ import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -41,20 +45,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.data.DummyUtils
 import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
 import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseDummies
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Yellow90
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryTextField
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisDiseaseDetails
@@ -65,6 +75,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.compo
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.NavigateUpButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContentLoading
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisOverview
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.SecondaryDescription
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ImageClassifierHelper
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.DetectedCacaoImageGrid
 import java.io.File
@@ -128,7 +140,7 @@ fun DiagnosisResultContent(
     val topToArrowMargin = screenHeightDp * topToArrowMarginRatio
 
     var isDiagnosisTabSelected by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     val imageFile = remember(imagePath) {
@@ -170,6 +182,19 @@ fun DiagnosisResultContent(
         mutableStateOf("null")
     }
 
+    val outermostPaddingModifier = remember {
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    }
+
+    val damageLevelCategoryInfo = remember {
+        listOf(
+            DamageLevelCategory.Low,
+            DamageLevelCategory.Medium,
+            DamageLevelCategory.High
+        )
+    }
 
     LaunchedEffect(Unit) {
         if(outputId == null){
@@ -359,11 +384,12 @@ fun DiagnosisResultContent(
                     Spacer(Modifier.height(16.dp))
                 }
 
-                item {
-                    if(isLoadingProvider()) DiagnosisDiseaseDetailsLoading()
-                }
 
-                if(!isLoadingProvider()){
+                if(isLoadingProvider()){
+                    item {
+                        DiagnosisDiseaseDetailsLoading()
+                    }
+                }else{
                     items(items = detectedDisease, key = { it.hashCode() }){
                         val isInitiallyExpanded = it == detectedDisease.first()
 
@@ -378,11 +404,88 @@ fun DiagnosisResultContent(
                         )
                     }
                 }
+
+
             }else{
-                item {
-                    if(isLoadingProvider()) PriceAnalysisContentLoading() else PriceAnalysisContent(
-                        sellPrice = diagnosisOutput.sellPrice,
-                        damageLevel = diagnosisOutput.damageLevel
+                if(isLoadingProvider()){
+                    item {
+                        PriceAnalysisContentLoading()
+                    }
+                }else{
+                    item {
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .background(color = Yellow90, shape = RoundedCornerShape(8.dp))
+                                .padding(16.dp)
+                        ) {
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.Top
+                            ) { 
+                                Image(
+                                    painter = painterResource(R.drawable.ic_info),
+                                    contentScale = ContentScale.Fit,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+
+                                Spacer(Modifier.width(16.dp))
+
+                                Text(
+                                    stringResource(R.string.price_note),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = Maroon55,
+                                    textAlign = TextAlign.Start
+                                )
+                            }
+
+                            Spacer(Modifier.height(24.dp))
+
+                            Text(
+                                stringResource(R.string.klik_untuk_prediksi_harga_dengan_porsi_yang_berbeda),
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    textDecoration = TextDecoration.Underline,
+                                    letterSpacing = (-0.175).sp
+                                ),
+                                color = Orange90,
+                                textAlign = TextAlign.Start
+                            )
+                        }
+                    }
+
+                    item{
+                        Spacer(Modifier.height(16.dp))
+
+                        PriceAnalysisOverview()
+                    }
+
+                    item {
+                        Spacer(Modifier.height(16.dp))
+
+                        Text(
+                            stringResource(R.string.rincian_prediksi_harga),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Black10,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        )
+
+                        Spacer(Modifier.height(16.dp))
+                    }
+
+                    items(
+                        count = 3,
+                        key = { it },
+                        itemContent = {
+                            PriceAnalysisContent(
+                                modifier = outermostPaddingModifier,
+                                damageLevelCategory = damageLevelCategoryInfo[it]
+                            )
+                            Spacer(Modifier.height(16.dp))
+                        }
                     )
                 }
             }
@@ -404,7 +507,7 @@ fun DiagnosisResultContent(
 
 
 
-@Preview(showBackground = true, heightDp = 1500)
+@Preview(showBackground = true, heightDp = 3500)
 @Composable
 private fun DiagnosisResultScreenPreview() {
     KamekAppTheme {

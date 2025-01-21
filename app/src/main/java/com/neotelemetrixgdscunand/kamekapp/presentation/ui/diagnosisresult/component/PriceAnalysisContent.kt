@@ -1,77 +1,155 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
+import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseDummies
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.formatDamageLevelEstimation
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.formatSellPriceEstimation
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange80
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.DetectedCacaoImageGrid
 
 @Composable
 fun PriceAnalysisContent(
     modifier: Modifier = Modifier,
-    sellPrice:Float = 0f,
-    damageLevel:Float = 0f
+    isInitiallyExpanded:Boolean = true,
+    damageLevelCategory: DamageLevelCategory = DamageLevelCategory.High
 ) {
-    val context = LocalContext.current
+
+    var isExpand by remember {
+        mutableStateOf(isInitiallyExpanded)
+    }
+
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(16.dp),
-    ){
-        PrimaryDescription(
-            title = stringResource(R.string.harga_jual),
-            description = remember {
-                formatSellPriceEstimation(context, sellPrice)
+    ) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(damageLevelCategory.titleResId),
+                style = MaterialTheme.typography.titleMedium,
+                color = Orange80,
+                modifier = Modifier.weight(1f)
+            )
+
+            IconButton(
+                onClick = {
+                    isExpand = !isExpand
+                },
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(14.dp),
+            ) {
+
+                val drawableResId = remember(isExpand) {
+                    if (isExpand) {
+                        R.drawable.ic_down_arrow
+                    } else R.drawable.ic_right_arrow
+                }
+
+                Icon(
+                    imageVector = ImageVector
+                        .vectorResource(drawableResId),
+                    contentDescription = null,
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .width(14.dp)
+                        .height(14.dp)
+                )
             }
-        )
+        }
+
+        if (isExpand){
+            Spacer(Modifier.height(24.dp))
+
+            SecondaryDescription(
+                title = stringResource(R.string.tingkat_serangan_penyakit),
+                description = stringResource(damageLevelCategory.descriptionResId)
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            SecondaryDescription(
+                title = stringResource(R.string.bobot_buah),
+                description = "1 Kg"
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            PriceAnalysisDetails(
+                subDamageLevelSubCategory = damageLevelCategory.firstSubLevelCategory
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            PriceAnalysisDetails(
+                subDamageLevelSubCategory = damageLevelCategory.secondSubLevelCategory
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            PriceAnalysisDetails(
+                subDamageLevelSubCategory = damageLevelCategory.thirdSubLevelCategory
+            )
+
+        }
 
         Spacer(Modifier.height(24.dp))
 
-        PrimaryDescription(
-            title = stringResource(R.string.varietas),
-            description = stringResource(R.string.strip)
-        )
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .border(1.dp, color = Maroon55, shape = RoundedCornerShape(8.dp))
+                .padding(vertical = 12.dp, horizontal = 8.dp),
+              verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                stringResource(R.string.sub_total_harga_jual),
+                style = MaterialTheme.typography.titleMedium,
+                color = Maroon55,
+                modifier = Modifier
+                    .weight(1f)
+            )
 
-        Spacer(Modifier.height(24.dp))
-
-        SecondaryDescription(
-            title = stringResource(R.string.bobot_buah),
-            description = stringResource(R.string.strip)
-        )
-
-        Spacer(Modifier.height(24.dp))
-
-        SecondaryDescription(
-            title = stringResource(R.string.tingkat_kerusakan),
-            description = stringResource(R.string.dummy_level_of_damage)
-        )
-
-        Spacer(Modifier.height(24.dp))
-
-        SecondaryDescription(
-            title = stringResource(R.string.tingkat_serangan_penyakit),
-            description = remember {
-                formatDamageLevelEstimation(context, damageLevel)
-            }
-        )
+            Text(
+                "Rp 3.000 - Rp 6.000/kg",
+                style = MaterialTheme.typography.labelMedium,
+                color = Maroon55
+            )
+        }
     }
 }
+
+
 
 @Composable
 fun PriceAnalysisContentLoading(modifier: Modifier = Modifier) {
@@ -163,10 +241,11 @@ fun PriceAnalysisContentLoading(modifier: Modifier = Modifier) {
 
 }
 
-@Preview
+@Preview(showBackground = true, heightDp = 1500)
 @Composable
 private fun PriceAnalysisContentPreview() {
     KamekAppTheme {
         PriceAnalysisContent()
     }
 }
+

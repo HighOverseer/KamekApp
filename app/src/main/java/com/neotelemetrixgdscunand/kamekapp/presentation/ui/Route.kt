@@ -54,3 +54,9 @@ data object Shop:Route()
 @Serializable
 data object Weather:Route()
 
+@Serializable
+data object Notification:Route()
+
+@Serializable
+data object CacaoRequestRoute:Route()
+

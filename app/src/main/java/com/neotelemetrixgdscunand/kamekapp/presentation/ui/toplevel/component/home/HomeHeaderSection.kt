@@ -3,6 +3,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.h
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -46,7 +47,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
 
 @Composable
-fun HomeHeaderSection(modifier: Modifier = Modifier) {
+fun HomeHeaderSection(
+    modifier: Modifier = Modifier,
+    navigateToNotification:()->Unit = {}
+) {
 
     val parentModifier = remember {
         modifier
@@ -170,6 +174,7 @@ fun HomeHeaderSection(modifier: Modifier = Modifier) {
 
                 Box(
                     modifier = iconBellModifier
+                        .clickable(onClick = navigateToNotification)
                 ){
                     Image(
                         imageVector = ImageVector

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
@@ -22,7 +23,9 @@ fun SecondaryButton(
     onClick: () -> Unit = {},
     text:String = "",
     textColor: Color = Grey60,
-    containerColor: Color = Color.Transparent
+    containerColor: Color = Color.Transparent,
+    borderColor: Color = Grey60,
+    textStyle: TextStyle = MaterialTheme.typography.titleMedium,
 ) {
     Button(
         modifier = modifier,
@@ -33,11 +36,11 @@ fun SecondaryButton(
             contentColor = Grey60,
             containerColor = containerColor,
         ),
-        border = BorderStroke(width = 1.dp, color = Grey60)
+        border = BorderStroke(width = 1.dp, color = borderColor)
     ) {
         Text(
             text,
-            style = MaterialTheme.typography.titleMedium,
+            style = textStyle,
             color = textColor
         )
     }

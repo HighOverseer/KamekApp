@@ -44,6 +44,7 @@ fun HomeScreen(
     navigateToWeather:()->Unit = {},
     navigateToNewsDetail:()->Unit = {},
     navigateToDiagnosisResult:(Int, String)->Unit = {_, _ -> },
+    navigateToNotification:()-> Unit = {},
     showSnackbar:(String)->Unit = {}
 ) {
 
@@ -57,6 +58,7 @@ fun HomeScreen(
         navigateToNewsDetail = navigateToNewsDetail,
         diagnosisHistories = diagnosisHistories,
         navigateToDiagnosisResult = navigateToDiagnosisResult,
+        navigateToNotification = navigateToNotification,
         showSnackbar = showSnackbar
     )
 }
@@ -70,6 +72,7 @@ fun HomeContent(
     navigateToNewsDetail:()->Unit = {},
     diagnosisHistories:List<DiagnosisHistoryItemData> = emptyList(),
     navigateToDiagnosisResult: (Int, String) -> Unit = { _, _ -> },
+    navigateToNotification:()-> Unit = {},
     showSnackbar:(String)->Unit = {}
 ){
     val parentListState = rememberLazyListState()
@@ -94,7 +97,9 @@ fun HomeContent(
     ) {
 
         item {
-            HomeHeaderSection()
+            HomeHeaderSection(
+                navigateToNotification = navigateToNotification
+            )
         }
 
         item{
