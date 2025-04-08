@@ -6,5 +6,4 @@ fun isInTopLevelPage(currentRoute:String?):Boolean {
     return currentRoute == BottomBarRoute.Home::class.java.canonicalName
             || currentRoute == BottomBarRoute.Diagnosis::class.java.canonicalName
             || currentRoute == BottomBarRoute.Account::class.java.canonicalName
-
 }

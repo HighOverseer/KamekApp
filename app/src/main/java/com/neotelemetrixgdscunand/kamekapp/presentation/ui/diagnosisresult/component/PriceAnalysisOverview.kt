@@ -46,7 +46,7 @@ fun PriceAnalysisOverview(modifier: Modifier = Modifier) {
     ) {
         SecondaryDescription(
             title = stringResource(R.string.total_buah_keseluruhan),
-            description = "10 Buah"
+            description = "3 Buah"
         )
 
         Spacer(Modifier.height(16.dp))

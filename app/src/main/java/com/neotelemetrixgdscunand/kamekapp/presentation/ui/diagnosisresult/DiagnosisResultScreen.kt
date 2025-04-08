@@ -135,15 +135,15 @@ fun DiagnosisResultContent(
     val topToArrowMargin = screenHeightDp * topToArrowMarginRatio
 
     var isDiagnosisTabSelected by remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
 
     val imageFile = remember(imagePath) {
-        val isInPreview = imagePath.isBlank()
-
-        if(isInPreview){
-            return@remember null
-        }
+//        val isInPreview = imagePath.isBlank()
+//
+//        if(isInPreview){
+//            return@remember null
+//        }
 
         if(imagePath.first() == 'h') {
             null
@@ -174,7 +174,6 @@ fun DiagnosisResultContent(
                 ?: DummyUtils.diagnosisDummyNameMap[outputId]
                 ?: "Dummy Session Name"
         }
-        mutableStateOf("null")
     }
 
     val outermostPaddingModifier = remember {
