@@ -36,14 +36,14 @@ fun DescriptionShimmeringLoading(
             .shimmeringEffect()
     }
 
-    repeat(lineCount){
-        val currentModifier = if(it == lineCount - 1) lastBoxModifier else boxModifier
+    repeat(lineCount) {
+        val currentModifier = if (it == lineCount - 1) lastBoxModifier else boxModifier
 
         Box(
             modifier = currentModifier
         )
 
-        if(it != lineCount - 1) {
+        if (it != lineCount - 1) {
             Spacer(Modifier.height(4.dp))
         }
     }

@@ -24,9 +24,9 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 @Composable
 fun ExplorationMenu(
     modifier: Modifier = Modifier,
-    iconResId:Int,
-    label:String,
-    onClick:()->Unit = {}
+    iconResId: Int,
+    label: String,
+    onClick: () -> Unit = {}
 ) {
 
     val imageModifier = remember {

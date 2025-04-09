@@ -126,7 +126,7 @@ fun ShopScreen(
             contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            items(NewsCategory.entries, key = { it.ordinal }){
+            items(NewsCategory.entries, key = { it.ordinal }) {
                 SearchCategory(
                     unselectedColor = Grey90,
                     isSelected = it == selectedCategory,
@@ -149,7 +149,7 @@ fun ShopScreen(
             items(
                 shopItems.size,
                 key = { it.hashCode() }
-            ){
+            ) {
 
                 ShopItem(
                     imageUrl = shopItems[it].imageUrl,

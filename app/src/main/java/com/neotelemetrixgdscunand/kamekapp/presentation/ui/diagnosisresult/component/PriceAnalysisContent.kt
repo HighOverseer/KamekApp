@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange80
@@ -36,7 +37,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange80
 @Composable
 fun PriceAnalysisContent(
     modifier: Modifier = Modifier,
-    isInitiallyExpanded:Boolean = true,
+    isInitiallyExpanded: Boolean = true,
+    diagnosisSession: DiagnosisSession,
     damageLevelCategory: DamageLevelCategory = DamageLevelCategory.High
 ) {
 
@@ -84,7 +86,7 @@ fun PriceAnalysisContent(
             }
         }
 
-        if (isExpand){
+        if (isExpand) {
             Spacer(Modifier.height(24.dp))
 
             SecondaryDescription(
@@ -102,18 +104,21 @@ fun PriceAnalysisContent(
             Spacer(Modifier.height(24.dp))
 
             PriceAnalysisDetails(
+                diagnosisSession = diagnosisSession,
                 subDamageLevelSubCategory = damageLevelCategory.firstSubLevelCategory
             )
 
             Spacer(Modifier.height(16.dp))
 
             PriceAnalysisDetails(
+                diagnosisSession = diagnosisSession,
                 subDamageLevelSubCategory = damageLevelCategory.secondSubLevelCategory
             )
 
             Spacer(Modifier.height(16.dp))
 
             PriceAnalysisDetails(
+                diagnosisSession = diagnosisSession,
                 subDamageLevelSubCategory = damageLevelCategory.thirdSubLevelCategory
             )
 
@@ -126,7 +131,7 @@ fun PriceAnalysisContent(
                 .fillMaxWidth()
                 .border(1.dp, color = Maroon55, shape = RoundedCornerShape(8.dp))
                 .padding(vertical = 12.dp, horizontal = 8.dp),
-              verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 stringResource(R.string.sub_total_harga_jual),
@@ -146,7 +151,6 @@ fun PriceAnalysisContent(
 }
 
 
-
 @Composable
 fun PriceAnalysisContentLoading(modifier: Modifier = Modifier) {
 
@@ -156,7 +160,7 @@ fun PriceAnalysisContentLoading(modifier: Modifier = Modifier) {
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(16.dp),
-    ){
+    ) {
 
 
         TitleShimmeringLoading(
@@ -241,7 +245,7 @@ fun PriceAnalysisContentLoading(modifier: Modifier = Modifier) {
 @Composable
 private fun PriceAnalysisContentPreview() {
     KamekAppTheme {
-        PriceAnalysisContent()
+        PriceAnalysisContent(diagnosisSession = DiagnosisSession())
     }
 }
 

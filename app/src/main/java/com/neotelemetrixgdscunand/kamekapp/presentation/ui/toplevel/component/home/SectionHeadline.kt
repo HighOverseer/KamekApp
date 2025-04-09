@@ -18,12 +18,12 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 fun SectionHeadline(
     modifier: Modifier = Modifier,
     leadingIconResId: Int? = null,
-    trailingIconResId:Int? = null,
-    title:String = "Test"
+    trailingIconResId: Int? = null,
+    title: String = "Test"
 ) {
     Row(
         modifier = modifier
-    ){
+    ) {
         leadingIconResId?.let {
             Image(
                 imageVector = ImageVector

@@ -26,8 +26,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     navigationBarItems: List<BottomBarItem> = getBottomBarItems(),
-    onSelectedNavigation:(BottomBarRoute) -> Unit = {},
-    currentRoute:String?=null
+    onSelectedNavigation: (BottomBarRoute) -> Unit = {},
+    currentRoute: String? = null
 ) {
 
     BottomAppBar(
@@ -40,7 +40,7 @@ fun BottomNavigationBar(
     ) {
         navigationBarItems.forEach {
             val isSelected = currentRoute == it.route::class.java.canonicalName
-            
+
             NavigationBarItem(
 
                 colors = NavigationBarItemDefaults.colors(
@@ -50,7 +50,7 @@ fun BottomNavigationBar(
                     selectedTextColor = Maroon55,
                     indicatorColor = Color.White,
 
-                ),
+                    ),
 
                 selected = isSelected,
                 icon = {

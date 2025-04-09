@@ -38,10 +38,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun BottomBarTakePhoto(
     modifier: Modifier = Modifier,
-    bottomBarStartMarginRatio:Float = 0.11864f,
-    bottomBarEndMarginRatio:Float = 0.09864f,
-    onCaptureImage:() -> Unit = {},
-    onGetImageFromGallery:() -> Unit = {}
+    bottomBarStartMarginRatio: Float = 0.11864f,
+    bottomBarEndMarginRatio: Float = 0.09864f,
+    onCaptureImage: () -> Unit = {},
+    onGetImageFromGallery: () -> Unit = {}
 ) {
     val parentModifier = remember {
         modifier
@@ -56,14 +56,14 @@ fun BottomBarTakePhoto(
     ) {
         BoxWithConstraints(
             Modifier.fillMaxSize()
-        ){
+        ) {
             val bottomBarMarginStart = this@BoxWithConstraints.maxWidth * bottomBarStartMarginRatio
             val bottomBarMarginEnd = this@BoxWithConstraints.maxWidth * bottomBarEndMarginRatio
 
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-            ){
+            ) {
                 Spacer(
                     Modifier.width(bottomBarMarginStart)
                 )
@@ -73,7 +73,7 @@ fun BottomBarTakePhoto(
                         .clickable(onClick = onGetImageFromGallery),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
-                ){
+                ) {
                     Image(
                         modifier = Modifier,
                         imageVector = ImageVector
@@ -98,8 +98,9 @@ fun BottomBarTakePhoto(
                         shape = CircleShape,
                         color = Maroon55,
                         width = 4.dp
-                    ).clickable(onClick = onCaptureImage)
-            ){
+                    )
+                    .clickable(onClick = onCaptureImage)
+            ) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.Center)

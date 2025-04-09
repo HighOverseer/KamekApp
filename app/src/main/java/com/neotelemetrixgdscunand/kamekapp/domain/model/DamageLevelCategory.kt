@@ -3,13 +3,13 @@ package com.neotelemetrixgdscunand.kamekapp.domain.model
 import com.neotelemetrixgdscunand.kamekapp.R
 
 abstract class DamageLevelCategory(
-    val titleResId:Int,
-    val descriptionResId:Int,
-    val boundLevel:Pair<Int, Int>,
-    val firstSubLevelCategory:DamageLevelSubCategory,
-    val secondSubLevelCategory:DamageLevelSubCategory,
-    val thirdSubLevelCategory:DamageLevelSubCategory,
-){
+    val titleResId: Int,
+    val descriptionResId: Int,
+    val boundLevel: Pair<Int, Int>,
+    val firstSubLevelCategory: DamageLevelSubCategory,
+    val secondSubLevelCategory: DamageLevelSubCategory,
+    val thirdSubLevelCategory: DamageLevelSubCategory,
+) {
 
     data object Low : DamageLevelCategory(
         titleResId = R.string.tingkat_kerusakan_rendah,
@@ -68,7 +68,7 @@ abstract class DamageLevelCategory(
 }
 
 class DamageLevelSubCategory(
-    val subTitleResId:Int,
-    val subBoundLevel:Pair<Double, Double>,
+    val subTitleResId: Int,
+    val subBoundLevel: Pair<Double, Double>,
 )
 

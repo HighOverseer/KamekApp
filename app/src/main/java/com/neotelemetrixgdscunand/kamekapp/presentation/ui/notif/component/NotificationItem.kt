@@ -42,14 +42,14 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.S
 @Composable
 fun NotificationItem(
     modifier: Modifier = Modifier,
-    currentAmountFulfilled:Float,
-    exporterName:String = "-",
-    sendDate:String = "-",
-    exporterImageUrl:String = "",
-    totalAmountDemands:Float,
-    isAgreed:Boolean = false,
-    message:String = "-",
-    navigateToDetail:() -> Unit = { }
+    currentAmountFulfilled: Float,
+    exporterName: String = "-",
+    sendDate: String = "-",
+    exporterImageUrl: String = "",
+    totalAmountDemands: Float,
+    isAgreed: Boolean = false,
+    message: String = "-",
+    navigateToDetail: () -> Unit = { }
 ) {
 
     val isFulfilled = remember(currentAmountFulfilled, totalAmountDemands) {
@@ -57,9 +57,9 @@ fun NotificationItem(
     }
 
     val contentMarginModifier = remember {
-        if(isAgreed){
+        if (isAgreed) {
             Modifier.height(12.dp)
-        }else Modifier.height(8.dp)
+        } else Modifier.height(8.dp)
     }
 
     Column(
@@ -88,7 +88,7 @@ fun NotificationItem(
                 Row(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Text(
                         exporterName,
                         style = MaterialTheme.typography.titleMedium.copy(
@@ -130,7 +130,7 @@ fun NotificationItem(
                         modifier = Modifier.weight(1f)
                     )
 
-                    if(isAgreed){
+                    if (isAgreed) {
                         Image(
                             painter = painterResource(R.drawable.ic_verified),
                             contentScale = ContentScale.Fit,
@@ -162,19 +162,20 @@ fun NotificationItem(
 
                 Spacer(Modifier.height(24.dp))
 
-                if(isFulfilled){
+                if (isFulfilled) {
                     SecondaryButton(
                         text = stringResource(R.string.telah_terpenuhi),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .height(45.dp),
                         borderColor = Grey75,
-                        textColor =  Grey47,
+                        textColor = Grey47,
                         contentPadding = PaddingValues(0.dp),
                         textStyle = MaterialTheme.typography.titleMedium,
                         containerColor = Grey75,
                         onClick = { }
                     )
-                }else{
+                } else {
                     SecondaryButton(
                         text = stringResource(R.string.cek_detail),
                         modifier = Modifier
@@ -182,13 +183,13 @@ fun NotificationItem(
                             .height(45.dp),
                         contentPadding = PaddingValues(0.dp),
                         borderColor = Maroon55,
-                        textColor =  Maroon55,
+                        textColor = Maroon55,
                         textStyle = MaterialTheme.typography.titleMedium,
                         containerColor = Color.Transparent,
                         onClick = navigateToDetail
                     )
                 }
-                
+
             }
         }
     }

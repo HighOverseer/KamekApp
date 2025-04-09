@@ -17,8 +17,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun CacaoTechnicalSpec(
     modifier: Modifier = Modifier,
-    titleResId:Int = -1,
-    text:String = ""
+    titleResId: Int = -1,
+    text: String = ""
 ) {
     Column(modifier = modifier) {
         Text(

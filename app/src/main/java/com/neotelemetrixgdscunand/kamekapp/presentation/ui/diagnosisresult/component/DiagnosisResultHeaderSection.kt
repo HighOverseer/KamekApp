@@ -15,35 +15,18 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun DiagnosisResultHeaderSection(
     modifier: Modifier = Modifier,
-    sessionName:String = "",
-    diseaseName:String = "",
+    sessionName: String = "",
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp, top = 24.dp, end = 16.dp)
-    ){
+    ) {
         Text(
             sessionName,
             style = MaterialTheme.typography.headlineSmall,
             color = Black10
         )
-
-//        Spacer(Modifier.height(16.dp))
-//
-//        Text(
-//            stringResource(R.string.penyakit),
-//            style = MaterialTheme.typography.labelMedium,
-//            color = Grey60
-//        )
-//
-//        Spacer(Modifier.height(8.dp))
-//
-//        Text(
-//            diseaseName,
-//            style = MaterialTheme.typography.titleMedium,
-//            color = Black10
-//        )
     }
 }
 
@@ -56,30 +39,13 @@ fun DiagnosisResultHeaderSectionLoading(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp, top = 24.dp, end = 16.dp)
-    ){
+    ) {
 
         Text(
             sessionName,
             style = MaterialTheme.typography.headlineSmall,
             color = Black10
         )
-
-//        Spacer(Modifier.height(16.dp))
-//
-//
-//        Text(
-//            stringResource(R.string.penyakit),
-//            style = MaterialTheme.typography.labelMedium,
-//            color = Grey60
-//        )
-//
-//        Spacer(Modifier.height(8.dp))
-//
-//        DescriptionShimmeringLoading(
-//            lineHeight = 17.dp,
-//            lastLineWidthRatio = 0.7f,
-//            lineCount = 2
-//        )
     }
 }
 

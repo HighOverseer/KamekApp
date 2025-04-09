@@ -69,7 +69,7 @@ fun WeeklyNews(
                 modifier = imageModifier
                     .align(Alignment.CenterVertically)
                     .fillMaxSize()
-            ){
+            ) {
                 AsyncImage(
                     modifier = Modifier
                         .align(Alignment.Center),

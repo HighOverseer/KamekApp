@@ -15,18 +15,18 @@ import javax.inject.Inject
 @HiltViewModel
 class DiagnosisViewModel @Inject constructor(
     private val repository: Repository
-):ViewModel() {
+) : ViewModel() {
 
-    val diagnosisHistory = repository.getAllDiagnosisHistories()
+    val diagnosisHistoryPreview = repository.getAllSavedDiagnosisSessionPreviews()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     var job: Job? = null
 
-    fun search(query:String){
+    fun search(query: String) {
         job?.cancel()
         job = viewModelScope.launch {
-            withContext(Dispatchers.Default){
-                diagnosisHistory.value.filter {
+            withContext(Dispatchers.Default) {
+                diagnosisHistoryPreview.value.filter {
                     it.title.contains("query", ignoreCase = true)
                 }
             }

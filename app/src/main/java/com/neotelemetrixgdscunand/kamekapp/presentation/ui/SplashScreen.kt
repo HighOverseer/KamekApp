@@ -28,7 +28,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(
     modifier: Modifier = Modifier,
-    navigateToLogin:() -> Unit = {}
+    navigateToLogin: () -> Unit = {}
 ) {
 
     LaunchedEffect(true) {
@@ -42,7 +42,7 @@ fun SplashScreen(
             .background(color = Maroon55),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Image(
             modifier = Modifier
                 .width(157.dp)

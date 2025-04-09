@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItemData
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.ExplorationSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.HomeDiagnosisHistory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.HomeHeaderSection
@@ -39,16 +39,16 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.viewmodel.Ho
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToNews:()->Unit = {},
-    navigateToShop:()->Unit = {},
-    navigateToWeather:()->Unit = {},
-    navigateToNewsDetail:()->Unit = {},
-    navigateToDiagnosisResult:(Int, String)->Unit = {_, _ -> },
-    navigateToNotification:()-> Unit = {},
-    showSnackbar:(String)->Unit = {}
+    navigateToNews: () -> Unit = {},
+    navigateToShop: () -> Unit = {},
+    navigateToWeather: () -> Unit = {},
+    navigateToNewsDetail: () -> Unit = {},
+    navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
+    navigateToNotification: () -> Unit = {},
+    showSnackbar: (String) -> Unit = {}
 ) {
 
-    val diagnosisHistories by viewModel.diagnosisHistory.collectAsState()
+    val diagnosisSessionPreviews by viewModel.diagnosisHistory.collectAsState()
 
     HomeContent(
         modifier = modifier,
@@ -56,7 +56,7 @@ fun HomeScreen(
         navigateToShop = navigateToShop,
         navigateToWeather = navigateToWeather,
         navigateToNewsDetail = navigateToNewsDetail,
-        diagnosisHistories = diagnosisHistories,
+        diagnosisSessionPreviews = diagnosisSessionPreviews,
         navigateToDiagnosisResult = navigateToDiagnosisResult,
         navigateToNotification = navigateToNotification,
         showSnackbar = showSnackbar
@@ -66,15 +66,15 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
-    navigateToNews:()->Unit = {},
-    navigateToShop:()->Unit = {},
-    navigateToWeather:()->Unit = {},
-    navigateToNewsDetail:()->Unit = {},
-    diagnosisHistories:List<DiagnosisHistoryItemData> = emptyList(),
-    navigateToDiagnosisResult: (Int, String) -> Unit = { _, _ -> },
-    navigateToNotification:()-> Unit = {},
-    showSnackbar:(String)->Unit = {}
-){
+    navigateToNews: () -> Unit = {},
+    navigateToShop: () -> Unit = {},
+    navigateToWeather: () -> Unit = {},
+    navigateToNewsDetail: () -> Unit = {},
+    diagnosisSessionPreviews: List<DiagnosisSessionPreview> = emptyList(),
+    navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
+    navigateToNotification: () -> Unit = {},
+    showSnackbar: (String) -> Unit = {}
+) {
     val parentListState = rememberLazyListState()
     val diagnosisHistoryListState = rememberLazyListState()
 
@@ -102,7 +102,7 @@ fun HomeContent(
             )
         }
 
-        item{
+        item {
             PriceInfoSection()
         }
 
@@ -143,11 +143,11 @@ fun HomeContent(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 state = diagnosisHistoryListState
             ) {
-                items(diagnosisHistories, {it.id}){ item ->
+                items(diagnosisSessionPreviews, { it.id }) { item ->
                     HomeDiagnosisHistory(
                         modifier = Modifier
-                            .clickable{
-                                navigateToDiagnosisResult(item.outputId, item.imageUrlOrPath)
+                            .clickable {
+                                navigateToDiagnosisResult(item.id)
                             },
                         item = item
                     )
@@ -173,7 +173,7 @@ fun HomeContent(
             }
         }
 
-        items(weeklyNewsItems, { it.id }){ item ->
+        items(weeklyNewsItems, { it.id }) { item ->
             WeeklyNews(
                 modifier = weeklyItemModifier,
                 item = item

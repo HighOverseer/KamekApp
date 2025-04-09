@@ -36,12 +36,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistory
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItemData
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchHistoryCategory
@@ -53,16 +53,16 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.dashedBorder
 fun DiagnosisScreen(
     modifier: Modifier = Modifier,
     viewModel: DiagnosisViewModel = hiltViewModel(),
-    navigateToTakePhoto:() -> Unit = {},
-    navigateToDiagnosisResult: (Int, String) -> Unit = { _, _ -> }
+    navigateToTakePhoto: () -> Unit = {},
+    navigateToDiagnosisResult: (Int) -> Unit = { _ -> }
 ) {
 
-    val diagnosisHistories by viewModel.diagnosisHistory.collectAsState()
+    val diagnosisHistories by viewModel.diagnosisHistoryPreview.collectAsState()
 
     DiagnosisContent(
         modifier = modifier,
         navigateToTakePhoto = navigateToTakePhoto,
-        diagnosisHistories = diagnosisHistories,
+        diagnosisSessionPreviews = diagnosisHistories,
         navigateToDiagnosisResult = navigateToDiagnosisResult
     )
 
@@ -73,9 +73,9 @@ fun DiagnosisScreen(
 @Composable
 fun DiagnosisContent(
     modifier: Modifier = Modifier,
-    navigateToTakePhoto:() -> Unit = {},
-    diagnosisHistories:List<DiagnosisHistoryItemData> = emptyList(),
-    navigateToDiagnosisResult: (Int, String) -> Unit = { _, _ -> }
+    navigateToTakePhoto: () -> Unit = {},
+    diagnosisSessionPreviews: List<DiagnosisSessionPreview> = emptyList(),
+    navigateToDiagnosisResult: (Int) -> Unit = { _ -> }
 ) {
 
     var searchQuery by remember {
@@ -131,12 +131,12 @@ fun DiagnosisContent(
         Modifier
             .fillMaxWidth()
             .background(color = Grey90)
-            .padding(horizontal =  16.dp)
+            .padding(horizontal = 16.dp)
     }
 
     BoxWithConstraints(
         modifier = modifier
-    ){
+    ) {
         val maxHeight = this.maxHeight
 
         LazyColumn(
@@ -147,9 +147,11 @@ fun DiagnosisContent(
             item {
                 Spacer(Modifier.height(topMarginRatio * maxHeight))
 
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
 
                     Text(
                         modifier = Modifier
@@ -167,7 +169,8 @@ fun DiagnosisContent(
             item {
 
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
                     TakePhotoSection(modifier = cardModifier, onClick = navigateToTakePhoto)
@@ -210,7 +213,7 @@ fun DiagnosisContent(
                     contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(SearchHistoryCategory.entries, key = { it.ordinal }){
+                    items(SearchHistoryCategory.entries, key = { it.ordinal }) {
                         SearchCategory(
                             isSelected = it == selectedSearchHistoryCategory,
                             text = stringResource(it.textResId)
@@ -220,24 +223,21 @@ fun DiagnosisContent(
 
             }
 
-            itemsIndexed(diagnosisHistories, { _, it -> it.id }){ index, item ->
-                Spacer(Modifier.height(
-                    if(index == 0) 8.dp else 16.dp
-                ))
+            itemsIndexed(diagnosisSessionPreviews, { _, it -> it.id }) { index, item ->
+                Spacer(
+                    Modifier.height(
+                        if (index == 0) 8.dp else 16.dp
+                    )
+                )
 
                 DiagnosisHistory(
                     modifier = diagnosisHistoryModifier
                         .clickable {
-                            navigateToDiagnosisResult(
-                                item.outputId,
-                                item.imageUrlOrPath
-                            )
+                            navigateToDiagnosisResult(item.id)
                         },
                     item = item,
                 )
             }
-
-
         }
     }
 

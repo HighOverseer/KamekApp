@@ -25,11 +25,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.CacaoImageDetailRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.CacaoRequestRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.DiagnosisResultRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.News
@@ -38,6 +38,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Notification
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Shop
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.TakePhotoRoute
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Weather
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.cacaoimagedetail.CacaoImageDetailScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.DiagnosisResultScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsDetailScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsScreen
@@ -58,7 +59,7 @@ import kotlinx.coroutines.launch
 fun TopLevelPage(
     modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController(),
-    isCameraPermissionGranted:Boolean?,
+    isCameraPermissionGranted: Boolean?,
 ) {
 
     val navigationBarItems = remember {
@@ -85,12 +86,12 @@ fun TopLevelPage(
     }
 
     LaunchedEffect(currentRoute) {
-        if(context !is MainActivity) return@LaunchedEffect
+        if (context !is MainActivity) return@LaunchedEffect
 
-        if(currentRoute == TakePhotoRoute::class.java.canonicalName){
+        if (currentRoute == TakePhotoRoute::class.java.canonicalName) {
             context.hideStatusBar()
             isLastDestinationFromTakePictureScreen = true
-        }else if(isLastDestinationFromTakePictureScreen){
+        } else if (isLastDestinationFromTakePictureScreen) {
             context.showStatusBar()
             isLastDestinationFromTakePictureScreen = false
         }
@@ -108,16 +109,16 @@ fun TopLevelPage(
             )
         },
         bottomBar = {
-            if(isInTopLevelRoute){
+            if (isInTopLevelRoute) {
                 BottomNavigationBar(
                     navigationBarItems = navigationBarItems,
                     currentRoute = currentRoute,
                     onSelectedNavigation = { nextDestination ->
-                        if(currentRoute != nextDestination::class.java.canonicalName){
+                        if (currentRoute != nextDestination::class.java.canonicalName) {
                             navHostController.navigate(
                                 nextDestination
-                            ){
-                                popUpTo(navHostController.graph.startDestinationId){
+                            ) {
+                                popUpTo(navHostController.graph.startDestinationId) {
                                     saveState = true
                                 }
                                 launchSingleTop = true
@@ -157,9 +158,13 @@ fun TopLevelPage(
                             NewsDetail
                         )
                     },
-                    navigateToDiagnosisResult = { outputId, imageUrlOrPath ->
+                    navigateToDiagnosisResult = { sessionId ->
                         navHostController.navigate(
-                            DiagnosisResultRoute(imageUrlOrPath, outputId)
+                            DiagnosisResultRoute(
+                                sessionId = sessionId,
+                                newSessionName = null,
+                                newUnsavedSessionImagePath = null
+                            )
                         )
                     },
                     navigateToNotification = {
@@ -181,11 +186,12 @@ fun TopLevelPage(
                             TakePhotoRoute
                         )
                     },
-                    navigateToDiagnosisResult = { outputId, imagePath ->
+                    navigateToDiagnosisResult = { sessionId ->
                         navHostController.navigate(
                             DiagnosisResultRoute(
-                                imagePath = imagePath,
-                                outputId = outputId
+                                sessionId = sessionId,
+                                newSessionName = null,
+                                newUnsavedSessionImagePath = null
                             )
                         )
                     }
@@ -208,9 +214,15 @@ fun TopLevelPage(
                         }
                     },
                     navigateUp = navHostController::navigateUp,
-                    navigateToResult = { imagePath ->
-                        navHostController.navigate(DiagnosisResultRoute(imagePath, null)){
-                            popUpTo<BottomBarRoute.Diagnosis>{
+                    navigateToResult = { newSessionName, newUnsavedSessionImagePath ->
+                        navHostController.navigate(
+                            DiagnosisResultRoute(
+                                sessionId = null,
+                                newSessionName = newSessionName,
+                                newUnsavedSessionImagePath = newUnsavedSessionImagePath
+                            )
+                        ) {
+                            popUpTo<BottomBarRoute.Diagnosis> {
                                 inclusive = false
                             }
                         }
@@ -219,11 +231,22 @@ fun TopLevelPage(
             }
 
             composable<DiagnosisResultRoute> {
-                val route = it.toRoute<DiagnosisResultRoute>()
                 DiagnosisResultScreen(
                     navigateUp = navHostController::navigateUp,
-                    imagePath = route.imagePath,
-                    outputId = route.outputId
+                    showSnackbar = {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(it)
+                        }
+                    },
+                    navigateToCacaoImageDetail = { sessionId, detectedCacaoId, imagePreviewPath ->
+                        navHostController.navigate(
+                            CacaoImageDetailRoute(
+                                diagnosisSessionId = sessionId,
+                                detectedCacaoId = detectedCacaoId,
+                                imagePath = imagePreviewPath
+                            )
+                        )
+                    }
                 )
             }
 
@@ -236,13 +259,13 @@ fun TopLevelPage(
                 )
             }
 
-            composable<NewsDetail>{
+            composable<NewsDetail> {
                 NewsDetailScreen(
                     navigateUp = navHostController::navigateUp
                 )
             }
 
-            composable<Weather>{
+            composable<Weather> {
                 WeatherScreen(
                     navigateUp = navHostController::navigateUp
                 )
@@ -270,20 +293,24 @@ fun TopLevelPage(
                     navigateUp = navHostController::navigateUp
                 )
             }
+
+            composable<CacaoImageDetailRoute> {
+                CacaoImageDetailScreen(
+                    navigateUp = navHostController::navigateUp
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun rememberCurrentRoute(navBackStackEntry: NavBackStackEntry?):State<String?>{
+private fun rememberCurrentRoute(navBackStackEntry: NavBackStackEntry?): State<String?> {
     return remember(navBackStackEntry) {
         derivedStateOf {
             navBackStackEntry?.destination?.route
         }
     }
 }
-
-
 
 
 @Preview

@@ -30,14 +30,14 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.Primar
 
 @Composable
 fun InputPhotoNameDialog(
-    isShowDialog:Boolean = false,
-    onDismiss:()->Unit = { },
-    name:String = "",
-    onValueNameChange:(String) -> Unit = {},
-    onSubmit:() -> Unit = {}
+    isShowDialog: Boolean = false,
+    onDismiss: () -> Unit = { },
+    name: String = "",
+    onValueNameChange: (String) -> Unit = {},
+    onSubmit: () -> Unit = {}
 ) {
 
-    if(isShowDialog){
+    if (isShowDialog) {
         val interactionSource = remember {
             MutableInteractionSource()
         }
@@ -75,7 +75,7 @@ fun InputPhotoNameDialog(
 
                     Spacer(Modifier.height(24.dp))
 
-                    Row{
+                    Row {
                         SecondaryButton(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.batal),

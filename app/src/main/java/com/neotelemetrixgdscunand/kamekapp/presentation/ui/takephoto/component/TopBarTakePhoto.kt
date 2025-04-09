@@ -24,9 +24,9 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun TopBarTakePhoto(
     modifier: Modifier = Modifier,
-    topBarHeightRatio:Float = 0.089f,
-    switchCameraLens:() -> Unit = {},
-    cancelSession:() -> Unit = {}
+    topBarHeightRatio: Float = 0.089f,
+    switchCameraLens: () -> Unit = {},
+    cancelSession: () -> Unit = {}
 ) {
     val topBarModifier = remember {
         modifier

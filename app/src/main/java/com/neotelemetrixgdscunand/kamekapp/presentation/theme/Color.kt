@@ -11,7 +11,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 
-
 val Maroon55 = Color(0xFF711010)
 val Maroon50 = Color(0xFF671717)
 val Maroon60 = Color(0xFF9B2828)
@@ -22,7 +21,7 @@ val Grey60 = Color(0xFF908E8E)
 val Grey68 = Color(0xFFBEBEBE)
 val Grey65 = Color(0xFFB8B8B8)
 val Grey69 = Color(0xFFCFCFCF)
-val Grey70= Color(0xFFD5D5D5)
+val Grey70 = Color(0xFFD5D5D5)
 val Grey90 = Color(0xFFF5F5F5)
 val Grey55 = Color(0xFF9A9A9A)
 val Grey50 = Color(0xFF9C9191)

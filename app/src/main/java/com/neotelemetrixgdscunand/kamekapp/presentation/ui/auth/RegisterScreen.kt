@@ -58,18 +58,18 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
         password = password,
         confirmationPassword = confirmationPassword,
         onUsernameChange = {
-            if(it.length <= textMaxLength){
+            if (it.length <= textMaxLength) {
                 username = it
             }
 
         },
         onPasswordChange = {
-            if(it.length <= textMaxLength){
+            if (it.length <= textMaxLength) {
                 password = it
             }
         },
         onConfirmationPasswordChange = {
-            if(it.length <= textMaxLength){
+            if (it.length <= textMaxLength) {
                 confirmationPassword = it
             }
         },
@@ -92,16 +92,16 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
 @Composable
 fun RegisterContent(
     modifier: Modifier = Modifier,
-    username:String = "",
-    password:String = "",
-    confirmationPassword:String="",
-    onUsernameChange:(String) -> Unit = {},
-    onPasswordChange:(String) -> Unit = {},
-    onConfirmationPasswordChange:(String) -> Unit = {},
-    isPasswordVisible:Boolean = false,
-    isConfirmationPasswordVisible:Boolean = false,
-    changePasswordVisibility:(Boolean) -> Unit = {},
-    changeConfirmationPasswordVisibility:(Boolean) -> Unit = {},
+    username: String = "",
+    password: String = "",
+    confirmationPassword: String = "",
+    onUsernameChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+    onConfirmationPasswordChange: (String) -> Unit = {},
+    isPasswordVisible: Boolean = false,
+    isConfirmationPasswordVisible: Boolean = false,
+    changePasswordVisibility: (Boolean) -> Unit = {},
+    changeConfirmationPasswordVisibility: (Boolean) -> Unit = {},
     usernameInteractionSource: MutableInteractionSource = MutableInteractionSource(),
     passwordInteractionSource: MutableInteractionSource = MutableInteractionSource(),
     confirmationPasswordInteractionSource: MutableInteractionSource = MutableInteractionSource()
@@ -109,7 +109,7 @@ fun RegisterContent(
     val topMarginToContentRatio = 0.0838f
     val headlineToLogoMarginRatio = 0.0805f
     val formToHeadlineMarginRatio = 0.0697f
-    val buttonToFormMarginRatio =  0.0872f
+    val buttonToFormMarginRatio = 0.0872f
 
     val isUsernameTextFieldFocused by usernameInteractionSource.collectIsFocusedAsState()
     val isPasswordTextFieldFocused by passwordInteractionSource.collectIsFocusedAsState()
@@ -165,14 +165,14 @@ fun RegisterContent(
                 onValueChange = onPasswordChange,
                 value = password,
                 isFocused = isPasswordTextFieldFocused,
-                visualTransformation = if(isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Icon(
                         modifier = Modifier
-                            .clickable{
+                            .clickable {
                                 changePasswordVisibility(!isPasswordVisible)
                             },
-                        imageVector = if(isPasswordVisible)
+                        imageVector = if (isPasswordVisible)
                             ImageVector
                                 .vectorResource(
                                     R.drawable.ic_eye,
@@ -195,14 +195,14 @@ fun RegisterContent(
                 onValueChange = onConfirmationPasswordChange,
                 value = confirmationPassword,
                 isFocused = isConfirmationPasswordTextFieldFocused,
-                visualTransformation = if(isConfirmationPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (isConfirmationPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Icon(
                         modifier = Modifier
-                            .clickable{
+                            .clickable {
                                 changeConfirmationPasswordVisibility(!isConfirmationPasswordVisible)
                             },
-                        imageVector = if(isConfirmationPasswordVisible)
+                        imageVector = if (isConfirmationPasswordVisible)
                             ImageVector
                                 .vectorResource(
                                     R.drawable.ic_eye,
@@ -237,7 +237,6 @@ fun RegisterContent(
             )
 
         }
-
 
 
     }

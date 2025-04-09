@@ -71,7 +71,7 @@ fun PriceInfoSection(modifier: Modifier = Modifier) {
 
         Column(
             horizontalAlignment = Alignment.End
-        ){
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {

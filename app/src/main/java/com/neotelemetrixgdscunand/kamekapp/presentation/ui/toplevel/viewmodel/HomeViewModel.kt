@@ -11,10 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: Repository
-):ViewModel() {
+) : ViewModel() {
 
-    val diagnosisHistory = repository.getAllDiagnosisHistories()
+    val diagnosisHistory = repository.getAllSavedDiagnosisSessionPreviews()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
 
 }

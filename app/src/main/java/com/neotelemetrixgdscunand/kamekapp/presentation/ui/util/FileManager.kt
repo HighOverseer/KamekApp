@@ -16,9 +16,9 @@ class FileManager(
 
     suspend fun saveImage(
         imageUri: Uri?,
-        imageBytes:ByteArray?,
-        fileName:String = "image"
-    ):String?{
+        imageBytes: ByteArray?,
+        fileName: String = "image"
+    ): String? {
         return withContext(Dispatchers.IO) {
             if (imageBytes == null) return@withContext null
 
@@ -29,9 +29,9 @@ class FileManager(
                 .getSingleton()
                 .getExtensionFromMimeType(mimeType) ?: "jpeg"
 
-            if(imageUri.scheme == "file"){
+            if (imageUri.scheme == "file") {
                 val oldFile = imageUri.toFile()
-                if(oldFile.exists()) oldFile.delete()
+                if (oldFile.exists()) oldFile.delete()
             }
 
 
@@ -45,10 +45,10 @@ class FileManager(
 
     }
 
-    private fun renameFile(file: File?, newName: String):Uri{
-        if(file == null) throw Exception("File is null")
+    private fun renameFile(file: File?, newName: String): Uri {
+        if (file == null) throw Exception("File is null")
 
-        if(!file.exists()) throw Exception("File not found")
+        if (!file.exists()) throw Exception("File not found")
 
         val newFile = File(file.parent, newName)
 
@@ -56,14 +56,13 @@ class FileManager(
         return newFile.toUri()
     }
 
-    fun deleteFile(fileUri: Uri?){
-        if(fileUri == null) return
+    fun deleteFile(fileUri: Uri?) {
+        if (fileUri == null) return
 
-        if(fileUri.scheme == "file"){
+        if (fileUri.scheme == "file") {
             val file = fileUri.toFile()
-            if(file.exists()) file.delete()
+            if (file.exists()) file.delete()
         }
-
     }
 
 }

@@ -34,14 +34,14 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.S
 
 @Composable
 fun InputFulfillAmountCacaoDialog(
-    isShowDialog:Boolean = false,
-    onDismiss:()->Unit = { },
-    value:String = "",
-    onValueChange:(String) -> Unit = {},
-    onSubmit:() -> Unit = {}
+    isShowDialog: Boolean = false,
+    onDismiss: () -> Unit = { },
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
+    onSubmit: () -> Unit = {}
 ) {
 
-    if(isShowDialog){
+    if (isShowDialog) {
         val interactionSource = remember {
             MutableInteractionSource()
         }
@@ -88,7 +88,7 @@ fun InputFulfillAmountCacaoDialog(
 
                     Spacer(Modifier.height(24.dp))
 
-                    Row{
+                    Row {
                         SecondaryButton(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.batal),

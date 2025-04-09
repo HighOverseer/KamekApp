@@ -28,10 +28,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun WeatherPredictionItem(
     modifier: Modifier = Modifier,
-    date:String,
-    temperatureRange:String,
-    humidityPercentage:Int,
-    windVelocity:Int
+    date: String,
+    temperatureRange: String,
+    humidityPercentage: Int,
+    windVelocity: Int
 ) {
     Row(
         modifier = modifier

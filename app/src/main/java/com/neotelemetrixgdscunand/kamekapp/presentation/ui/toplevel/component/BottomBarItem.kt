@@ -4,13 +4,13 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.BottomBarRoute
 
 data class BottomBarItem(
-    val titleRestId:Int,
-    val iconResId:Int,
-    val route:BottomBarRoute
+    val titleRestId: Int,
+    val iconResId: Int,
+    val route: BottomBarRoute
 )
 
 
-fun getBottomBarItems():List<BottomBarItem>{
+fun getBottomBarItems(): List<BottomBarItem> {
 
     return listOf(
         BottomBarItem(

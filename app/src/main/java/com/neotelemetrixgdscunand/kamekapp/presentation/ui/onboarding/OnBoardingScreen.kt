@@ -58,8 +58,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.Primar
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    navigateUp:()->Unit = { },
-    navigateToTopLevelPage:()->Unit = {}
+    navigateUp: () -> Unit = { },
+    navigateToTopLevelPage: () -> Unit = {}
 ) {
     var selectedTabIndex by remember {
         mutableIntStateOf(0)
@@ -68,7 +68,7 @@ fun OnBoardingScreen(
     val constraints = rememberConstraintSet(selectedTabIndex)
 
     val onBoardingImageResId = remember(selectedTabIndex) {
-        when(selectedTabIndex){
+        when (selectedTabIndex) {
             0 -> R.drawable.onboarding_1
             1 -> R.drawable.onboarding_2
             else -> R.drawable.onboarding_3
@@ -76,7 +76,7 @@ fun OnBoardingScreen(
     }
 
     val headlineResId = remember(selectedTabIndex) {
-        when(selectedTabIndex){
+        when (selectedTabIndex) {
             0 -> R.string.onboarding_1
             1 -> R.string.onboarding_2
             else -> R.string.onboarding_3
@@ -84,7 +84,7 @@ fun OnBoardingScreen(
     }
 
     val descResId = remember(selectedTabIndex) {
-        when(selectedTabIndex){
+        when (selectedTabIndex) {
             0 -> R.string.onboarding_1_desc
             1 -> R.string.onboarding_desc_2
             else -> R.string.onboarding_desc_3
@@ -94,16 +94,16 @@ fun OnBoardingScreen(
     BackHandler(
         enabled = true
     ) {
-        if(selectedTabIndex > 0){
+        if (selectedTabIndex > 0) {
             selectedTabIndex--
-        }else navigateUp()
+        } else navigateUp()
     }
 
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize(),
         constraintSet = constraints
-    ){
+    ) {
         val configuration = LocalConfiguration.current
         val screenWidthDp = configuration.screenWidthDp
         val onBoardingImageAspectRatio = 1.88f
@@ -113,7 +113,7 @@ fun OnBoardingScreen(
         val rightCloudHeightRatio = 0.0687f
         val birdAspectRatio = 5.02f
         val birdWidthToParentRatio = 0.2f
-        val birdWidth = remember{
+        val birdWidth = remember {
             (screenWidthDp * birdWidthToParentRatio).dp
         }
         val buttonWidthMin = remember {
@@ -172,8 +172,7 @@ fun OnBoardingScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .aspectRatio(onBoardingImageAspectRatio)
-                .layoutId(LayoutUtil.ON_BOARDING_IMAGE_ID)
-            ,
+                .layoutId(LayoutUtil.ON_BOARDING_IMAGE_ID),
             targetState = onBoardingImageResId,
             label = ""
         ) { targetOnBoardingImageResId ->
@@ -206,7 +205,7 @@ fun OnBoardingScreen(
                 .layoutId(LayoutUtil.TABS_ID),
             horizontalArrangement = Arrangement.Center
 
-        ){
+        ) {
             Box(
                 Modifier
                     .size(10.dp)
@@ -248,12 +247,12 @@ fun OnBoardingScreen(
                 .widthIn(min = buttonWidthMin)
                 .layoutId(LayoutUtil.BUTTON_ID),
             contentPadding = PaddingValues(horizontal = 40.dp, vertical = 12.5.dp),
-            text = if(selectedTabIndex < 2) {
+            text = if (selectedTabIndex < 2) {
                 stringResource(R.string.selanjutnya)
             } else stringResource(
                 R.string.mulai
             ),
-            trailingIcon = if(selectedTabIndex < 2){
+            trailingIcon = if (selectedTabIndex < 2) {
                 {
                     Icon(
                         Icons.Default.ArrowForward,
@@ -261,18 +260,18 @@ fun OnBoardingScreen(
                         contentDescription = null
                     )
                 }
-            }else null,
+            } else null,
             onClick = {
-                if(selectedTabIndex < 2){
+                if (selectedTabIndex < 2) {
                     selectedTabIndex++
-                }else navigateToTopLevelPage()
+                } else navigateToTopLevelPage()
             }
         )
     }
 }
 
 @Composable
-private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
+private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
     val configuration = LocalConfiguration.current
     var screenWidthDp by remember {
         mutableIntStateOf(configuration.screenWidthDp)
@@ -289,7 +288,7 @@ private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
     val birdToLeftCloudMargin = remember(selectedTabIndex) {
         val leftCloudHeightToParentRatio = 0.1138f
         val cloudHeight = screenHeightDp * leftCloudHeightToParentRatio
-        val birdToLeftCloudMarginRatio = when(selectedTabIndex){
+        val birdToLeftCloudMarginRatio = when (selectedTabIndex) {
             0 -> 0f
             1 -> -0.75f
             else -> -0.9f
@@ -297,8 +296,8 @@ private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
         (cloudHeight * birdToLeftCloudMarginRatio).dp
     }
 
-    val birdToParentMargin  = remember(selectedTabIndex){
-        val birdToParentMarginRatio = when(selectedTabIndex) {
+    val birdToParentMargin = remember(selectedTabIndex) {
+        val birdToParentMarginRatio = when (selectedTabIndex) {
             0 -> 0.135f
             1 -> 0.3f
             else -> 0.76f
@@ -308,7 +307,7 @@ private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
 
     val leftCloudToParentMargin = remember(selectedTabIndex) {
         val leftCloudWidthEstimation = (screenWidthDp * 0.55f).dp
-        val ratio = when(selectedTabIndex){
+        val ratio = when (selectedTabIndex) {
             0 -> 0f
             1 -> -0.45f
             else -> -0.7f
@@ -318,8 +317,8 @@ private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
 
     val rightCloudToParentMargin = remember(selectedTabIndex) {
         val rightCloudWidthEstimation = (screenWidthDp * 0.40f).dp
-        val ratio = when(selectedTabIndex){
-            0, 1-> -0.2f
+        val ratio = when (selectedTabIndex) {
+            0, 1 -> -0.2f
             else -> 0f
         }
         (rightCloudWidthEstimation * ratio)
@@ -362,16 +361,14 @@ private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
     )
 
 
-
-
     val rightCloudToLeftCloudMarginRatio = -0.0356f
-    val rightCloudToLeftCloudMargin =  (rightCloudToLeftCloudMarginRatio * screenHeightDp).dp
+    val rightCloudToLeftCloudMargin = (rightCloudToLeftCloudMarginRatio * screenHeightDp).dp
 
     val leftCloudToHeadlineMarginRatio = 0.061f
     val leftCloudToHeadlineMargin = (screenHeightDp * leftCloudToHeadlineMarginRatio).dp
 
     return remember(selectedTabIndex, screenWidthDp, screenHeightDp) {
-        ConstraintSet{
+        ConstraintSet {
             val onBoardingImage = createRefFor(LayoutUtil.ON_BOARDING_IMAGE_ID)
             val headline = createRefFor(LayoutUtil.HEADLINE_ID)
             val desc = createRefFor(LayoutUtil.DESC_ID)
@@ -381,17 +378,17 @@ private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
             val rightCloud = createRefFor(LayoutUtil.RIGHT_CLOUD_ID)
             val bird = createRefFor(LayoutUtil.BIRD_ID)
 
-            constrain(leftCloud){
+            constrain(leftCloud) {
                 bottom.linkTo(headline.top, margin = leftCloudToHeadlineMargin)
                 start.linkTo(parent.start, margin = animateLeftCloudToParentMargin)
             }
 
-            constrain(bird){
+            constrain(bird) {
                 start.linkTo(parent.start, margin = animateBirdToParentMargin)
                 bottom.linkTo(leftCloud.top, margin = animateBirdToLeftCloudMargin)
             }
 
-            constrain(rightCloud){
+            constrain(rightCloud) {
                 end.linkTo(parent.end, margin = animateRightCloudToParentMargin)
                 bottom.linkTo(leftCloud.top, margin = rightCloudToLeftCloudMargin)
             }
@@ -400,7 +397,7 @@ private fun rememberConstraintSet(selectedTabIndex:Int): ConstraintSet{
                 bottom.linkTo(onBoardingImage.top, margin = 40.dp)
             }
 
-            constrain(button){
+            constrain(button) {
                 top.linkTo(tabs.bottom, margin = 64.dp)
                 start.linkTo(tabs.start)
                 end.linkTo(tabs.end)

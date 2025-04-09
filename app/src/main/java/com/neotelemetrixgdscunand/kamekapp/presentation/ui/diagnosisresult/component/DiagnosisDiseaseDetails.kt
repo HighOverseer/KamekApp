@@ -35,12 +35,13 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.ho
 @Composable
 fun DiagnosisDiseaseDetails(
     modifier: Modifier = Modifier,
-    diseaseName:String="-",
-    diseaseCause:String = "-",
-    diseaseSymptoms:String = "-",
-    seedCondition:String = "-",
-    initiallyExpanded:Boolean = false,
-    detectedCacaos:List<DetectedCacao> = listOf()
+    diseaseName: String = "-",
+    diseaseCause: String = "-",
+    diseaseSymptoms: String = "-",
+    seedCondition: String = "-",
+    initiallyExpanded: Boolean = false,
+    imagePath: String = "",
+    detectedCacaos: List<DetectedCacao> = listOf()
 ) {
 
     var isExpand by remember {
@@ -72,9 +73,9 @@ fun DiagnosisDiseaseDetails(
             ) {
 
                 val drawableResId = remember(isExpand) {
-                    if(isExpand){
+                    if (isExpand) {
                         R.drawable.ic_down_arrow
-                    }else R.drawable.ic_right_arrow
+                    } else R.drawable.ic_right_arrow
                 }
 
                 Icon(
@@ -89,10 +90,13 @@ fun DiagnosisDiseaseDetails(
             }
         }
 
-        if(isExpand){
+        if (isExpand) {
             Spacer(Modifier.height(24.dp))
 
-            DetectedCacaoImageGrid(detectedCacaos = detectedCacaos)
+            DetectedCacaoImageGrid(
+                imagePath = imagePath,
+                detectedCacaos = detectedCacaos
+            )
 
             Spacer(Modifier.height(16.dp))
 
@@ -116,7 +120,7 @@ fun DiagnosisDiseaseDetails(
                 description = seedCondition
             )
         }
-        }
+    }
 
 }
 

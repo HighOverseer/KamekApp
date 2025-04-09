@@ -7,56 +7,64 @@ import kotlinx.serialization.Serializable
 sealed class Route
 
 @Serializable
-data object Splash:Route()
+data object Splash : Route()
 
 @Serializable
-data object Login:Route()
+data object Login : Route()
 
 @Serializable
-data object Register:Route()
+data object Register : Route()
 
 @Serializable
-data object OnBoarding:Route()
+data object OnBoarding : Route()
 
 @Serializable
-data object TopLevelPage:Route()
+data object TopLevelPage : Route()
 
 @Serializable
-sealed class BottomBarRoute:Route(){
+sealed class BottomBarRoute : Route() {
     @Serializable
-    data object Home:BottomBarRoute()
-
-    @Serializable
-    data object Diagnosis:BottomBarRoute()
+    data object Home : BottomBarRoute()
 
     @Serializable
-    data object Account:BottomBarRoute()
+    data object Diagnosis : BottomBarRoute()
+
+    @Serializable
+    data object Account : BottomBarRoute()
 }
 
 @Serializable
-data object TakePhotoRoute:Route()
+data object TakePhotoRoute : Route()
+
 
 @Serializable
 data class DiagnosisResultRoute(
-    val imagePath:String,
-    val outputId:Int?
-):Route()
+    val newUnsavedSessionImagePath: String?,
+    val newSessionName: String?,
+    val sessionId: Int?
+) : Route()
 
 @Serializable
-data object News:Route()
+data object News : Route()
 
 @Serializable
-data object NewsDetail:Route()
+data object NewsDetail : Route()
 
 @Serializable
-data object Shop:Route()
+data object Shop : Route()
 
 @Serializable
-data object Weather:Route()
+data object Weather : Route()
 
 @Serializable
-data object Notification:Route()
+data object Notification : Route()
 
 @Serializable
-data object CacaoRequestRoute:Route()
+data object CacaoRequestRoute : Route()
 
+@Serializable
+data class CacaoImageDetailRoute(
+    val imagePath: String,
+    val diagnosisSessionId: Int,
+    val detectedCacaoId: Int
+)

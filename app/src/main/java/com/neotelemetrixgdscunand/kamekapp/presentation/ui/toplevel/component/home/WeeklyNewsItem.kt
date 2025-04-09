@@ -1,13 +1,13 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home
 
 data class WeeklyNewsItem(
-    val id:Int,
-    val title:String,
-    val imageUrl:String,
-    val date:String
+    val id: Int,
+    val title: String,
+    val imageUrl: String,
+    val date: String
 )
 
-fun getDummyWeeklyNewsItems():List<WeeklyNewsItem> {
+fun getDummyWeeklyNewsItems(): List<WeeklyNewsItem> {
     val imageUrlItems = listOf(
         "https://akcdn.detik.net.id/visual/2023/10/13/tanaman-kakao_169.jpeg?w=715&q=90",
         "https://www.imperial.ac.uk/ImageCropToolT4/imageTool/uploaded-images/newseventsimage_1532078065374_mainnews2012_x1.jpg",

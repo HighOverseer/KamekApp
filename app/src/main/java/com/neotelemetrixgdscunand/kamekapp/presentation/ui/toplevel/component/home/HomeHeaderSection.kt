@@ -49,7 +49,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
 @Composable
 fun HomeHeaderSection(
     modifier: Modifier = Modifier,
-    navigateToNotification:()->Unit = {}
+    navigateToNotification: () -> Unit = {}
 ) {
 
     val parentModifier = remember {
@@ -110,9 +110,9 @@ fun HomeHeaderSection(
     )
     {
         val backgroundIconSize = remember {
-            if(this.maxWidth < this.maxHeight){
+            if (this.maxWidth < this.maxHeight) {
                 0.6125f * this.maxWidth
-            }else 0.6125f * this.maxHeight
+            } else 0.6125f * this.maxHeight
 
         }
         val backgroundIconModifier = remember {
@@ -134,10 +134,10 @@ fun HomeHeaderSection(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Box(
                     modifier = circleImageModifier
-                ){
+                ) {
                     AsyncImage(
                         modifier = Modifier
                             .align(Alignment.Center),
@@ -175,7 +175,7 @@ fun HomeHeaderSection(
                 Box(
                     modifier = iconBellModifier
                         .clickable(onClick = navigateToNotification)
-                ){
+                ) {
                     Image(
                         imageVector = ImageVector
                             .vectorResource(R.drawable.ic_bell),
@@ -187,7 +187,7 @@ fun HomeHeaderSection(
 
 
             Spacer(
-                modifier =  autoSpacerModifier
+                modifier = autoSpacerModifier
             )
             Column(
                 modifier = cardModifier

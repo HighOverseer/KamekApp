@@ -17,10 +17,10 @@ import androidx.compose.ui.unit.dp
 fun Modifier.dashedBorder(
     brush: Brush,
     shape: Shape,
-    strokeWidth:Dp = 2.dp,
-    dashLength:Dp = 4.dp,
-    gapLength:Dp = 4.dp,
-    cap:StrokeCap = StrokeCap.Round
+    strokeWidth: Dp = 2.dp,
+    dashLength: Dp = 4.dp,
+    gapLength: Dp = 4.dp,
+    cap: StrokeCap = StrokeCap.Round
 ) = this.drawWithContent {
 
     val outline = shape.createOutline(size, layoutDirection, density = this)
@@ -28,7 +28,7 @@ fun Modifier.dashedBorder(
         cap = cap,
         width = strokeWidth.toPx(),
         pathEffect = PathEffect.dashPathEffect(
-            intervals = floatArrayOf(dashLength.toPx(),gapLength.toPx())
+            intervals = floatArrayOf(dashLength.toPx(), gapLength.toPx())
         )
     )
 
@@ -45,8 +45,8 @@ fun Modifier.dashedBorder(
 fun Modifier.dashedBorder(
     color: Color,
     shape: Shape,
-    strokeWidth:Dp = 2.dp,
-    dashLength:Dp = 4.dp,
-    gapLength:Dp = 4.dp,
-    cap:StrokeCap = StrokeCap.Round
+    strokeWidth: Dp = 2.dp,
+    dashLength: Dp = 4.dp,
+    gapLength: Dp = 4.dp,
+    cap: StrokeCap = StrokeCap.Round
 ) = dashedBorder(brush = SolidColor(color), shape, strokeWidth, dashLength, gapLength, cap)

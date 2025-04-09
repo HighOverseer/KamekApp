@@ -11,7 +11,7 @@ import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun Context.getCameraProvider():ProcessCameraProvider{
+suspend fun Context.getCameraProvider(): ProcessCameraProvider {
     return suspendCoroutine { continuation ->
         ProcessCameraProvider.getInstance(this).also { cameraProvider ->
             cameraProvider.addListener({
@@ -22,11 +22,11 @@ suspend fun Context.getCameraProvider():ProcessCameraProvider{
 }
 
 fun captureImage(
-    imageCapture:ImageCapture,
+    imageCapture: ImageCapture,
     context: Context,
-    onSuccess:(Uri) -> Unit,
-    onError:(ImageCaptureException) -> Unit = {}
-){
+    onSuccess: (Uri) -> Unit,
+    onError: (ImageCaptureException) -> Unit = {}
+) {
     val outputFile = createCustomTempFile(context)
     val outputOptions = ImageCapture.OutputFileOptions
         .Builder(outputFile)
@@ -35,7 +35,7 @@ fun captureImage(
     imageCapture.takePicture(
         outputOptions,
         ContextCompat.getMainExecutor(context),
-        object : ImageCapture.OnImageSavedCallback{
+        object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 onSuccess(outputFileResults.savedUri ?: outputFile.toUri())
             }
@@ -47,7 +47,7 @@ fun captureImage(
     )
 }
 
-fun createCustomTempFile(context: Context, extension:String = "jpeg"): File {
+fun createCustomTempFile(context: Context, extension: String = "jpeg"): File {
     val fileDir = context.externalCacheDir
     val customTempFile = File.createTempFile("temp", ".$extension", fileDir)
     return customTempFile

@@ -48,7 +48,7 @@ fun DiagnosisResultTabSection(
             },
             contentPadding = PaddingValues(vertical = 8.dp),
             colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = if(isDiagnosisTabSelected) Maroon55 else Color.Transparent
+                containerColor = if (isDiagnosisTabSelected) Maroon55 else Color.Transparent
             )
         ) {
             Text(
@@ -56,7 +56,7 @@ fun DiagnosisResultTabSection(
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = if(isDiagnosisTabSelected) Color.White else Grey55
+                color = if (isDiagnosisTabSelected) Color.White else Grey55
             )
         }
 
@@ -71,7 +71,7 @@ fun DiagnosisResultTabSection(
             },
             contentPadding = PaddingValues(vertical = 8.dp),
             colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = if(!isDiagnosisTabSelected) Maroon55 else Color.Transparent
+                containerColor = if (!isDiagnosisTabSelected) Maroon55 else Color.Transparent
             )
         ) {
             Text(
@@ -79,7 +79,7 @@ fun DiagnosisResultTabSection(
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = if(!isDiagnosisTabSelected) Color.White else Grey55
+                color = if (!isDiagnosisTabSelected) Color.White else Grey55
             )
         }
     }

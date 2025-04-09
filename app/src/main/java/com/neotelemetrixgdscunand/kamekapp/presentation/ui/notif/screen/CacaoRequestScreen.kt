@@ -62,13 +62,13 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.Suppl
 @Composable
 fun CacaoRequestScreen(
     modifier: Modifier = Modifier,
-    navigateUp:()-> Unit = {},
-    currentAmountFulfilled:Float = 0f,
-    totalAmountDemands:Float = 0f
+    navigateUp: () -> Unit = {},
+    currentAmountFulfilled: Float = 0f,
+    totalAmountDemands: Float = 0f
 ) {
 
     val progressFraction = remember(currentAmountFulfilled, totalAmountDemands) {
-        val progress = currentAmountFulfilled/totalAmountDemands
+        val progress = currentAmountFulfilled / totalAmountDemands
         progress.coerceIn(0f, 1f)
     }
 
@@ -82,7 +82,7 @@ fun CacaoRequestScreen(
 
     val lazyListRowState = rememberLazyListState()
     val cacaoPhotos = remember {
-        List(6){
+        List(6) {
             "https://s3-alpha-sig.figma.com/img/86ec/eb1d/880b37b9a3edc5d734e482b54e2415bc?Expires=1737936000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QQUE6G7FyaWre22eVVZ95skNbVWTAoWFb-GsakTBJprz5iPrARUDjgW7l92p4cuvBWv3UiDFGEVKkJZrjV4z5kvHTX7pE3gDUCSSAFCfmiZyxKKFhiYS15fY4DQh98Rpoc8bLU6qVkmFQeELF103D2JHQwgS~hPUXO36r3kOwdXZXFKn~OSRd-WNMryy9KKzCrckA-mrNoJlkjKI5Y7upLj0uv1h-Ouo9501Wkv0i4rzeeQhhLUqHZ6D5CuxvMX3mGdAOCGgXLXl5Ypk~6z5a7WxE2~8Hh0jIfx36nqmftcGm6bRA4e8AbjCBqHVtux7-v4IU4onadWX-UnBPpuJoA__"
         }
     }
@@ -196,7 +196,7 @@ fun CacaoRequestScreen(
                         .fillMaxWidth()
                         .height(6.dp)
                         .background(color = Grey71, shape = RoundedCornerShape(2.dp)),
-                ){
+                ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(progressFraction)
@@ -215,7 +215,7 @@ fun CacaoRequestScreen(
                     .background(color = Color.White, shape = RoundedCornerShape(8.dp))
                     .padding(vertical = 24.dp, horizontal = 16.dp),
 
-            ) {
+                ) {
                 Row(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.Top
@@ -293,7 +293,7 @@ fun CacaoRequestScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
-                items(cacaoPhotos){
+                items(cacaoPhotos) {
                     AsyncImage(
                         model = it,
                         alignment = Alignment.Center,
@@ -317,7 +317,7 @@ fun CacaoRequestScreen(
                 outermostPaddingModifier
                     .background(color = Color.White, shape = RoundedCornerShape(12.dp))
                     .padding(vertical = 24.dp, horizontal = 16.dp)
-            ){
+            ) {
                 Text(
                     stringResource(R.string.cocoa_profile),
                     style = MaterialTheme.typography.titleLarge.copy(
@@ -428,18 +428,19 @@ fun CacaoRequestScreen(
             }
         }
 
-        itemsIndexed(suppliers, key = {_, it -> it.id}){ i, it ->
+        itemsIndexed(suppliers, key = { _, it -> it.id }) { i, it ->
             SupplierItem(
                 supplierName = it.name,
                 supplierImageUrl = it.imageUrl,
                 modifier = supplierItemModifier
             )
 
-            if(i < suppliers.lastIndex){
+            if (i < suppliers.lastIndex) {
                 Spacer(
                     outermostPaddingModifier
                         .height(16.dp)
-                        .background(color = Color.White))
+                        .background(color = Color.White)
+                )
                 Box(
                     outermostPaddingModifier
                         .height(1.dp)
@@ -449,7 +450,8 @@ fun CacaoRequestScreen(
                 Spacer(
                     outermostPaddingModifier
                         .height(16.dp)
-                        .background(color = Color.White))
+                        .background(color = Color.White)
+                )
             }
         }
 
@@ -487,7 +489,7 @@ fun CacaoRequestScreen(
 
     InputFulfillAmountCacaoDialog(
         onValueChange = {
-            if(allowedCharacterPattern.matches(it)){
+            if (allowedCharacterPattern.matches(it)) {
                 inputFulfillAmount = it
             }
         },

@@ -1,17 +1,17 @@
 package com.neotelemetrixgdscunand.kamekapp.domain.model
 
 data class NotificationItemData(
-    val id:Int,
-    val exporterName:String,
-    val exporterImageUrl:String,
-    val message:String,
-    val sendDate:String,
-    val isAgreed:Boolean,
-    val currentAmountFulfilled:Float,
-    val totalAmountDemands:Float,
+    val id: Int,
+    val exporterName: String,
+    val exporterImageUrl: String,
+    val message: String,
+    val sendDate: String,
+    val isAgreed: Boolean,
+    val currentAmountFulfilled: Float,
+    val totalAmountDemands: Float,
 )
 
-fun getNotificationItemDummies():List<NotificationItemData>{
+fun getNotificationItemDummies(): List<NotificationItemData> {
     return listOf(
         NotificationItemData(
             exporterName = "Anthony Gasing",

@@ -44,10 +44,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun ShopItem(
     modifier: Modifier = Modifier,
-    imageUrl:String = "",
-    title:String = "Pestisida Fungsida Inteksida",
-    price:String = "Rp 205.000",
-    targetUrl:String = ""
+    imageUrl: String = "",
+    title: String = "Pestisida Fungsida Inteksida",
+    price: String = "Rp 205.000",
+    targetUrl: String = ""
 ) {
 
     val configuration = LocalConfiguration.current
@@ -84,7 +84,7 @@ fun ShopItem(
         Box(
             modifier = imageModifier,
             contentAlignment = Alignment.Center
-        ){
+        ) {
             AsyncImage(
                 modifier = Modifier.align(Alignment.Center),
                 model = imageUrl,
@@ -106,7 +106,7 @@ fun ShopItem(
 
         Spacer(Modifier.height(16.dp))
 
-        Row(Modifier.fillMaxWidth()){
+        Row(Modifier.fillMaxWidth()) {
             Text(
                 text = price,
                 style = MaterialTheme.typography.labelMedium,

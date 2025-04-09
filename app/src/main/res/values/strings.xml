@@ -195,4 +195,5 @@
     <string name="berat_61_70_rusak">Berat : 61 - 70% Rusak</string>
     <string name="berat_71_80_rusak">Berat : 71 - 80% Rusak</string>
     <string name="berat_81_90_rusak">Berat : 81 - 90% Rusak</string>
+    <string name="kakao">Kakao %1$s</string>
 </resources>

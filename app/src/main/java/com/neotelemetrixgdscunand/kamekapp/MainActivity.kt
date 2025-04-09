@@ -20,13 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var windowInsetController:WindowInsetsControllerCompat
+    private lateinit var windowInsetController: WindowInsetsControllerCompat
 
     private var isCameraPermissionGranted by mutableStateOf<Boolean?>(null)
 
     private val cameraPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ){ isGranted ->
+    ) { isGranted ->
         isCameraPermissionGranted = isGranted
     }
 
@@ -41,31 +41,31 @@ class MainActivity : ComponentActivity() {
         setContent {
             KamekAppTheme {
                 App(
-                    isCameraPermissionGranted =  isCameraPermissionGranted
+                    isCameraPermissionGranted = isCameraPermissionGranted
                 )
             }
         }
     }
 
-    fun hideStatusBar(){
+    fun hideStatusBar() {
         windowInsetController.hide(WindowInsetsCompat.Type.statusBars())
     }
 
-    fun showStatusBar(){
+    fun showStatusBar() {
         windowInsetController.show(WindowInsetsCompat.Type.statusBars())
     }
 
 
-        fun checkCameraPermission(){
-            val isAlreadyGranted = ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
+    fun checkCameraPermission() {
+        val isAlreadyGranted = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
 
-            if(!isAlreadyGranted){
-                cameraPermissionRequest.launch(
-                    Manifest.permission.CAMERA
-                )
-            }else isCameraPermissionGranted = true
-        }
+        if (!isAlreadyGranted) {
+            cameraPermissionRequest.launch(
+                Manifest.permission.CAMERA
+            )
+        } else isCameraPermissionGranted = true
+    }
 }

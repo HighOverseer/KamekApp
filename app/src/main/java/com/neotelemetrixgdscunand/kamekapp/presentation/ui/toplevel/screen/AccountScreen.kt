@@ -46,8 +46,7 @@ fun AccountScreen(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(color = Grey90)
-            .padding(horizontal = 16.dp)
-        ,
+            .padding(horizontal = 16.dp),
     ) {
         Spacer(Modifier.height(36.dp))
 
@@ -77,7 +76,7 @@ fun AccountScreen(modifier: Modifier = Modifier) {
 
             Box(
                 modifier = circleImageModifier
-            ){
+            ) {
                 AsyncImage(
                     modifier = Modifier
                         .align(Alignment.Center),
@@ -130,9 +129,9 @@ fun AccountScreen(modifier: Modifier = Modifier) {
                 .background(color = Color.White, shape = RoundedCornerShape(8.dp))
                 .padding(vertical = 24.dp, horizontal = 16.dp)
         ) {
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Image(
                     modifier = Modifier
                         .size(20.dp),

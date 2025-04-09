@@ -45,7 +45,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.SmallL
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    navigateToTopLevelPage:() -> Unit = {}
+    navigateToTopLevelPage: () -> Unit = {}
 ) {
 
     var username by remember { mutableStateOf("") }
@@ -60,13 +60,13 @@ fun LoginScreen(
         username = username,
         password = password,
         onUsernameChange = {
-            if(it.length <= textMaxLength){
+            if (it.length <= textMaxLength) {
                 username = it
             }
 
         },
         onPasswordChange = {
-            if(it.length <= textMaxLength){
+            if (it.length <= textMaxLength) {
                 password = it
             }
         },
@@ -84,20 +84,20 @@ fun LoginScreen(
 @Composable
 fun LoginContent(
     modifier: Modifier = Modifier,
-    username:String = "",
-    password:String = "",
-    onUsernameChange:(String) -> Unit = {},
-    onPasswordChange:(String) -> Unit = {},
-    isPasswordVisible:Boolean = false,
-    changePasswordVisibility:(Boolean) -> Unit = {},
+    username: String = "",
+    password: String = "",
+    onUsernameChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+    isPasswordVisible: Boolean = false,
+    changePasswordVisibility: (Boolean) -> Unit = {},
     usernameInteractionSource: MutableInteractionSource = MutableInteractionSource(),
     passwordInteractionSource: MutableInteractionSource = MutableInteractionSource(),
-    navigateToTopLevelPage:() -> Unit = {}
+    navigateToTopLevelPage: () -> Unit = {}
 ) {
     val topMarginToContentRatio = 0.0838f
     val headlineToLogoMarginRatio = 0.0805f
     val formToHeadlineMarginRatio = 0.0697f
-    val buttonToFormMarginRatio =  0.0872f
+    val buttonToFormMarginRatio = 0.0872f
 
     val isUsernameTextFieldFocused by usernameInteractionSource.collectIsFocusedAsState()
     val isPasswordTextFieldFocused by passwordInteractionSource.collectIsFocusedAsState()
@@ -154,19 +154,19 @@ fun LoginContent(
                 value = password,
                 hintText = stringResource(R.string.masukkan_password_kamu_disini),
                 isFocused = isPasswordTextFieldFocused,
-                visualTransformation = if(isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Icon(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .clickable{
+                            .clickable {
                                 changePasswordVisibility(!isPasswordVisible)
                             },
-                        imageVector = if(isPasswordVisible)
+                        imageVector = if (isPasswordVisible)
                             ImageVector
-                            .vectorResource(
-                                R.drawable.ic_eye,
-                            )
+                                .vectorResource(
+                                    R.drawable.ic_eye,
+                                )
                         else ImageVector
                             .vectorResource(R.drawable.ic_hide_eye),
                         tint = Grey60,
@@ -191,15 +191,14 @@ fun LoginContent(
                 modifier = Modifier.fillMaxHeight(buttonToFormMarginRatio)
             )
 
-           PrimaryButton(
-               modifier = Modifier
-                   .fillMaxWidth(),
-               text = stringResource(R.string.masuk),
-               onClick = navigateToTopLevelPage
-           )
+            PrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = stringResource(R.string.masuk),
+                onClick = navigateToTopLevelPage
+            )
 
         }
-
 
 
     }

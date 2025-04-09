@@ -19,8 +19,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 
 @Composable
 fun PrimaryButton(
-    modifier: Modifier = Modifier, text:String = "",
-    onClick:() -> Unit = {},
+    modifier: Modifier = Modifier, text: String = "",
+    onClick: () -> Unit = {},
     contentPadding: PaddingValues = PaddingValues(vertical = 14.dp),
     trailingIcon: (@Composable () -> Unit)? = null
 ) {
@@ -33,14 +33,14 @@ fun PrimaryButton(
             containerColor = Maroon55,
             disabledContentColor = Grey70,
         ),
-    ){
+    ) {
         Text(
             text = text,
             style = MaterialTheme.typography.titleMedium,
             color = Color.White
         )
 
-        if(trailingIcon != null){
+        if (trailingIcon != null) {
             Spacer(Modifier.width(8.dp))
             trailingIcon()
         }

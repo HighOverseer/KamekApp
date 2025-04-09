@@ -16,8 +16,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun SecondaryDescription(
     modifier: Modifier = Modifier,
-    title:String,
-    description:String
+    title: String,
+    description: String
 ) {
     Text(
         modifier = modifier,

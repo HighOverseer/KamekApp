@@ -51,8 +51,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 @Composable
 fun DiagnosisBottomContent(
     modifier: Modifier = Modifier,
-    solution:String = "-",
-    preventions:List<String> = listOf()
+    solution: String = "-",
+    preventions: List<String> = listOf()
 ) {
     Column(
         modifier = modifier
@@ -60,7 +60,7 @@ fun DiagnosisBottomContent(
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(16.dp),
-    ){
+    ) {
         Row(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -107,8 +107,8 @@ fun DiagnosisBottomContent(
 
         Spacer(Modifier.height(8.dp))
 
-        preventions.forEachIndexed{ index, it ->
-            if(index != 0) {
+        preventions.forEachIndexed { index, it ->
+            if (index != 0) {
                 Spacer(Modifier.height(16.dp))
             }
 
@@ -118,7 +118,7 @@ fun DiagnosisBottomContent(
                 Box(
                     modifier = Modifier
                         .size(20.dp)
-                ){
+                ) {
                     Box(
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -150,7 +150,7 @@ fun DiagnosisBottomContentLoading(modifier: Modifier = Modifier) {
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(16.dp),
-    ){
+    ) {
         Row(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -201,7 +201,10 @@ fun DiagnosisBottomContentLoading(modifier: Modifier = Modifier) {
                             Maroon55,
                         ),
                         start = Offset(startOffsetX, 0f),
-                        end = Offset(startOffsetX + textSize.width.toFloat(), textSize.height.toFloat())
+                        end = Offset(
+                            startOffsetX + textSize.width.toFloat(),
+                            textSize.height.toFloat()
+                        )
                     )
                 ),
             )

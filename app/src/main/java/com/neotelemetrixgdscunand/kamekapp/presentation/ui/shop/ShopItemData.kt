@@ -3,15 +3,15 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.shop
 import kotlin.random.Random
 
 data class ShopItemData(
-    val id:Int = Random.nextInt(0, 1_000_000),
-    val imageUrl:String,
-    val title:String,
-    val price:String,
-    val targetUrl:String
+    val id: Int = Random.nextInt(0, 1_000_000),
+    val imageUrl: String,
+    val title: String,
+    val price: String,
+    val targetUrl: String
 )
 
 
-fun getShopItemDataDummies():List<ShopItemData>{
+fun getShopItemDataDummies(): List<ShopItemData> {
     return listOf(
         ShopItemData(
             imageUrl = "https://images.tokopedia.net/img/cache/900/VqbcmM/2022/2/28/8b27f067-59f5-44e9-93b1-0236408355f5.jpg",
@@ -49,5 +49,5 @@ fun getShopItemDataDummies():List<ShopItemData>{
             price = "Rp35.000",
             targetUrl = "https://www.tokopedia.com/pekaranganlestari/pupuk-nutrisi-tanaman-kakao-coklat-buah-fortune-anti-rontok-bunga?extParam=ivf%3Dfalse%26keyword%3Dpupuk+kakao%26search_id%3D20241115191830A88038D44782132E028K%26src%3Dsearch"
         ),
-        )
+    )
 }

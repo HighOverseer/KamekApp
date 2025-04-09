@@ -35,10 +35,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun TakePhotoScreen(
     modifier: Modifier = Modifier,
-    isCameraPermissionGranted:Boolean?,
-    showSnackBar:(String) -> Unit = {},
-    navigateUp:() -> Unit = {},
-    navigateToResult:(String) -> Unit = {_->}
+    isCameraPermissionGranted: Boolean?,
+    showSnackBar: (String) -> Unit = {},
+    navigateUp: () -> Unit = {},
+    navigateToResult: (String, String) -> Unit = { _, _ -> }
 ) {
 
     val context = LocalContext.current
@@ -66,7 +66,7 @@ fun TakePhotoScreen(
     }
 
     LaunchedEffect(true) {
-        if(isCameraPermissionGranted == null && context is MainActivity){
+        if (isCameraPermissionGranted == null && context is MainActivity) {
             context.checkCameraPermission()
         }
 
@@ -75,7 +75,7 @@ fun TakePhotoScreen(
     val permissionDeniedMessage = stringResource(R.string.fitur_tidak_bisa_diakses)
 
     LaunchedEffect(isCameraPermissionGranted) {
-        if(isCameraPermissionGranted == false){
+        if (isCameraPermissionGranted == false) {
             showSnackBar(
                 permissionDeniedMessage
             )
@@ -88,14 +88,14 @@ fun TakePhotoScreen(
     val bottomBarEndMarginRatio = 0.09864f
 
 
-    if(isCameraPermissionGranted == true){
+    if (isCameraPermissionGranted == true) {
 
         var isCameraOpen by remember { mutableStateOf(true) }
         val photoPickerLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) {
             capturedPhotoUri = it
-            if(capturedPhotoUri != null){
+            if (capturedPhotoUri != null) {
                 isDialogShowed = true
                 isCameraOpen = false
             }
@@ -104,7 +104,7 @@ fun TakePhotoScreen(
 
         Column(
             modifier.fillMaxSize()
-        ){
+        ) {
 
             TopBarTakePhoto(
                 topBarHeightRatio = topBarHeightRatio,
@@ -157,21 +157,24 @@ fun TakePhotoScreen(
         }
 
         val invalidNameMessage = stringResource(R.string.nama_yang_dimasukkan_tidak_valid)
-        val onSubmit:() -> Unit by rememberUpdatedState{
-            if(sessionName.isBlank()){
+        val onSubmit: () -> Unit by rememberUpdatedState {
+            if (sessionName.isBlank()) {
                 showSnackBar(invalidNameMessage)
-            }else{
+            } else {
                 coroutineScope.launch {
                     val compressedImage = imageCompressor.compressImage(capturedPhotoUri)
-                    val imagePath = fileManager.saveImage(capturedPhotoUri, compressedImage, sessionName)
+                    val imagePath =
+                        fileManager.saveImage(capturedPhotoUri, compressedImage, sessionName)
 
-                    if(imagePath == null){
+                    if (imagePath == null) {
                         capturedPhotoUri = null
                         isDialogShowed = false
                         isCameraOpen = true
-                    }else{
+                    } else {
                         isDialogShowed = false
-                        navigateToResult(imagePath)
+                        navigateToResult(
+                            sessionName, imagePath
+                        )
                     }
                 }
             }
@@ -181,7 +184,7 @@ fun TakePhotoScreen(
             isShowDialog = isDialogShowed,
             name = sessionName,
             onValueNameChange = {
-                if(it.length < 50){
+                if (it.length < 50) {
                     sessionName = it
                 }
             },

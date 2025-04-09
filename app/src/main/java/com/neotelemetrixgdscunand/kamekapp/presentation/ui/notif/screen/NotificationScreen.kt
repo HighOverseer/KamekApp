@@ -33,8 +33,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.Notif
 @Composable
 fun NotificationScreen(
     modifier: Modifier = Modifier,
-    navigateUp:()->Unit = { },
-    navigateToCacaoRequestScreen:()-> Unit = { }
+    navigateUp: () -> Unit = { },
+    navigateToCacaoRequestScreen: () -> Unit = { }
 ) {
 
     val outermostPaddingModifier = remember {
@@ -93,7 +93,7 @@ fun NotificationScreen(
             Spacer(Modifier.height(16.dp))
         }
 
-        items(notificationItems, key = { it.id }){
+        items(notificationItems, key = { it.id }) {
             NotificationItem(
                 currentAmountFulfilled = it.currentAmountFulfilled,
                 totalAmountDemands = it.totalAmountDemands,

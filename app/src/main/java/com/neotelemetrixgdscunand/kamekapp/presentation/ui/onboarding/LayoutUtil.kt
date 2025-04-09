@@ -1,6 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding
 
-object LayoutUtil{
+object LayoutUtil {
     const val ON_BOARDING_IMAGE_ID = "onBoardingImage"
     const val HEADLINE_ID = "headline"
     const val DESC_ID = "desc"

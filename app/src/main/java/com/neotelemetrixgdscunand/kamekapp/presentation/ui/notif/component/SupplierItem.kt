@@ -25,11 +25,12 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun SupplierItem(
     modifier: Modifier = Modifier,
-    supplierName:String = "",
-    supplierImageUrl:String = ""
+    supplierName: String = "",
+    supplierImageUrl: String = ""
 ) {
-    Row (
-        modifier = modifier, verticalAlignment = Alignment.CenterVertically){
+    Row(
+        modifier = modifier, verticalAlignment = Alignment.CenterVertically
+    ) {
         AsyncImage(
             model = supplierImageUrl,
             placeholder = painterResource(R.drawable.ic_camera),

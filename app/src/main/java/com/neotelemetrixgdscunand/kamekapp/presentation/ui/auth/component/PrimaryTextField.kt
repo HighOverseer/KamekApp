@@ -29,31 +29,31 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun PrimaryTextField(
     modifier: Modifier = Modifier,
-    isFocused:Boolean = false,
-    value:String = "",
-    onValueChange:(String) -> Unit = {},
-    hintText:String = "",
-    textColor:Color = Black10,
+    isFocused: Boolean = false,
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
+    hintText: String = "",
+    textColor: Color = Black10,
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    contentPadding:PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    isBordered:Boolean = true,
-    backgroundColor:Color = Color.Transparent
+    isBordered: Boolean = true,
+    backgroundColor: Color = Color.Transparent
 ) {
 
     val textFieldModifier = remember {
         modifier
             .fillMaxWidth()
             .then(
-                if(isBordered){
+                if (isBordered) {
                     Modifier.border(
                         color = if (isFocused) Maroon55 else Grey70,
                         width = 1.dp,
                         shape = RoundedCornerShape(8.dp)
                     )
-                }else{
+                } else {
                     Modifier
                 }
             )
@@ -67,19 +67,19 @@ fun PrimaryTextField(
         onValueChange = onValueChange,
         visualTransformation = visualTransformation,
         interactionSource = interactionSource,
-        decorationBox = @Composable { innerTextField : @Composable () -> Unit ->
+        decorationBox = @Composable { innerTextField: @Composable () -> Unit ->
             Row {
-                if(leadingIcon != null){
+                if (leadingIcon != null) {
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 2.dp),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         leadingIcon.invoke()
                     }
                 }
 
-                if(!isFocused && value.isEmpty()){
+                if (!isFocused && value.isEmpty()) {
                     Text(
                         text = hintText,
                         style = MaterialTheme.typography.labelMedium,
@@ -88,16 +88,16 @@ fun PrimaryTextField(
                 }
                 Box(
                     modifier = Modifier.weight(1f)
-                ){
+                ) {
                     innerTextField()
                 }
 
-                if(trailingIcon != null){
+                if (trailingIcon != null) {
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 2.dp),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         trailingIcon.invoke()
                     }
                 }

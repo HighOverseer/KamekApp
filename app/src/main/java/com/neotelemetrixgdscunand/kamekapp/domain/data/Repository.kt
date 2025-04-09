@@ -1,17 +1,15 @@
 package com.neotelemetrixgdscunand.kamekapp.domain.data
 
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.DiagnosisOutput
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItemData
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
 
 interface Repository {
-    fun saveDiagnosis(diagnosisOutput: DiagnosisOutput,
-                      sessionName:String,
-                      sessionDate: Date,
-                      imagePath:String)
+    fun saveDiagnosis(newDiagnosisSession: DiagnosisSession)
 
-    fun getAllDiagnosisHistories(): Flow<List<DiagnosisHistoryItemData>>
+    fun getAllSavedDiagnosisSessions(): Flow<List<DiagnosisSession>>
 
-    fun getDiagnosisOutput(id:Int):DiagnosisOutput
+    fun getDiagnosisSession(id: Int): DiagnosisSession
+
+    fun getAllSavedDiagnosisSessionPreviews(): Flow<List<DiagnosisSessionPreview>>
 }

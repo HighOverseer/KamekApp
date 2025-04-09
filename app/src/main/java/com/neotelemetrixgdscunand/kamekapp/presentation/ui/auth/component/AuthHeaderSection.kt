@@ -14,7 +14,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 
 @Composable
-fun AuthHeaderSection(modifier: Modifier = Modifier, title:String, subTitle:String) {
+fun AuthHeaderSection(modifier: Modifier = Modifier, title: String, subTitle: String) {
     Column(
         modifier = modifier
     ) {

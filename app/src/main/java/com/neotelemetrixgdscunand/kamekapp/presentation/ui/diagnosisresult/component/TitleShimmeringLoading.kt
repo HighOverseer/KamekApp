@@ -12,7 +12,11 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
 
 @Composable
-fun TitleShimmeringLoading(modifier: Modifier = Modifier, height:Dp = 17.dp, widthRatio : Float = 0.2f) {
+fun TitleShimmeringLoading(
+    modifier: Modifier = Modifier,
+    height: Dp = 17.dp,
+    widthRatio: Float = 0.2f
+) {
     Box(
         modifier = modifier
             .fillMaxWidth(widthRatio)

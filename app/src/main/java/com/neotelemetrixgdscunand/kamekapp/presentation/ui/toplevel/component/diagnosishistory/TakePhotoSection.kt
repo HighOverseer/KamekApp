@@ -32,7 +32,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TakePhotoSection(modifier: Modifier = Modifier, onClick:() -> Unit = {}) {
+fun TakePhotoSection(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     Card(
         onClick = onClick,
         modifier = modifier,

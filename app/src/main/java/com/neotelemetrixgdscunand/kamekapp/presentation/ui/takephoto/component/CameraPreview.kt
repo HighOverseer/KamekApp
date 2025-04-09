@@ -19,19 +19,19 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.getCameraPr
 @Composable
 fun CameraPreview(
     modifier: Modifier = Modifier,
-    isUsingBackCamera:Boolean = true,
+    isUsingBackCamera: Boolean = true,
     imageCapture: ImageCapture,
-    isCameraOpen:Boolean = true
+    isCameraOpen: Boolean = true
 ) {
 
-    if(isCameraOpen){
+    if (isCameraOpen) {
         val context = LocalContext.current
         val lifecycleOwner = LocalLifecycleOwner.current
 
         val lensFacing = remember(isUsingBackCamera) {
-            if(isUsingBackCamera) {
+            if (isUsingBackCamera) {
                 CameraSelector.LENS_FACING_BACK
-            }else CameraSelector.LENS_FACING_FRONT
+            } else CameraSelector.LENS_FACING_FRONT
         }
 
         val preview = remember {
@@ -66,7 +66,7 @@ fun CameraPreview(
             modifier = modifier,
             factory = { previewView },
         )
-    }else{
+    } else {
         Box(
             modifier = modifier
                 .background(color = Color.Black)

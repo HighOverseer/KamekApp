@@ -21,10 +21,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun ExplorationSection(
     modifier: Modifier = Modifier,
-    navigateToNews:()->Unit = {},
-    navigateToShop:()->Unit = {},
-    navigateToWeather:()->Unit = {},
-    showSnackbar:(String)->Unit = {}
+    navigateToNews: () -> Unit = {},
+    navigateToShop: () -> Unit = {},
+    navigateToWeather: () -> Unit = {},
+    showSnackbar: (String) -> Unit = {}
 ) {
 
     Column(

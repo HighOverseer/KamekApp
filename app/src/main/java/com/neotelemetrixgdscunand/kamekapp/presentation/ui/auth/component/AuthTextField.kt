@@ -15,12 +15,12 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 
 @Composable
 fun AuthTextField(
-    title:String = "",
+    title: String = "",
     modifier: Modifier = Modifier,
-    isFocused:Boolean = false,
-    value:String = "",
-    onValueChange:(String) -> Unit = {},
-    hintText:String = "",
+    isFocused: Boolean = false,
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
+    hintText: String = "",
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,

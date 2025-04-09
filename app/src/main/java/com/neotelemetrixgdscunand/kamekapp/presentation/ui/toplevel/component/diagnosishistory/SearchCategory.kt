@@ -19,23 +19,23 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun SearchCategory(
     modifier: Modifier = Modifier,
-    isSelected:Boolean,
-    text:String,
-    selectedColor:Color = Maroon55,
-    unselectedColor:Color = Color.White
+    isSelected: Boolean,
+    text: String,
+    selectedColor: Color = Maroon55,
+    unselectedColor: Color = Color.White
 ) {
     Box(
         modifier = modifier
             .background(
-                color = if(isSelected) selectedColor else unselectedColor,
+                color = if (isSelected) selectedColor else unselectedColor,
                 shape = RoundedCornerShape(4.dp)
             )
             .padding(horizontal = 16.dp, vertical = 4.dp)
-    ){
+    ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelMedium,
-            color = if(isSelected) Color.White else Grey68
+            color = if (isSelected) Color.White else Grey68
         )
     }
 
@@ -45,6 +45,9 @@ fun SearchCategory(
 @Composable
 private fun DiagnosisHistoryCategoryPreview() {
     KamekAppTheme {
-        SearchCategory(isSelected = true, text = stringResource(SearchHistoryCategory.ALL.textResId) )
+        SearchCategory(
+            isSelected = true,
+            text = stringResource(SearchHistoryCategory.ALL.textResId)
+        )
     }
 }

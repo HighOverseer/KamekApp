@@ -43,7 +43,7 @@ fun NewsDetailScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
 
-) {
+    ) {
 
     val scrollState = rememberScrollState()
     Column(
@@ -82,7 +82,7 @@ fun NewsDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(15.dp))
-            ){
+            ) {
                 AsyncImage(
                     modifier = Modifier
                         .aspectRatio(imageAspectRatio)
@@ -98,7 +98,7 @@ fun NewsDetailScreen(
 
             Row(
                 verticalAlignment = Alignment.Top
-            ){
+            ) {
 
                 Icon(
                     modifier = Modifier
@@ -127,7 +127,7 @@ fun NewsDetailScreen(
                 style = MaterialTheme.typography.titleLarge,
                 color = Black10,
 
-            )
+                )
 
             Spacer(Modifier.height(24.dp))
 

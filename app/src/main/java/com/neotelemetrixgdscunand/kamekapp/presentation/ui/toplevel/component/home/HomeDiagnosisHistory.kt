@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,17 +31,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.DiagnosisHistoryItemData
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeDiagnosisHistory(
     modifier: Modifier = Modifier,
-    item: DiagnosisHistoryItemData
+    item: DiagnosisSessionPreview
 ) {
 
     val cardModifier = remember {
@@ -69,7 +67,7 @@ fun HomeDiagnosisHistory(
         Box(
             modifier = imageModifier
                 .align(Alignment.CenterHorizontally)
-        ){
+        ) {
             AsyncImage(
                 modifier = Modifier
                     .align(Alignment.Center),
@@ -98,7 +96,7 @@ fun HomeDiagnosisHistory(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Image(
                 imageVector = ImageVector
                     .vectorResource(
@@ -121,15 +119,18 @@ fun HomeDiagnosisHistory(
 @Preview
 @Composable
 private fun DiagnosisHistoryPreview() {
+
     KamekAppTheme {
-        HomeDiagnosisHistory(item = DiagnosisHistoryItemData(
-            id = 0,
-            title = "Kakao Pak Tono",
-            imageUrlOrPath = "https://drive.google.com/file/d/1SXCPCoMzRjZEpemeT-mLOUTD2mzbGee_/view?usp=drive_link",
-            date = "12/11/2024",
-            predictedPrice = 700f,
-            outputId = 0
-        ))
+        HomeDiagnosisHistory(
+            item =
+            DiagnosisSessionPreview(
+                id = 0,
+                title = "Kakao Pak Tono",
+                imageUrlOrPath = "https://drive.google.com/file/d/1SXCPCoMzRjZEpemeT-mLOUTD2mzbGee_/view?usp=drive_link",
+                date = "12/11/2024",
+                predictedPrice = 700f
+            )
+        )
     }
 
 }

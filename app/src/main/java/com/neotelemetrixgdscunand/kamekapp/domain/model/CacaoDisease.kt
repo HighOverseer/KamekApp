@@ -3,13 +3,13 @@ package com.neotelemetrixgdscunand.kamekapp.domain.model
 import com.neotelemetrixgdscunand.kamekapp.R
 
 enum class CacaoDisease(
-    val nameResId:Int,
-    val causeStringResId:Int,
-    val symptomStringResId : Int,
-    val seedConditionStringResId:Int,
-    val solutionStringResId:Int,
-    val controlStringResId:List<Int>
-){
+    val nameResId: Int,
+    val causeStringResId: Int,
+    val symptomStringResId: Int,
+    val seedConditionStringResId: Int,
+    val solutionStringResId: Int,
+    val controlStringResId: List<Int>
+) {
     NONE(
         nameResId = R.string.name_none,
         causeStringResId = R.string.strip,
@@ -23,7 +23,7 @@ enum class CacaoDisease(
             R.string.control_none4
         )
     ),
-    HELOPELTHIS(
+    HELOPELTIS(
         nameResId = R.string.name_helo,
         causeStringResId = R.string.cause_helopelthis,
         symptomStringResId = R.string.symptom_helopelthis,
@@ -46,6 +46,19 @@ enum class CacaoDisease(
             R.string.control_blackpod2,
             R.string.control_blackpod3
         )
-    ),
+    );
+
+    companion object {
+        fun getDiseaseFromName(
+            name: String
+        ): CacaoDisease? {
+            return when (name.lowercase().trim()) {
+                "healthy", "none" -> NONE
+                "blackpod" -> BLACKPOD
+                "mirid", "helopeltis" -> HELOPELTIS
+                else -> null
+            }
+        }
+    }
 }
 

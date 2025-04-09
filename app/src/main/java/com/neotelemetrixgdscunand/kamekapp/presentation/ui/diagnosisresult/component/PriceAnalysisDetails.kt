@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelSubCategory
-import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseDummies
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
@@ -38,15 +38,22 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.ho
 @Composable
 fun PriceAnalysisDetails(
     modifier: Modifier = Modifier,
-    isInitiallyExpanded:Boolean = false,
+    isInitiallyExpanded: Boolean = false,
+    diagnosisSession: DiagnosisSession,
     subDamageLevelSubCategory: DamageLevelSubCategory = DamageLevelCategory.Low.secondSubLevelCategory
 ) {
     var isDetailsExpanded by remember(isInitiallyExpanded) {
         mutableStateOf(isInitiallyExpanded)
     }
 
-    val detectedDiseases = remember {
-        getDetectedDiseaseDummies()
+    val groupedDetectedDisease = remember(diagnosisSession) {
+        diagnosisSession.detectedCacaos.groupBy {
+            it.disease
+        }
+    }
+
+    val groupedDetectedDiseaseKeys = remember(groupedDetectedDisease) {
+        groupedDetectedDisease.keys.toList()
     }
 
     Column(
@@ -89,11 +96,14 @@ fun PriceAnalysisDetails(
             }
         }
 
-        if(isDetailsExpanded){
+        if (isDetailsExpanded) {
             Spacer(Modifier.height(16.dp))
 
             DetectedCacaoImageGrid(
-                detectedCacaos = detectedDiseases.first().detectedCacaos
+                imagePath = diagnosisSession.imageUrlOrPath,
+                detectedCacaos = groupedDetectedDiseaseKeys.firstOrNull()?.let {
+                    groupedDetectedDisease[it]
+                } ?: emptyList()
             )
 
             Spacer(Modifier.height(24.dp))
@@ -118,6 +128,6 @@ fun PriceAnalysisDetails(
 @Composable
 private fun PriceAnalysisDetailsPreview() {
     KamekAppTheme {
-        PriceAnalysisDetails()
+        PriceAnalysisDetails(diagnosisSession = DiagnosisSession())
     }
 }

@@ -33,10 +33,10 @@ fun NavigateUpButton(
             .clip(CircleShape)
             .background(color = WhiteTransparent)
             .size(37.dp)
-            .clickable (
+            .clickable(
                 onClick = navigateUp
             )
-    ){
+    ) {
         Image(
             modifier = Modifier
                 .align(Alignment.Center)

@@ -109,7 +109,7 @@ fun WeatherScreen(
                     modifier = Modifier
                         .align(Alignment.Center),
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Image(
                         imageVector = ImageVector
                             .vectorResource(R.drawable.ic_needle_location),
@@ -265,7 +265,7 @@ fun WeatherScreen(
             Spacer(Modifier.height(16.dp))
         }
 
-        items(weatherData, key = {it.id}){
+        items(weatherData, key = { it.id }) {
             WeatherPredictionItem(
                 modifier = weatherItemModifier,
                 date = it.date,
@@ -274,7 +274,6 @@ fun WeatherScreen(
                 humidityPercentage = it.humidityPercentage
             )
         }
-
 
 
     }

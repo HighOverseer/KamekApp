@@ -20,7 +20,7 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey63
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey67
 
-fun Modifier.shimmeringEffect() = composed{
+fun Modifier.shimmeringEffect() = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)
     }
@@ -52,7 +52,7 @@ fun Modifier.shimmeringEffect() = composed{
         }
 }
 
-fun formatSellPriceEstimation(context: Context, sellPrice:Float):String{
+fun formatSellPriceEstimation(context: Context, sellPrice: Float): String {
     val lowerBound = sellPrice.minus(100f).coerceAtLeast(0f)
     val upperBound = sellPrice.plus(100f).coerceAtMost(2000f)
 
@@ -63,7 +63,7 @@ fun formatSellPriceEstimation(context: Context, sellPrice:Float):String{
     return context.getString(R.string.sekitar_buah, lowerBoundString, upperBoundString)
 }
 
-fun formatSellPriceEstimationForHistory(sellPrice:Float):String{
+fun formatSellPriceEstimationForHistory(sellPrice: Float): String {
     val lowerBound = sellPrice.minus(100f).coerceAtLeast(0f)
     val upperBound = sellPrice.plus(100f).coerceAtMost(2000f)
 
@@ -74,7 +74,7 @@ fun formatSellPriceEstimationForHistory(sellPrice:Float):String{
     return "$lowerBoundString - $upperBoundString/buah"
 }
 
-fun formatBound(bound:Float):String{
+fun formatBound(bound: Float): String {
 
     val indexFloatingPoint = bound.toString().indexOfFirst {
         it == '.'
@@ -85,18 +85,18 @@ fun formatBound(bound:Float):String{
         .toString()
         .substring(0, indexFloatingPoint)
 
-    if(numberFloat == "0") numberFloat = ""
+    if (numberFloat == "0") numberFloat = ""
 
-    if(numberFloat.length > 2) numberFloat = numberFloat.substring(0, 2)
+    if (numberFloat.length > 2) numberFloat = numberFloat.substring(0, 2)
 
-    return if(bound >= 1000){
+    return if (bound >= 1000) {
         val beforeDot = boundWithoutFloat
             .reversed()
             .substring(0, 3)
             .reversed()
         val afterDot = boundWithoutFloat
             .reversed()
-            .substring(3,  boundWithoutFloat.length)
+            .substring(3, boundWithoutFloat.length)
             .reversed()
 
         StringBuilder().apply {
@@ -104,16 +104,16 @@ fun formatBound(bound:Float):String{
             append(afterDot)
             append(".")
             append(beforeDot)
-            if(numberFloat.isNotEmpty()){
+            if (numberFloat.isNotEmpty()) {
                 append(",")
                 append(numberFloat)
             }
         }.toString()
-    }else {
+    } else {
         StringBuilder().apply {
             append("Rp ")
             append(boundWithoutFloat)
-            if(numberFloat.isNotEmpty()){
+            if (numberFloat.isNotEmpty()) {
                 append(",")
                 append(numberFloat)
             }
@@ -140,8 +140,8 @@ fun String.checkForZeroAfterFloatingPoint(): String {
 }
 
 
-fun formatDamageLevelEstimation(context: Context, damageLevel:Float):String{
-    val level = when{
+fun formatDamageLevelEstimation(context: Context, damageLevel: Float): String {
+    val level = when {
         damageLevel == 0f -> context.getString(R.string.tidak_ada)
         damageLevel > 0 && damageLevel <= 0.3 -> context.getString(R.string.Light)
         damageLevel > 0.3 && damageLevel <= 0.6 -> context.getString(R.string.sedang)
@@ -159,7 +159,7 @@ fun formatDamageLevelEstimation(context: Context, damageLevel:Float):String{
     )
 }
 
-fun Float.roundOffDecimal(n : Int = 3): Float {
+fun Float.roundOffDecimal(n: Int = 3): Float {
     val rounder = (10 * n).toFloat()
     return Math.round(this * rounder) / rounder
 }

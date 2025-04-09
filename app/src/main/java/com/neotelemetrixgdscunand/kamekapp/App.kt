@@ -22,19 +22,19 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.TopLevelPage
 @Composable
 fun App(
     modifier: Modifier = Modifier,
-    navController:NavHostController = rememberNavController(),
-    isCameraPermissionGranted:Boolean?
+    navController: NavHostController = rememberNavController(),
+    isCameraPermissionGranted: Boolean?
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = Splash,
-    ){
+    ) {
         composable<Splash> {
             SplashScreen(
                 navigateToLogin = {
-                    navController.navigate(Login){
-                        popUpTo<Splash>{
+                    navController.navigate(Login) {
+                        popUpTo<Splash> {
                             inclusive = true
                         }
                     }
@@ -44,7 +44,7 @@ fun App(
         composable<Login> {
             LoginScreen(
                 navigateToTopLevelPage = {
-                    navController.navigate(OnBoarding){
+                    navController.navigate(OnBoarding) {
                         popUpTo<Login> {
                             inclusive = true
                         }
@@ -56,16 +56,16 @@ fun App(
             RegisterScreen()
         }
 
-        composable<OnBoarding>{
+        composable<OnBoarding> {
             val context = LocalContext.current
             OnBoardingScreen(
                 navigateUp = {
-                    if(context is MainActivity){
+                    if (context is MainActivity) {
                         context.finish()
                     }
                 },
                 navigateToTopLevelPage = {
-                    navController.navigate(TopLevelPage){
+                    navController.navigate(TopLevelPage) {
                         popUpTo<OnBoarding> {
                             inclusive = true
                         }

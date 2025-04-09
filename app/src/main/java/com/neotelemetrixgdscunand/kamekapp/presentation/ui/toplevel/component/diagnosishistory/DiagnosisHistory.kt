@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
@@ -38,7 +39,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.
 @Composable
 fun DiagnosisHistory(
     modifier: Modifier = Modifier,
-    item: DiagnosisHistoryItemData
+    item: DiagnosisSessionPreview
 ) {
     val cardModifier = remember {
         modifier
@@ -66,7 +67,7 @@ fun DiagnosisHistory(
             Box(
                 modifier = imageModifier
                     .align(Alignment.CenterVertically)
-            ){
+            ) {
                 AsyncImage(
                     modifier = Modifier
                         .align(Alignment.Center),
@@ -128,14 +129,15 @@ fun DiagnosisHistory(
 @Composable
 private fun DiagnosisHistoryPreview() {
     KamekAppTheme {
-        DiagnosisHistory(item = DiagnosisHistoryItemData(
-            id = 0,
-            title = "Kakao Pak Tono",
-            imageUrlOrPath = "https://drive.google.com/file/d/1SXCPCoMzRjZEpemeT-mLOUTD2mzbGee_/view?usp=drive_link",
-            date = "12-11-2024",
-            predictedPrice = 700f,
-            outputId = 0
-        ))
+        DiagnosisHistory(
+            item = DiagnosisSessionPreview(
+                id = 0,
+                title = "Kakao Pak Tono",
+                imageUrlOrPath = "https://drive.google.com/file/d/1SXCPCoMzRjZEpemeT-mLOUTD2mzbGee_/view?usp=drive_link",
+                date = "12-11-2024",
+                predictedPrice = 700f,
+            )
+        )
     }
 
 }

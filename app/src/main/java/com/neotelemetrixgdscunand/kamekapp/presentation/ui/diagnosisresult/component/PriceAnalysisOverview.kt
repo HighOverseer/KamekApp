@@ -75,7 +75,7 @@ fun PriceAnalysisOverview(modifier: Modifier = Modifier) {
             hintText = stringResource(R.string.masukkan_jumlah),
             value = cacaoAverageWeightInput,
             onValueChange = {
-                if(allowedCharacterPattern.matches(it)){
+                if (allowedCharacterPattern.matches(it)) {
                     cacaoAverageWeightInput = it
                 }
             },
@@ -92,7 +92,7 @@ fun PriceAnalysisOverview(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .background(color = Maroon55, shape = RoundedCornerShape(8.dp))
                 .padding(vertical = 8.dp, horizontal = 16.dp)
-        ){
+        ) {
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically

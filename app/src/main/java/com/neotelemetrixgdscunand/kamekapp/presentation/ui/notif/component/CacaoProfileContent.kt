@@ -22,9 +22,9 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun CacaoProfileContent(
     modifier: Modifier = Modifier,
-    iconResId:Int = -1,
-    titleResId:Int = -1,
-    text:String = ""
+    iconResId: Int = -1,
+    titleResId: Int = -1,
+    text: String = ""
 ) {
     Row(
         verticalAlignment = Alignment.Top,

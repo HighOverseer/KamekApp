@@ -34,10 +34,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
-    isActive:Boolean = false,
-    query:String = "",
-    onQueryChange:(String) -> Unit = {},
-    hint:String = "",
+    isActive: Boolean = false,
+    query: String = "",
+    onQueryChange: (String) -> Unit = {},
+    hint: String = "",
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
     backgroundColor: Color = Color.White
 ) {
@@ -58,7 +58,7 @@ fun SearchBar(
         value = query,
         onValueChange = onQueryChange,
         interactionSource = interactionSource,
-        decorationBox = @Composable { innerTextField : @Composable () -> Unit ->
+        decorationBox = @Composable { innerTextField: @Composable () -> Unit ->
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -73,7 +73,7 @@ fun SearchBar(
 
                 Spacer(Modifier.width(8.dp))
 
-                if(!isActive && query.isEmpty()){
+                if (!isActive && query.isEmpty()) {
                     Text(
                         text = hint,
                         style = MaterialTheme.typography.labelMedium,
@@ -83,7 +83,7 @@ fun SearchBar(
 
                 Box(
                     modifier = Modifier.weight(1f)
-                ){
+                ) {
                     innerTextField()
                 }
 

@@ -21,7 +21,7 @@ fun SecondaryButton(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     onClick: () -> Unit = {},
-    text:String = "",
+    text: String = "",
     textColor: Color = Grey60,
     containerColor: Color = Color.Transparent,
     borderColor: Color = Grey60,

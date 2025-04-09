@@ -54,8 +54,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.ho
 @Composable
 fun NewsScreen(
     modifier: Modifier = Modifier,
-    navigateUp:()->Unit = {},
-    navigateToDetail:()->Unit = {}
+    navigateUp: () -> Unit = {},
+    navigateToDetail: () -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val configuration = LocalConfiguration.current
@@ -87,8 +87,8 @@ fun NewsScreen(
     }
 
 
-    Box{
-        val imageBackgroundSize = remember(screenHeightDp){
+    Box {
+        val imageBackgroundSize = remember(screenHeightDp) {
             val imageAspectRatio = 0.205
             (screenHeightDp * imageAspectRatio).dp
         }
@@ -181,7 +181,7 @@ fun NewsScreen(
                     contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(NewsCategory.entries, key = { it.ordinal }){
+                    items(NewsCategory.entries, key = { it.ordinal }) {
                         SearchCategory(
                             isSelected = it == selectedNewsCategory,
                             text = stringResource(it.textResId)
@@ -190,10 +190,12 @@ fun NewsScreen(
                 }
             }
 
-            itemsIndexed(newsItems, key = { _,  it -> it.id }){ index, item ->
-                Spacer(Modifier.height(
-                    if(index == 0) 8.dp else 16.dp
-                ))
+            itemsIndexed(newsItems, key = { _, it -> it.id }) { index, item ->
+                Spacer(
+                    Modifier.height(
+                        if (index == 0) 8.dp else 16.dp
+                    )
+                )
 
                 WeeklyNews(
                     modifier = weeklyItemModifier
@@ -203,7 +205,6 @@ fun NewsScreen(
             }
         }
     }
-
 
 
 }
