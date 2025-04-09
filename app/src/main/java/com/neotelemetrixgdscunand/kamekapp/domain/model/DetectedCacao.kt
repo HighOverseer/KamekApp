@@ -24,7 +24,7 @@ fun getDetectedDiseaseCacaos(): List<DetectedCacao> {
                 w = 1f,
                 cnf = 1f,
                 cls = 1,
-                clsName = "Kakao"
+                label = "Kakao"
             ),
             disease = CacaoDisease.BLACKPOD
         ),
@@ -41,7 +41,7 @@ fun getDetectedDiseaseCacaos(): List<DetectedCacao> {
                 w = 1f,
                 cnf = 1f,
                 cls = 1,
-                clsName = "Kakao"
+                label = "Kakao"
             ),
             disease = CacaoDisease.HELOPELTIS
         ),
@@ -58,7 +58,7 @@ fun getDetectedDiseaseCacaos(): List<DetectedCacao> {
                 w = 1f,
                 cnf = 1f,
                 cls = 1,
-                clsName = "Kakao"
+                label = "Kakao"
             ),
             disease = CacaoDisease.BLACKPOD
         ),

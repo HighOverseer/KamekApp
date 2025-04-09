@@ -39,14 +39,12 @@ fun DiagnosisDiseaseDetails(
     diseaseCause: String = "-",
     diseaseSymptoms: String = "-",
     seedCondition: String = "-",
-    initiallyExpanded: Boolean = false,
     imagePath: String = "",
-    detectedCacaos: List<DetectedCacao> = listOf()
+    detectedCacaos: List<DetectedCacao> = listOf(),
+    onDetectedCacaoImageClicked:(Int) -> Unit = { },
+    isExpand:Boolean = false,
+    toggleExpand:() -> Unit = { }
 ) {
-
-    var isExpand by remember {
-        mutableStateOf(initiallyExpanded)
-    }
 
     Column(
         modifier = modifier
@@ -64,9 +62,7 @@ fun DiagnosisDiseaseDetails(
             )
 
             IconButton(
-                onClick = {
-                    isExpand = !isExpand
-                },
+                onClick = toggleExpand,
                 modifier = Modifier
                     .width(24.dp)
                     .height(14.dp),
@@ -95,7 +91,8 @@ fun DiagnosisDiseaseDetails(
 
             DetectedCacaoImageGrid(
                 imagePath = imagePath,
-                detectedCacaos = detectedCacaos
+                detectedCacaos = detectedCacaos,
+                onItemClicked = onDetectedCacaoImageClicked
             )
 
             Spacer(Modifier.height(16.dp))

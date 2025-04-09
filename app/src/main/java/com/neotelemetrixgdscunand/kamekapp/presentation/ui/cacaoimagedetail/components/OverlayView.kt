@@ -13,6 +13,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
 class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private var results = listOf<BoundingBox>()
+
     private var boxPaint = Paint()
     private var textBackgroundPaint = Paint()
     private var textPaint = Paint()
@@ -55,7 +56,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             val bottom = it.y2 * height
 
             canvas.drawRect(left, top, right, bottom, boxPaint)
-            val drawableText = it.clsName
+            val drawableText = it.label
 
             textBackgroundPaint.getTextBounds(drawableText, 0, drawableText.length, bounds)
             val textWidth = bounds.width()
@@ -83,6 +84,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         results = boundingBox
         invalidate()
     }
+
 
     companion object {
         private const val BOUNDING_RECT_TEXT_PADDING = 8

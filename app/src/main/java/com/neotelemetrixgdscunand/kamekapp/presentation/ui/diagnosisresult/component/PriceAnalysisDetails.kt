@@ -40,7 +40,8 @@ fun PriceAnalysisDetails(
     modifier: Modifier = Modifier,
     isInitiallyExpanded: Boolean = false,
     diagnosisSession: DiagnosisSession,
-    subDamageLevelSubCategory: DamageLevelSubCategory = DamageLevelCategory.Low.secondSubLevelCategory
+    subDamageLevelSubCategory: DamageLevelSubCategory = DamageLevelCategory.Low.secondSubLevelCategory,
+    onDetectedCacaoImageClicked:(Int) -> Unit = { }
 ) {
     var isDetailsExpanded by remember(isInitiallyExpanded) {
         mutableStateOf(isInitiallyExpanded)
@@ -103,7 +104,8 @@ fun PriceAnalysisDetails(
                 imagePath = diagnosisSession.imageUrlOrPath,
                 detectedCacaos = groupedDetectedDiseaseKeys.firstOrNull()?.let {
                     groupedDetectedDisease[it]
-                } ?: emptyList()
+                } ?: emptyList(),
+                onItemClicked = onDetectedCacaoImageClicked
             )
 
             Spacer(Modifier.height(24.dp))

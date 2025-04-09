@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,7 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +58,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Yellow90
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.cacaoimagedetail.components.OverlayCompose
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisDiseaseDetails
@@ -66,6 +70,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.compo
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisOverview
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.DetectedCacaoImageGrid
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
@@ -150,6 +155,13 @@ fun DiagnosisResultContent(
         groupedDetectedDisease.keys.toList()
     }
 
+    val isExpandList = rememberSaveable(groupedDetectedDiseaseKeys) {
+        List(groupedDetectedDiseaseKeys.size) { index ->
+            val isInitialStateExpand = index == 0
+            mutableStateOf(isInitialStateExpand)
+        }
+    }
+
     val outermostPaddingModifier = remember {
         Modifier
             .fillMaxWidth()
@@ -194,6 +206,20 @@ fun DiagnosisResultContent(
                         painter = image,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
+                    )
+
+                    val context = LocalContext.current
+                    val adjustedBoundingBox = remember(diagnosisSession) {
+                        diagnosisSession.detectedCacaos.map {
+                            it.getBoundingBoxWithItsNameAsTheLabel(context)
+                        }
+                    }
+
+                    OverlayCompose(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center),
+                        boundingBoxes = adjustedBoundingBox
                     )
                 }
             }
@@ -345,17 +371,20 @@ fun DiagnosisResultContent(
                     itemsIndexed(
                         items = groupedDetectedDiseaseKeys,
                         key = { _, it -> it.ordinal }) { index, diseaseKey ->
-                        val isInitiallyExpanded = index == 0
 
                         DiagnosisDiseaseDetails(
-                            initiallyExpanded = isInitiallyExpanded,
+                            isExpand = isExpandList[index].value,
+                            toggleExpand = {
+                                isExpandList[index].value = !isExpandList[index].value
+                            },
                             modifier = Modifier.padding(bottom = 8.dp),
                             imagePath = diagnosisSession.imageUrlOrPath,
                             diseaseName = stringResource(diseaseKey.nameResId),
                             detectedCacaos = groupedDetectedDisease[diseaseKey] ?: emptyList(),
                             diseaseCause = stringResource(diseaseKey.causeStringResId),
                             diseaseSymptoms = stringResource(diseaseKey.symptomStringResId),
-                            seedCondition = stringResource(diseaseKey.seedConditionStringResId)
+                            seedCondition = stringResource(diseaseKey.seedConditionStringResId),
+                            onDetectedCacaoImageClicked = navigateToCacaoImageDetail
                         )
                     }
                 }
@@ -438,7 +467,8 @@ fun DiagnosisResultContent(
                             PriceAnalysisContent(
                                 modifier = outermostPaddingModifier,
                                 damageLevelCategory = damageLevelCategoryInfo[it],
-                                diagnosisSession = diagnosisSession
+                                diagnosisSession = diagnosisSession,
+                                onDetectedCacaoImageClicked = navigateToCacaoImageDetail
                             )
                             Spacer(Modifier.height(16.dp))
                         }

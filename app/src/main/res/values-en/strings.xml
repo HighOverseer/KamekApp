@@ -197,5 +197,6 @@
     <string name="berat_61_70_rusak">Severe: 61 – 70% Damaged</string>
     <string name="berat_71_80_rusak">Severe: 71 – 80% Damaged</string>
     <string name="berat_81_90_rusak">Severe: 81 – 90% Damaged</string>
+    <string name="kakao">Cocoa %1$s</string>
 
 </resources>

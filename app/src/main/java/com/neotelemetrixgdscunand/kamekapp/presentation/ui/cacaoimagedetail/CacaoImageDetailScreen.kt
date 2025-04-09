@@ -3,6 +3,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.cacaoimagedetail
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -43,6 +44,10 @@ fun CacaoImageDetailContent(
     val screenHeightDp = configuration.screenHeightDp.dp
     val topToArrowMargin = screenHeightDp * topToArrowMarginRatio
 
+    val boundingBoxes = remember(boundingBox) {
+        listOf(boundingBox)
+    }
+
     Box(Modifier.fillMaxSize()) {
         AsyncImage(
             modifier = modifier
@@ -59,7 +64,7 @@ fun CacaoImageDetailContent(
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.Center),
-            boundingBox = boundingBox
+            boundingBoxes = boundingBoxes
         )
 
         NavigateUpButton(

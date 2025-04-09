@@ -5,12 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,52 +34,46 @@ fun DetectedCacaoImageGrid(
     detectedCacaos: List<DetectedCacao> = listOf(),
     onItemClicked: (Int) -> Unit = { }
 ) {
-    val lazyVerticalGridState = rememberLazyGridState()
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-    val maxHeightRow = remember {
-        val maxHeight = (configuration.screenHeightDp / 3)
-        with(density) { maxHeight.toDp() }
+
+    val chunkedDetectedCacao = remember(detectedCacaos) {
+        detectedCacaos.chunked(2)
     }
 
-    LazyVerticalGrid(
-        //contentPadding = PaddingValues(top = 16.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
-        state = lazyVerticalGridState,
-        columns = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(max = maxHeightRow)
-    ) {
-        items(detectedCacaos.size, key = { item -> item.hashCode() }) { index ->
-            val currentCacao = detectedCacaos[index]
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onItemClicked(currentCacao.id)
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AsyncImage(
-                    model = imagePath,
-                    contentScale = ContentScale.Crop,
-                    placeholder = painterResource(R.drawable.ic_camera),
-                    alignment = Alignment.Center,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(56.dp)
-                )
+    chunkedDetectedCacao.forEach { rowItems ->
+        Row(
+            modifier = modifier
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            rowItems.forEach { currentCacao ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .then(if(rowItems.size == 2) Modifier.weight(1f) else Modifier)
+                        .clickable {
+                            onItemClicked(currentCacao.id)
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AsyncImage(
+                        model = imagePath,
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(R.drawable.ic_camera),
+                        alignment = Alignment.Center,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(56.dp)
+                    )
 
-                Spacer(Modifier.width(16.dp))
+                    Spacer(Modifier.width(16.dp))
 
-                Text(
-                    stringResource(R.string.kakao, currentCacao.cacaoNumber),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Black10
-                )
+                    Text(
+                        stringResource(R.string.kakao, currentCacao.cacaoNumber),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Black10
+                    )
+                }
             }
         }
     }

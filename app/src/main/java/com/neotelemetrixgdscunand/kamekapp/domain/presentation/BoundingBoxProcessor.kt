@@ -48,7 +48,7 @@ object BoundingBoxProcessor {
                     BoundingBox(
                         x1 = x1, y1 = y1, x2 = x2, y2 = y2,
                         cx = cx, cy = cy, w = w, h = h,
-                        cnf = maxConf, cls = maxIdx, clsName = clsName
+                        cnf = maxConf, cls = maxIdx, label = clsName
                     )
                 )
             }

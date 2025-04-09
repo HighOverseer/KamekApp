@@ -39,7 +39,8 @@ fun PriceAnalysisContent(
     modifier: Modifier = Modifier,
     isInitiallyExpanded: Boolean = true,
     diagnosisSession: DiagnosisSession,
-    damageLevelCategory: DamageLevelCategory = DamageLevelCategory.High
+    damageLevelCategory: DamageLevelCategory = DamageLevelCategory.High,
+    onDetectedCacaoImageClicked:(Int) -> Unit = { }
 ) {
 
     var isExpand by remember {
@@ -105,21 +106,24 @@ fun PriceAnalysisContent(
 
             PriceAnalysisDetails(
                 diagnosisSession = diagnosisSession,
-                subDamageLevelSubCategory = damageLevelCategory.firstSubLevelCategory
+                subDamageLevelSubCategory = damageLevelCategory.firstSubLevelCategory,
+                onDetectedCacaoImageClicked = onDetectedCacaoImageClicked
             )
 
             Spacer(Modifier.height(16.dp))
 
             PriceAnalysisDetails(
                 diagnosisSession = diagnosisSession,
-                subDamageLevelSubCategory = damageLevelCategory.secondSubLevelCategory
+                subDamageLevelSubCategory = damageLevelCategory.secondSubLevelCategory,
+                onDetectedCacaoImageClicked = onDetectedCacaoImageClicked
             )
 
             Spacer(Modifier.height(16.dp))
 
             PriceAnalysisDetails(
                 diagnosisSession = diagnosisSession,
-                subDamageLevelSubCategory = damageLevelCategory.thirdSubLevelCategory
+                subDamageLevelSubCategory = damageLevelCategory.thirdSubLevelCategory,
+                onDetectedCacaoImageClicked = onDetectedCacaoImageClicked
             )
 
         }

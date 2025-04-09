@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey63
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey67
 
@@ -164,3 +166,12 @@ fun Float.roundOffDecimal(n: Int = 3): Float {
     return Math.round(this * rounder) / rounder
 }
 
+fun DetectedCacao.getBoundingBoxWithItsNameAsTheLabel(
+    context: Context
+):BoundingBox{
+    return boundingBox.run {
+        BoundingBox(
+            x1, y1, x2, y2, cx, cy, w, h, cnf, cls, context.getString(R.string.kakao, cacaoNumber.toString())
+        )
+    }
+}

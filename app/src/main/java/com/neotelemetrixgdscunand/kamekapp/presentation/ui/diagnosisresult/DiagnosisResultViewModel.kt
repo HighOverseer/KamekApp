@@ -86,7 +86,7 @@ class DiagnosisResultViewModel @Inject constructor(
                     cacaoNumber = index.plus(1).toShort(),
                     boundingBox = item,
                     disease = CacaoDisease.getDiseaseFromName(
-                        name = item.clsName
+                        name = item.label
                     ) ?: return
                 )
             }
