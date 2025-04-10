@@ -29,12 +29,13 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.Primar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryTextField
 
 @Composable
-fun InputPhotoNameDialog(
+fun InputSessionNameDialog(
     isShowDialog: Boolean = false,
     onDismiss: () -> Unit = { },
     name: String = "",
     onValueNameChange: (String) -> Unit = {},
-    onSubmit: () -> Unit = {}
+    onSubmit: () -> Unit = {},
+    canUserInteract:Boolean = true
 ) {
 
     if (isShowDialog) {
@@ -45,7 +46,11 @@ fun InputPhotoNameDialog(
         val isFocused by interactionSource.collectIsFocusedAsState()
 
         Dialog(
-            onDismissRequest = onDismiss
+            onDismissRequest = {
+                if(canUserInteract){
+                    onDismiss()
+                }
+            }
         ) {
             Card(
                 shape = RoundedCornerShape(8.dp),
@@ -68,6 +73,7 @@ fun InputPhotoNameDialog(
                         onValueChange = onValueNameChange,
                         textColor = Black10,
                         backgroundColor = Grey90,
+                        enabled = canUserInteract,
                         isFocused = isFocused,
                         interactionSource = interactionSource,
                         isBordered = false
@@ -80,7 +86,8 @@ fun InputPhotoNameDialog(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.batal),
                             contentPadding = PaddingValues(vertical = 14.dp),
-                            onClick = onDismiss
+                            onClick = onDismiss,
+                            enabled = canUserInteract
                         )
 
                         Spacer(Modifier.width(14.dp))
@@ -90,12 +97,11 @@ fun InputPhotoNameDialog(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.selesai),
                             contentPadding = PaddingValues(vertical = 14.dp),
-                            onClick = onSubmit
+                            onClick = onSubmit,
+                            enabled = canUserInteract
                         )
 
                     }
-
-
                 }
             }
         }
@@ -105,10 +111,11 @@ fun InputPhotoNameDialog(
 
 @Preview
 @Composable
-private fun InputPhotoNameDialogPreview() {
+private fun InputSessionNameDialogPreview() {
     KamekAppTheme {
-        InputPhotoNameDialog(
-            isShowDialog = true
+        InputSessionNameDialog(
+            isShowDialog = true,
+            canUserInteract = false
         )
     }
 }

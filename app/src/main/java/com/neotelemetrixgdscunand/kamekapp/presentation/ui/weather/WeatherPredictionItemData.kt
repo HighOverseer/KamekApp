@@ -8,7 +8,6 @@ data class WeatherPredictionItemData(
     val windVelocity: Int
 )
 
-
 fun getDummyWeatherPredictionItemData(): List<WeatherPredictionItemData> {
     return List(7) {
         WeatherPredictionItemData(

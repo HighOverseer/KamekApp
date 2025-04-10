@@ -26,12 +26,14 @@ fun SecondaryButton(
     containerColor: Color = Color.Transparent,
     borderColor: Color = Grey60,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
+    enabled: Boolean = true
 ) {
     Button(
         modifier = modifier,
         contentPadding = contentPadding,
         shape = RoundedCornerShape(8.dp),
         onClick = onClick,
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             contentColor = Grey60,
             containerColor = containerColor,

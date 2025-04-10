@@ -1,42 +1,44 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
+import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseCacaos
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
 
 @Composable
 fun DetectedCacaoImageGrid(
     modifier: Modifier = Modifier,
-    imagePath: String = "",
     detectedCacaos: List<DetectedCacao> = listOf(),
     onItemClicked: (Int) -> Unit = { }
 ) {
 
     val chunkedDetectedCacao = remember(detectedCacaos) {
-        detectedCacaos.chunked(2)
+        detectedCacaos.chunked(3)
     }
 
     chunkedDetectedCacao.forEach { rowItems ->
@@ -48,41 +50,57 @@ fun DetectedCacaoImageGrid(
             rowItems.forEach { currentCacao ->
                 Row(
                     Modifier
-                        .fillMaxWidth()
-                        .then(if(rowItems.size == 2) Modifier.weight(1f) else Modifier)
+                        .weight(1f)
                         .clickable {
                             onItemClicked(currentCacao.id)
                         },
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    AsyncImage(
-                        model = imagePath,
-                        contentScale = ContentScale.Crop,
-                        placeholder = painterResource(R.drawable.ic_camera),
-                        alignment = Alignment.Center,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(56.dp)
-                    )
 
-                    Spacer(Modifier.width(16.dp))
+                    Text(
+                        "- ",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Black10
+                    )
 
                     Text(
                         stringResource(R.string.kakao, currentCacao.cacaoNumber),
                         style = MaterialTheme.typography.labelMedium,
+                        textDecoration = TextDecoration.Underline,
                         color = Black10
                     )
+
+                    Spacer(Modifier.width(4.dp))
+
+                    Image(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .align(Alignment.Top),
+                        painter = painterResource(R.drawable.ic_eye),
+                        contentScale = ContentScale.Fit,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Maroon45)
+                    )
                 }
+            }
+
+            val remainingItemCount = 3 - rowItems.size
+            repeat(remainingItemCount){
+                Spacer(modifier.weight(1f))
             }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun DetectedCacaoImageGridPreview() {
     KamekAppTheme {
-        DetectedCacaoImageGrid()
+        Column(Modifier.wrapContentSize()) {
+            DetectedCacaoImageGrid(
+                detectedCacaos = getDetectedDiseaseCacaos()
+            )
+        }
     }
 }

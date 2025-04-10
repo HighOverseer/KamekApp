@@ -71,7 +71,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.compo
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisOverview
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.DetectedCacaoImageGrid
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DetectedCacaoImageGrid
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 
@@ -289,7 +289,7 @@ fun DiagnosisResultContent(
                                     )
                                 }
                             )
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                            .padding(start = 16.dp, end = 16.dp),
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
@@ -316,10 +316,9 @@ fun DiagnosisResultContent(
                             )
                         }
 
-                        Spacer(Modifier.height(16.dp))
+                        Spacer(Modifier.height(12.dp))
 
                         DetectedCacaoImageGrid(
-                            imagePath = diagnosisSession.imageUrlOrPath,
                             detectedCacaos = groupedDetectedDisease[it] ?: emptyList(),
                             onItemClicked = navigateToCacaoImageDetail
                         )
@@ -378,7 +377,6 @@ fun DiagnosisResultContent(
                                 isExpandList[index].value = !isExpandList[index].value
                             },
                             modifier = Modifier.padding(bottom = 8.dp),
-                            imagePath = diagnosisSession.imageUrlOrPath,
                             diseaseName = stringResource(diseaseKey.nameResId),
                             detectedCacaos = groupedDetectedDisease[diseaseKey] ?: emptyList(),
                             diseaseCause = stringResource(diseaseKey.causeStringResId),

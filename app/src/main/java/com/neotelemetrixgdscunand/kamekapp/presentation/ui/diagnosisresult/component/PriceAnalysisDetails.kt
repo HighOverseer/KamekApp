@@ -33,7 +33,6 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.DetectedCacaoImageGrid
 
 @Composable
 fun PriceAnalysisDetails(
@@ -101,7 +100,6 @@ fun PriceAnalysisDetails(
             Spacer(Modifier.height(16.dp))
 
             DetectedCacaoImageGrid(
-                imagePath = diagnosisSession.imageUrlOrPath,
                 detectedCacaos = groupedDetectedDiseaseKeys.firstOrNull()?.let {
                     groupedDetectedDisease[it]
                 } ?: emptyList(),

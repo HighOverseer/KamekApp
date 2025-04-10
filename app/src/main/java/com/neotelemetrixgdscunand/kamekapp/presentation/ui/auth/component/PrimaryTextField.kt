@@ -40,7 +40,8 @@ fun PrimaryTextField(
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isBordered: Boolean = true,
-    backgroundColor: Color = Color.Transparent
+    backgroundColor: Color = Color.Transparent,
+    enabled: Boolean = true
 ) {
 
     val textFieldModifier = remember {
@@ -67,6 +68,7 @@ fun PrimaryTextField(
         onValueChange = onValueChange,
         visualTransformation = visualTransformation,
         interactionSource = interactionSource,
+        enabled = enabled,
         decorationBox = @Composable { innerTextField: @Composable () -> Unit ->
             Row {
                 if (leadingIcon != null) {

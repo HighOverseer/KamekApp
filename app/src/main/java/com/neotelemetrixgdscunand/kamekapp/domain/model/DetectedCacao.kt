@@ -62,5 +62,40 @@ fun getDetectedDiseaseCacaos(): List<DetectedCacao> {
             ),
             disease = CacaoDisease.BLACKPOD
         ),
+        DetectedCacao(
+            cacaoNumber = 4,
+            boundingBox = BoundingBox(
+                0.2f,
+                0.3f,
+                0.3f,
+                0.4f,
+                cx = 1f,
+                cy = 1f,
+                h = 1f,
+                w = 1f,
+                cnf = 1f,
+                cls = 1,
+                label = "Kakao"
+            ),
+            disease = CacaoDisease.BLACKPOD
+        ),
+        DetectedCacao(
+            cacaoNumber = 5,
+            boundingBox = BoundingBox(
+                0.2f,
+                0.3f,
+                0.3f,
+                0.4f,
+                cx = 1f,
+                cy = 1f,
+                h = 1f,
+                w = 1f,
+                cnf = 1f,
+                cls = 1,
+                label = "Kakao"
+            ),
+            disease = CacaoDisease.BLACKPOD
+        ),
+
     )
 }

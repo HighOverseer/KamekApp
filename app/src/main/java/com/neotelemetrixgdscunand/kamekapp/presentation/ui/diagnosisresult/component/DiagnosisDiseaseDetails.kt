@@ -14,10 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,7 +27,6 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange80
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.DetectedCacaoImageGrid
 
 @Composable
 fun DiagnosisDiseaseDetails(
@@ -39,7 +35,6 @@ fun DiagnosisDiseaseDetails(
     diseaseCause: String = "-",
     diseaseSymptoms: String = "-",
     seedCondition: String = "-",
-    imagePath: String = "",
     detectedCacaos: List<DetectedCacao> = listOf(),
     onDetectedCacaoImageClicked:(Int) -> Unit = { },
     isExpand:Boolean = false,
@@ -90,7 +85,6 @@ fun DiagnosisDiseaseDetails(
             Spacer(Modifier.height(24.dp))
 
             DetectedCacaoImageGrid(
-                imagePath = imagePath,
                 detectedCacaos = detectedCacaos,
                 onItemClicked = onDetectedCacaoImageClicked
             )

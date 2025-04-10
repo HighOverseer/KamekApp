@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,69 +10,46 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.BottomBarTakePhoto
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.CameraPreview
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.InputPhotoNameDialog
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.InputSessionNameDialog
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.TopBarTakePhoto
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.FileManager
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
-import kotlinx.coroutines.launch
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 
 @Composable
 fun TakePhotoScreen(
     modifier: Modifier = Modifier,
+    viewModel: TakePhotoViewModel = hiltViewModel(),
     isCameraPermissionGranted: Boolean?,
     showSnackBar: (String) -> Unit = {},
     navigateUp: () -> Unit = {},
     navigateToResult: (String, String) -> Unit = { _, _ -> }
 ) {
-
     val context = LocalContext.current
-
-    val imageCompressor = remember {
-        ImageCompressor(context)
-    }
-
-    val fileManager = remember {
-        FileManager(context)
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    var isDialogShowed by remember { mutableStateOf(false) }
-    var sessionName by remember { mutableStateOf("") }
-
-    var isUsingBackCamera by remember { mutableStateOf(true) }
-    val imageCapture = remember {
-        ImageCapture.Builder()
-            .build()
-    }
-    var capturedPhotoUri: Uri? by remember {
-        mutableStateOf(null)
-    }
 
     LaunchedEffect(true) {
         if (isCameraPermissionGranted == null && context is MainActivity) {
             context.checkCameraPermission()
         }
-
     }
 
     val permissionDeniedMessage = stringResource(R.string.fitur_tidak_bisa_diakses)
-
     LaunchedEffect(isCameraPermissionGranted) {
         if (isCameraPermissionGranted == false) {
             showSnackBar(
@@ -82,25 +58,67 @@ fun TakePhotoScreen(
         }
     }
 
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(true) {
+        lifecycleOwner.collectChannelWhenStarted(
+            viewModel.uiEvent
+        ){
+            when(it){
+                is TakePhotoUIEvent.ToastMessageEvent -> {
+                    showSnackBar(it.message.getValue(context))
+                }
+                is TakePhotoUIEvent.NavigateToResult -> {
+                    navigateToResult(
+                        it.sessionName,
+                        it.imagePath
+                    )
+                }
+            }
+        }
+    }
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    TakePhotoContent(
+        modifier = modifier,
+        isCameraPermissionGranted = isCameraPermissionGranted,
+        navigateUp = navigateUp,
+        uiState = uiState,
+        onAction = viewModel::onAction
+    )
+}
+
+@Composable
+fun TakePhotoContent(
+    modifier: Modifier = Modifier,
+    isCameraPermissionGranted: Boolean? = false,
+    navigateUp:() -> Unit = { },
+    uiState: TakePhotoUIState = TakePhotoUIState(),
+    onAction:(TakePhotoUIAction) -> Unit = { }
+) {
+    val context = LocalContext.current
+
+    var sessionName by rememberSaveable { mutableStateOf("") }
+    val imageCapture = remember {
+        ImageCapture.Builder()
+            .build()
+    }
+
     val cameraPreviewHeightRatio = 0.8f
     val topBarHeightRatio = 0.089f
     val bottomBarStartMarginRatio = 0.11864f
     val bottomBarEndMarginRatio = 0.09864f
-
-
     if (isCameraPermissionGranted == true) {
 
-        var isCameraOpen by remember { mutableStateOf(true) }
         val photoPickerLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) {
-            capturedPhotoUri = it
-            if (capturedPhotoUri != null) {
-                isDialogShowed = true
-                isCameraOpen = false
-            }
+            onAction(
+                TakePhotoUIAction.OnPickImageFromGalleryResult(
+                    it.toString()
+                )
+            )
         }
-
 
         Column(
             modifier.fillMaxSize()
@@ -109,7 +127,9 @@ fun TakePhotoScreen(
             TopBarTakePhoto(
                 topBarHeightRatio = topBarHeightRatio,
                 switchCameraLens = {
-                    isUsingBackCamera = !isUsingBackCamera
+                    onAction(
+                        TakePhotoUIAction.OnToggleIsUsingBackCamera
+                    )
                 },
                 cancelSession = navigateUp
             )
@@ -118,9 +138,9 @@ fun TakePhotoScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(cameraPreviewHeightRatio),
-                isUsingBackCamera = isUsingBackCamera,
+                isUsingBackCamera = uiState.isUsingBackCamera,
                 imageCapture,
-                isCameraOpen
+                uiState.isCameraOpen
             )
 
             BottomBarTakePhoto(
@@ -129,15 +149,16 @@ fun TakePhotoScreen(
                         imageCapture,
                         context,
                         onSuccess = { uri ->
-                            capturedPhotoUri = uri
-                            isDialogShowed = true
-                            isCameraOpen = false
+                            onAction(
+                                TakePhotoUIAction.OnCaptureImageSuccess(
+                                    uri.toString()
+                                )
+                            )
                         },
-                        onError = { e ->
-                            showSnackBar(
-                                context.getString(
-                                    R.string.error,
-                                    e.message.toString()
+                        onError = { error ->
+                            onAction(
+                                TakePhotoUIAction.OnCaptureImageError(
+                                    error
                                 )
                             )
                         }
@@ -156,44 +177,28 @@ fun TakePhotoScreen(
 
         }
 
-        val invalidNameMessage = stringResource(R.string.nama_yang_dimasukkan_tidak_valid)
-        val onSubmit: () -> Unit by rememberUpdatedState {
-            if (sessionName.isBlank()) {
-                showSnackBar(invalidNameMessage)
-            } else {
-                coroutineScope.launch {
-                    val compressedImage = imageCompressor.compressImage(capturedPhotoUri)
-                    val imagePath =
-                        fileManager.saveImage(capturedPhotoUri, compressedImage, sessionName)
-
-                    if (imagePath == null) {
-                        capturedPhotoUri = null
-                        isDialogShowed = false
-                        isCameraOpen = true
-                    } else {
-                        isDialogShowed = false
-                        navigateToResult(
-                            sessionName, imagePath
-                        )
-                    }
-                }
-            }
-        }
-
-        InputPhotoNameDialog(
-            isShowDialog = isDialogShowed,
+        InputSessionNameDialog(
+            isShowDialog = uiState.isConfirmationDialogShown,
             name = sessionName,
+            canUserInteract = uiState.canUserInteractWithDialog,
             onValueNameChange = {
                 if (it.length < 50) {
                     sessionName = it
                 }
             },
             onDismiss = {
-                fileManager.deleteFile(capturedPhotoUri)
-                isDialogShowed = false
-                isCameraOpen = true
+                sessionName = ""
+                onAction(
+                    TakePhotoUIAction.OnConfirmationDialogDismissed
+                )
             },
-            onSubmit = onSubmit
+            onSubmit = {
+                onAction(
+                    TakePhotoUIAction.OnConfirmationDialogSubmitted(
+                        sessionName
+                    )
+                )
+            }
         )
     }
 }

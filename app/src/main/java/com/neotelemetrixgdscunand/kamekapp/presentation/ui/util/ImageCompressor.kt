@@ -5,15 +5,19 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import androidx.core.net.toUri
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.File
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class ImageCompressor(
-    private val context: Context
+class ImageCompressor @Inject constructor(
+    @ApplicationContext private val context: Context
 ) {
 
     suspend fun compressBitmap(
@@ -47,11 +51,12 @@ class ImageCompressor(
 
 
     suspend fun compressImage(
-        uri: Uri?,
+        imageUriPath: String?,
         maxImageSizeKB: Int = DEFAULT_MAX_IMAGE_SIZE_KB
-    ): ByteArray? {
+    ): ByteArray?{
+        if(imageUriPath == null) return null
 
-        if (uri == null) return null
+        val uri = imageUriPath.toUri()
 
         return withContext(Dispatchers.IO) {
             val mimeType = context.contentResolver.getType(uri)

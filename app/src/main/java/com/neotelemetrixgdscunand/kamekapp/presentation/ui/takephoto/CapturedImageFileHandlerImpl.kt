@@ -1,29 +1,28 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 
 import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.createCustomTempFile
+import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CaptureImageFileHandler
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FileManager(
-    private val context: Context
-) {
+@Singleton
+class CapturedImageFileHandlerImpl @Inject constructor(
+    @ApplicationContext private val context: Context
+):CaptureImageFileHandler{
 
-    suspend fun saveImage(
-        imageUri: Uri?,
-        imageBytes: ByteArray?,
-        fileName: String = "image"
-    ): String? {
+    override suspend fun saveImage(imageUriPath: String?, imageBytes: ByteArray?, fileName: String):String? {
         return withContext(Dispatchers.IO) {
-            if (imageBytes == null) return@withContext null
+            if (imageBytes == null || imageUriPath == null) return@withContext null
 
-            if (imageUri == null) return@withContext null
-
+            val imageUri = imageUriPath.toUri()
             val mimeType = context.contentResolver.getType(imageUri)
             val extension = MimeTypeMap
                 .getSingleton()
@@ -34,7 +33,6 @@ class FileManager(
                 if (oldFile.exists()) oldFile.delete()
             }
 
-
             val file = createCustomTempFile(context, extension = extension)
             file.writeBytes(imageBytes)
             val fullFileName = "$fileName.$extension"
@@ -42,7 +40,15 @@ class FileManager(
 
             return@withContext renameFileUri.path
         }
+    }
 
+    override fun deleteImageFile(fileUriPath: String) {
+        val fileUri = fileUriPath.toUri()
+
+        if (fileUri.scheme == "file") {
+            val file = fileUri.toFile()
+            if (file.exists()) file.delete()
+        }
     }
 
     private fun renameFile(file: File?, newName: String): Uri {
@@ -56,13 +62,5 @@ class FileManager(
         return newFile.toUri()
     }
 
-    fun deleteFile(fileUri: Uri?) {
-        if (fileUri == null) return
-
-        if (fileUri.scheme == "file") {
-            val file = fileUri.toFile()
-            if (file.exists()) file.delete()
-        }
-    }
 
 }
