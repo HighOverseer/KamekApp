@@ -62,11 +62,12 @@ fun TakePhotoScreen(
     LaunchedEffect(true) {
         lifecycleOwner.collectChannelWhenStarted(
             viewModel.uiEvent
-        ){
-            when(it){
+        ) {
+            when (it) {
                 is TakePhotoUIEvent.ToastMessageEvent -> {
                     showSnackBar(it.message.getValue(context))
                 }
+
                 is TakePhotoUIEvent.NavigateToResult -> {
                     navigateToResult(
                         it.sessionName,
@@ -92,9 +93,9 @@ fun TakePhotoScreen(
 fun TakePhotoContent(
     modifier: Modifier = Modifier,
     isCameraPermissionGranted: Boolean? = false,
-    navigateUp:() -> Unit = { },
+    navigateUp: () -> Unit = { },
     uiState: TakePhotoUIState = TakePhotoUIState(),
-    onAction:(TakePhotoUIAction) -> Unit = { }
+    onAction: (TakePhotoUIAction) -> Unit = { }
 ) {
     val context = LocalContext.current
 

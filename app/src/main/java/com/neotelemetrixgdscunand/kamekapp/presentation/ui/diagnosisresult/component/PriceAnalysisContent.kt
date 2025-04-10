@@ -40,7 +40,7 @@ fun PriceAnalysisContent(
     isInitiallyExpanded: Boolean = true,
     diagnosisSession: DiagnosisSession,
     damageLevelCategory: DamageLevelCategory = DamageLevelCategory.High,
-    onDetectedCacaoImageClicked:(Int) -> Unit = { }
+    onDetectedCacaoImageClicked: (Int) -> Unit = { }
 ) {
 
     var isExpand by remember {

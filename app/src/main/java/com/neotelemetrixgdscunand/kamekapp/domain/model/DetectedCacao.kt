@@ -97,5 +97,5 @@ fun getDetectedDiseaseCacaos(): List<DetectedCacao> {
             disease = CacaoDisease.BLACKPOD
         ),
 
-    )
+        )
 }

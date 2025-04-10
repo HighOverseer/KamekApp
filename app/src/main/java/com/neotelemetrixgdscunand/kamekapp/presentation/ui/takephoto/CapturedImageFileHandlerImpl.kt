@@ -16,9 +16,13 @@ import javax.inject.Singleton
 @Singleton
 class CapturedImageFileHandlerImpl @Inject constructor(
     @ApplicationContext private val context: Context
-):CaptureImageFileHandler{
+) : CaptureImageFileHandler {
 
-    override suspend fun saveImage(imageUriPath: String?, imageBytes: ByteArray?, fileName: String):String? {
+    override suspend fun saveImage(
+        imageUriPath: String?,
+        imageBytes: ByteArray?,
+        fileName: String
+    ): String? {
         return withContext(Dispatchers.IO) {
             if (imageBytes == null || imageUriPath == null) return@withContext null
 

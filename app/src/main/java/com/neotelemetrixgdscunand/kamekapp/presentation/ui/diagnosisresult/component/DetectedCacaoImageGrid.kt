@@ -86,7 +86,7 @@ fun DetectedCacaoImageGrid(
             }
 
             val remainingItemCount = 3 - rowItems.size
-            repeat(remainingItemCount){
+            repeat(remainingItemCount) {
                 Spacer(modifier.weight(1f))
             }
         }

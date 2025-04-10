@@ -168,10 +168,20 @@ fun Float.roundOffDecimal(n: Int = 3): Float {
 
 fun DetectedCacao.getBoundingBoxWithItsNameAsTheLabel(
     context: Context
-):BoundingBox{
+): BoundingBox {
     return boundingBox.run {
         BoundingBox(
-            x1, y1, x2, y2, cx, cy, w, h, cnf, cls, context.getString(R.string.kakao, cacaoNumber.toString())
+            x1,
+            y1,
+            x2,
+            y2,
+            cx,
+            cy,
+            w,
+            h,
+            cnf,
+            cls,
+            context.getString(R.string.kakao, cacaoNumber.toString())
         )
     }
 }

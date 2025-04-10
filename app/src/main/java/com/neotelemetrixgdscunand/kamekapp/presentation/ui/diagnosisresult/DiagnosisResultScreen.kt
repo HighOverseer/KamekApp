@@ -59,6 +59,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Yellow90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.cacaoimagedetail.components.OverlayCompose
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DetectedCacaoImageGrid
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisBottomContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisDiseaseDetails
@@ -71,7 +72,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.compo
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisContentLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PriceAnalysisOverview
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DetectedCacaoImageGrid
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 

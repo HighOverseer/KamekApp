@@ -35,7 +35,7 @@ fun InputSessionNameDialog(
     name: String = "",
     onValueNameChange: (String) -> Unit = {},
     onSubmit: () -> Unit = {},
-    canUserInteract:Boolean = true
+    canUserInteract: Boolean = true
 ) {
 
     if (isShowDialog) {
@@ -47,7 +47,7 @@ fun InputSessionNameDialog(
 
         Dialog(
             onDismissRequest = {
-                if(canUserInteract){
+                if (canUserInteract) {
                     onDismiss()
                 }
             }

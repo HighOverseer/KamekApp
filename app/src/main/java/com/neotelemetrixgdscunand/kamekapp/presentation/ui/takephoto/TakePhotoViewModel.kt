@@ -22,21 +22,21 @@ import javax.inject.Inject
 class TakePhotoViewModel @Inject constructor(
     private val imageCompressor: ImageCompressor,
     private val captureImageFileHandler: CaptureImageFileHandler
-):ViewModel() {
+) : ViewModel() {
 
     private val _isConfirmationDialogShown = MutableStateFlow(false)
     private val _isUsingBackCamera = MutableStateFlow(true)
     private val _isCameraOpen = MutableStateFlow(true)
     private val _canUserInteractWithDialog = MutableStateFlow(true)
 
-    private var capturedPhotoImagePath:String? = null
+    private var capturedPhotoImagePath: String? = null
 
     val uiState = combine(
         _isConfirmationDialogShown,
         _isUsingBackCamera,
         _isCameraOpen,
         _canUserInteractWithDialog
-    ){ isConfirmationDialogShown, isUsingBackCamera, isCameraOpen, canUserInteractWithDialog ->
+    ) { isConfirmationDialogShown, isUsingBackCamera, isCameraOpen, canUserInteractWithDialog ->
         TakePhotoUIState(
             isConfirmationDialogShown = isConfirmationDialogShown,
             isUsingBackCamera = isUsingBackCamera,
@@ -52,10 +52,10 @@ class TakePhotoViewModel @Inject constructor(
     private val _uiEvent = Channel<TakePhotoUIEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    private var submitJob:Job? = null
+    private var submitJob: Job? = null
 
-    fun onAction(action:TakePhotoUIAction){
-        when(action){
+    fun onAction(action: TakePhotoUIAction) {
+        when (action) {
             is TakePhotoUIAction.OnCaptureImageError -> {
                 viewModelScope.launch {
                     val message = StringRes.Dynamic(action.error.message.toString())
@@ -64,15 +64,17 @@ class TakePhotoViewModel @Inject constructor(
                     )
                 }
             }
+
             is TakePhotoUIAction.OnCaptureImageSuccess -> {
                 action.apply {
                     capturedPhotoImagePath = imageUriPath
-                    if(imageUriPath != null){
+                    if (imageUriPath != null) {
                         _isConfirmationDialogShown.value = true
                         _isCameraOpen.value = false
                     }
                 }
             }
+
             TakePhotoUIAction.OnConfirmationDialogDismissed -> {
                 action.apply {
                     capturedPhotoImagePath?.let { captureImageFileHandler.deleteImageFile(it) }
@@ -81,6 +83,7 @@ class TakePhotoViewModel @Inject constructor(
                     _isCameraOpen.value = true
                 }
             }
+
             is TakePhotoUIAction.OnConfirmationDialogSubmitted -> {
                 if (action.submittedSessionName.isBlank()) {
                     val message = StringRes.Static(R.string.nama_yang_dimasukkan_tidak_valid)
@@ -90,7 +93,7 @@ class TakePhotoViewModel @Inject constructor(
                         )
                     }
                 } else {
-                    if(submitJob?.isActive == true) return
+                    if (submitJob?.isActive == true) return
 
                     submitJob = viewModelScope.launch {
                         _canUserInteractWithDialog.value = false
@@ -99,7 +102,11 @@ class TakePhotoViewModel @Inject constructor(
                         val capturePhotoImagePath = capturedPhotoImagePath ?: return@launch
                         val compressedImage = imageCompressor.compressImage(capturePhotoImagePath)
                         val imagePath =
-                            captureImageFileHandler.saveImage(capturePhotoImagePath, compressedImage, action.submittedSessionName)
+                            captureImageFileHandler.saveImage(
+                                capturePhotoImagePath,
+                                compressedImage,
+                                action.submittedSessionName
+                            )
 
                         if (imagePath == null) {
                             capturedPhotoImagePath?.let { captureImageFileHandler.deleteImageFile(it) }
@@ -123,15 +130,17 @@ class TakePhotoViewModel @Inject constructor(
                     }
                 }
             }
-            is TakePhotoUIAction.OnPickImageFromGalleryResult ->{
+
+            is TakePhotoUIAction.OnPickImageFromGalleryResult -> {
                 action.apply {
                     capturedPhotoImagePath = imageUriPath
-                    if(imageUriPath != null){
+                    if (imageUriPath != null) {
                         _isConfirmationDialogShown.value = true
                         _isCameraOpen.value = false
                     }
                 }
             }
+
             is TakePhotoUIAction.OnToggleIsUsingBackCamera -> {
                 _isUsingBackCamera.value = !_isUsingBackCamera.value
             }

@@ -36,9 +36,9 @@ fun DiagnosisDiseaseDetails(
     diseaseSymptoms: String = "-",
     seedCondition: String = "-",
     detectedCacaos: List<DetectedCacao> = listOf(),
-    onDetectedCacaoImageClicked:(Int) -> Unit = { },
-    isExpand:Boolean = false,
-    toggleExpand:() -> Unit = { }
+    onDetectedCacaoImageClicked: (Int) -> Unit = { },
+    isExpand: Boolean = false,
+    toggleExpand: () -> Unit = { }
 ) {
 
     Column(

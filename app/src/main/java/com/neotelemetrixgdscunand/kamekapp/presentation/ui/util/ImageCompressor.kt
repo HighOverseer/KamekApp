@@ -3,7 +3,6 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -12,7 +11,6 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
-import java.io.File
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -53,8 +51,8 @@ class ImageCompressor @Inject constructor(
     suspend fun compressImage(
         imageUriPath: String?,
         maxImageSizeKB: Int = DEFAULT_MAX_IMAGE_SIZE_KB
-    ): ByteArray?{
-        if(imageUriPath == null) return null
+    ): ByteArray? {
+        if (imageUriPath == null) return null
 
         val uri = imageUriPath.toUri()
 

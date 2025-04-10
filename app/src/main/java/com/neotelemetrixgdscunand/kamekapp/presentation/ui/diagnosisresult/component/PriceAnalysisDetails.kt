@@ -40,7 +40,7 @@ fun PriceAnalysisDetails(
     isInitiallyExpanded: Boolean = false,
     diagnosisSession: DiagnosisSession,
     subDamageLevelSubCategory: DamageLevelSubCategory = DamageLevelCategory.Low.secondSubLevelCategory,
-    onDetectedCacaoImageClicked:(Int) -> Unit = { }
+    onDetectedCacaoImageClicked: (Int) -> Unit = { }
 ) {
     var isDetailsExpanded by remember(isInitiallyExpanded) {
         mutableStateOf(isInitiallyExpanded)
