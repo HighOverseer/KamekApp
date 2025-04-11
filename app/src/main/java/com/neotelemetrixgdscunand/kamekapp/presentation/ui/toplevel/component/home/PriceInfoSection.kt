@@ -33,8 +33,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 fun PriceInfoSection(modifier: Modifier = Modifier) {
     val cardModifier = remember {
         modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 32.dp, start = 16.dp, end = 16.dp)
             .background(color = Color.White, shape = RoundedCornerShape(4.dp))
             .padding(vertical = 8.dp, horizontal = 16.dp)
     }
@@ -105,6 +103,8 @@ fun PriceInfoSection(modifier: Modifier = Modifier) {
 @Composable
 private fun PriceInfoSectionPreview() {
     KamekAppTheme {
-        PriceInfoSection()
+        PriceInfoSection(
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

@@ -133,7 +133,7 @@ fun TakePhotoContent(
                     .wrapContentHeight(),
                 captureImage = {
                     cameraState.captureImage(
-                        context
+                        context.applicationContext
                     )
                 },
                 pickImageFromGallery = {

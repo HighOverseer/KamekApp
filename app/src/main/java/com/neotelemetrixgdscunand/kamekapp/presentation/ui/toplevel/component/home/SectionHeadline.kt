@@ -3,6 +3,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.h
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,7 +56,9 @@ fun SectionHeadline(
 @Composable
 private fun SectionHeadlinePreview() {
     KamekAppTheme {
-        SectionHeadline()
+        SectionHeadline(
+            Modifier.padding(horizontal = 16.dp)
+        )
     }
 
 }

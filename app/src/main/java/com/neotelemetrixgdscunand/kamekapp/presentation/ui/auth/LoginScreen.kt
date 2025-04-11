@@ -6,12 +6,13 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -94,29 +96,32 @@ fun LoginContent(
     passwordInteractionSource: MutableInteractionSource = MutableInteractionSource(),
     navigateToTopLevelPage: () -> Unit = {}
 ) {
-    val topMarginToContentRatio = 0.0838f
-    val headlineToLogoMarginRatio = 0.0805f
-    val formToHeadlineMarginRatio = 0.0697f
-    val buttonToFormMarginRatio = 0.0872f
+    val configuration = LocalConfiguration.current
+    val topMarginToContentDp = (configuration.screenHeightDp * 0.0838f).dp
+    val headlineToLogoMarginDp = (configuration.screenHeightDp * 0.0805f).dp
+    val formToHeadlineMarginDp = (configuration.screenHeightDp * 0.0697f).dp
+    val buttonToFormMarginDp = (configuration.screenHeightDp * 0.0872f).dp
 
     val isUsernameTextFieldFocused by usernameInteractionSource.collectIsFocusedAsState()
     val isPasswordTextFieldFocused by passwordInteractionSource.collectIsFocusedAsState()
 
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(scrollState),
     ) {
 
         Spacer(
             modifier = Modifier
-                .fillMaxHeight(topMarginToContentRatio)
+                .height(topMarginToContentDp)
         )
 
         SmallLogoHeadline()
 
         Spacer(
             modifier = Modifier
-                .fillMaxHeight(headlineToLogoMarginRatio)
+                .height(headlineToLogoMarginDp)
         )
 
         AuthHeaderSection(
@@ -127,7 +132,7 @@ fun LoginContent(
 
         Spacer(
             modifier = Modifier
-                .fillMaxHeight(formToHeadlineMarginRatio)
+                .height(formToHeadlineMarginDp)
         )
 
         Column(
@@ -188,7 +193,7 @@ fun LoginContent(
             )
 
             Spacer(
-                modifier = Modifier.fillMaxHeight(buttonToFormMarginRatio)
+                modifier = Modifier.height(buttonToFormMarginDp)
             )
 
             PrimaryButton(
@@ -197,6 +202,8 @@ fun LoginContent(
                 text = stringResource(R.string.masuk),
                 onClick = navigateToTopLevelPage
             )
+
+            Spacer(Modifier.height(32.dp))
 
         }
 

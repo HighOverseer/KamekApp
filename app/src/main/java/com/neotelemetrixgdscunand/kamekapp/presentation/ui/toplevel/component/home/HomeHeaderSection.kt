@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,13 +33,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
 import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
@@ -54,7 +57,6 @@ fun HomeHeaderSection(
 
     val parentModifier = remember {
         modifier
-            .fillMaxWidth()
             .background(
                 brush = Brush.linearGradient(
                     Pair(1f, Maroon55),
@@ -65,7 +67,6 @@ fun HomeHeaderSection(
                     bottomEnd = 16.dp
                 )
             )
-
     }
 
     val circleImageModifier = remember {
@@ -105,20 +106,22 @@ fun HomeHeaderSection(
         Modifier.padding(horizontal = 16.dp, vertical = 25.dp)
     }
 
-    BoxWithConstraints(
-        modifier = parentModifier
-    )
-    {
-        val backgroundIconSize = remember {
-            if (this.maxWidth < this.maxHeight) {
-                0.6125f * this.maxWidth
-            } else 0.6125f * this.maxHeight
+    var inflatedCardHeight by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
-        }
-        val backgroundIconModifier = remember {
+    Box(
+        modifier = parentModifier
+            .onGloballyPositioned {
+                inflatedCardHeight = with(density) {
+                    it.size.height.toDp()
+                }
+            }
+
+    ) {
+
+        val backgroundIconModifier = remember(inflatedCardHeight) {
             Modifier
-                .width(backgroundIconSize)
-                .height(backgroundIconSize)
+                .size(inflatedCardHeight)
                 .align(Alignment.TopEnd)
         }
 
@@ -128,7 +131,9 @@ fun HomeHeaderSection(
             contentScale = ContentScale.FillBounds,
             contentDescription = null
         )
-        Column(modifier = columnModifier) {
+        Column(
+            modifier = columnModifier
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -297,7 +302,9 @@ fun HomeHeaderSection(
 @Composable
 private fun HomeHeaderSectionPreview() {
     KamekAppTheme {
-        HomeHeaderSection()
+        HomeHeaderSection(
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 
 }

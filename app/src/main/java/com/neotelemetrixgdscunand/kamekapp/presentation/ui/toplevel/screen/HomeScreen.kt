@@ -1,30 +1,36 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.screen
 
-import androidx.compose.foundation.background
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.ExplorationSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.HomeDiagnosisHistory
@@ -63,6 +69,7 @@ fun HomeScreen(
     )
 }
 
+
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
@@ -75,118 +82,126 @@ fun HomeContent(
     navigateToNotification: () -> Unit = {},
     showSnackbar: (String) -> Unit = {}
 ) {
-    val parentListState = rememberLazyListState()
     val diagnosisHistoryListState = rememberLazyListState()
-
 
     val weeklyNewsItems = remember {
         getDummyWeeklyNewsItems()
     }
 
-    val weeklyItemModifier = remember {
-        Modifier
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            .clickable(onClick = navigateToNewsDetail)
-    }
+    val scrollState = rememberScrollState()
 
-
-    LazyColumn(
+    Column(
         modifier = modifier
-            .background(Grey90),
-        state = parentListState
+            .fillMaxSize()
+            .verticalScroll(scrollState)
     ) {
+        HomeHeaderSection(
+            modifier = Modifier.fillMaxWidth(),
+            navigateToNotification = navigateToNotification
+        )
 
-        item {
-            HomeHeaderSection(
-                navigateToNotification = navigateToNotification
-            )
-        }
+        PriceInfoSection(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+        )
 
-        item {
-            PriceInfoSection()
-        }
+        ExplorationSection(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            navigateToNews = navigateToNews,
+            navigateToShop = navigateToShop,
+            navigateToWeather = navigateToWeather,
+            showSnackbar = showSnackbar
+        )
 
-        item {
-            ExplorationSection(
-                navigateToNews = navigateToNews,
-                navigateToShop = navigateToShop,
-                navigateToWeather = navigateToWeather,
-                showSnackbar = showSnackbar
-            )
+        Spacer(Modifier.height(24.dp))
 
-            Spacer(Modifier.height(24.dp))
-        }
+        SectionHeadline(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(horizontal = 16.dp),
+            leadingIconResId = R.drawable.ic_camera_gradient,
+            trailingIconResId = R.drawable.ic_right_arrow,
+            title = stringResource(R.string.riwayat_diagnosis)
+        )
 
-        item {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                SectionHeadline(
-                    leadingIconResId = R.drawable.ic_camera_gradient,
-                    trailingIconResId = R.drawable.ic_right_arrow,
-                    title = stringResource(R.string.riwayat_diagnosis)
+        Spacer(
+            Modifier.height(16.dp)
+        )
+
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            state = diagnosisHistoryListState
+        ) {
+            items(diagnosisSessionPreviews, { it.id }) { item ->
+                HomeDiagnosisHistory(
+                    modifier = Modifier
+                        .clickable {
+                            navigateToDiagnosisResult(item.id)
+                        },
+                    item = item
                 )
             }
         }
 
-        item {
-            Spacer(
-                Modifier.height(16.dp)
-            )
+        Spacer(
+            Modifier.height(24.dp)
+        )
+
+        SectionHeadline(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            title = stringResource(R.string.berita_mingguan_kamek),
+            leadingIconResId = R.drawable.ic_news_gradient
+        )
+
+        val configuration = LocalConfiguration.current
+        val orientation by remember {
+            derivedStateOf {
+                configuration.orientation
+            }
         }
 
-        item {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                state = diagnosisHistoryListState
-            ) {
-                items(diagnosisSessionPreviews, { it.id }) { item ->
-                    HomeDiagnosisHistory(
-                        modifier = Modifier
-                            .clickable {
-                                navigateToDiagnosisResult(item.id)
-                            },
-                        item = item
-                    )
+        val lazyColumnMaxHeight = remember(orientation) {
+            val screenHeightDp = configuration.screenHeightDp.dp
+            val maxHeight = when (orientation) {
+                Configuration.ORIENTATION_PORTRAIT -> {
+                    screenHeightDp * 2
                 }
+
+                else -> screenHeightDp * 5
             }
+            maxHeight
         }
 
-
-        item {
-            Spacer(
-                Modifier.height(24.dp)
-            )
+        val weeklyItemModifier = remember {
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                .clickable(onClick = navigateToNewsDetail)
         }
 
-        item {
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                SectionHeadline(
-                    title = stringResource(R.string.berita_mingguan_kamek),
-                    leadingIconResId = R.drawable.ic_news_gradient
+        val lazyListState = rememberLazyListState()
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = lazyColumnMaxHeight),
+            contentPadding = PaddingValues(bottom = 16.dp)
+        ) {
+            items(weeklyNewsItems, { it.id }) { item ->
+                WeeklyNews(
+                    modifier = weeklyItemModifier,
+                    item = item
                 )
             }
         }
-
-        items(weeklyNewsItems, { it.id }) { item ->
-            WeeklyNews(
-                modifier = weeklyItemModifier,
-                item = item
-            )
-        }
-
-        item {
-            Spacer(Modifier.height(16.dp))
-        }
-
-
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

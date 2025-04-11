@@ -43,7 +43,6 @@ fun WeeklyNews(
 ) {
     val cardModifier = remember {
         modifier
-            .fillMaxWidth()
             .height(110.dp)
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(12.dp)
