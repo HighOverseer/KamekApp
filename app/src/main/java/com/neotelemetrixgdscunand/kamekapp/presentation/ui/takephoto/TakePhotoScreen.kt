@@ -24,8 +24,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.C
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.TextFieldConfirmationDialog
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.TopBarTakePhoto
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CameraState
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogState
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TakePhotoUIEvent
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogState
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 
@@ -94,7 +94,7 @@ fun TakePhotoContent(
     textFieldConfirmationDialogState: TextFieldConfirmationDialogState = TextFieldConfirmationDialogState(
         rememberCoroutineScope()
     ),
-    handlePickImageFromGalleryResult:(String) -> Unit
+    handlePickImageFromGalleryResult: (String) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -103,7 +103,7 @@ fun TakePhotoContent(
         val photoPickerLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) {
-            if(it != null){
+            if (it != null) {
                 handlePickImageFromGalleryResult(it.toString())
             }
         }
@@ -152,7 +152,7 @@ fun TakePhotoContent(
             name = textFieldConfirmationDialogState.confirmationText,
             hintText = stringResource(R.string.masukan_nama_foto_disini),
             onValueNameChange = {
-                if(it.length < 50){
+                if (it.length < 50) {
                     textFieldConfirmationDialogState.setText(it)
                 }
             }

@@ -34,7 +34,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFi
 fun TextFieldConfirmationDialog(
     name: String = "",
     onValueNameChange: (String) -> Unit = {},
-    hintText:String = "",
+    hintText: String = "",
     state: TextFieldConfirmationDialogState = TextFieldConfirmationDialogState(
         rememberCoroutineScope()
     )

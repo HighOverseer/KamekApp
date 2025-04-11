@@ -39,15 +39,16 @@ class TakePhotoViewModel @Inject constructor(
         listenToTextFieldConfirmationDialogEvent()
     }
 
-    private fun listenToImageCaptureResult(){
+    private fun listenToImageCaptureResult() {
         viewModelScope.launch {
-            cameraState.captureImageResult.collect{ result ->
-                when(result){
+            cameraState.captureImageResult.collect { result ->
+                when (result) {
                     is ImageCaptureResult.Success -> {
                         capturedPhotoImagePath = result.imageUriPath
                         textFieldConfirmationDialogState.setIsShown(true)
                         cameraState.setIsCameraOpen(false)
                     }
+
                     is ImageCaptureResult.Error -> {
                         val message = StringRes.Dynamic(result.exception.message.toString())
                         _uiEvent.send(
@@ -59,13 +60,14 @@ class TakePhotoViewModel @Inject constructor(
         }
     }
 
-    private fun listenToTextFieldConfirmationDialogEvent(){
+    private fun listenToTextFieldConfirmationDialogEvent() {
         viewModelScope.launch {
             textFieldConfirmationDialogState.event.collect { event ->
-                when(event){
-                    is TextFieldConfirmationDialogEvent.OnSubmitted ->{
+                when (event) {
+                    is TextFieldConfirmationDialogEvent.OnSubmitted -> {
                         if (event.submittedText.isBlank()) {
-                            val message = StringRes.Static(R.string.nama_yang_dimasukkan_tidak_valid)
+                            val message =
+                                StringRes.Static(R.string.nama_yang_dimasukkan_tidak_valid)
                             viewModelScope.launch {
                                 _uiEvent.send(
                                     TakePhotoUIEvent.ToastMessageEvent(message)
@@ -77,8 +79,10 @@ class TakePhotoViewModel @Inject constructor(
                             submitJob = viewModelScope.launch secondLaunch@{
                                 textFieldConfirmationDialogState.setCanUserInteract(false)
 
-                                val capturePhotoImagePath = capturedPhotoImagePath ?: return@secondLaunch
-                                val compressedImage = imageCompressor.compressImage(capturePhotoImagePath)
+                                val capturePhotoImagePath =
+                                    capturedPhotoImagePath ?: return@secondLaunch
+                                val compressedImage =
+                                    imageCompressor.compressImage(capturePhotoImagePath)
                                 val imagePath =
                                     captureImageFileHandler.saveImage(
                                         capturePhotoImagePath,
@@ -87,7 +91,11 @@ class TakePhotoViewModel @Inject constructor(
                                     )
 
                                 if (imagePath == null) {
-                                    capturedPhotoImagePath?.let { captureImageFileHandler.deleteImageFile(it) }
+                                    capturedPhotoImagePath?.let {
+                                        captureImageFileHandler.deleteImageFile(
+                                            it
+                                        )
+                                    }
                                     capturedPhotoImagePath = null
                                     textFieldConfirmationDialogState.setIsShown(false)
                                     cameraState.setIsCameraOpen(true)
@@ -108,6 +116,7 @@ class TakePhotoViewModel @Inject constructor(
                             }
                         }
                     }
+
                     TextFieldConfirmationDialogEvent.OnDismissed -> {
                         capturedPhotoImagePath?.let { captureImageFileHandler.deleteImageFile(it) }
                         capturedPhotoImagePath = null
@@ -120,7 +129,7 @@ class TakePhotoViewModel @Inject constructor(
     }
 
 
-    fun handleOnPickImageGalleryResult(imageUriPath:String?){
+    fun handleOnPickImageGalleryResult(imageUriPath: String?) {
         capturedPhotoImagePath = imageUriPath
         if (imageUriPath != null) {
             textFieldConfirmationDialogState.setIsShown(true)

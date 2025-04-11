@@ -1,12 +1,8 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util
 
 import android.content.Context
-import android.net.Uri
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

@@ -54,7 +54,8 @@ fun BottomBarTakePhoto(
         modifier = parentModifier
     ) {
         BoxWithConstraints(
-            Modifier.fillMaxWidth()
+            Modifier
+                .fillMaxWidth()
                 .wrapContentHeight()
         ) {
             val bottomBarMarginStart = this@BoxWithConstraints.maxWidth * bottomBarStartMarginRatio

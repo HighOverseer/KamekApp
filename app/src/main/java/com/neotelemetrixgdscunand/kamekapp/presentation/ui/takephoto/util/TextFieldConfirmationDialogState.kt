@@ -27,19 +27,19 @@ class TextFieldConfirmationDialogState(
     val event = _event.asSharedFlow()
 
     fun setIsShown(
-        isShown:Boolean
-    ){
+        isShown: Boolean
+    ) {
         this.isShown = isShown
     }
 
     fun setCanUserInteract(
-        canUserInteract:Boolean
-    ){
+        canUserInteract: Boolean
+    ) {
         this.canUserInteractWithDialog = canUserInteract
     }
 
-    fun submit(){
-        if(canUserInteractWithDialog){
+    fun submit() {
+        if (canUserInteractWithDialog) {
             val submittedText = confirmationText
             coroutineScope.launch {
                 _event.emit(
@@ -49,8 +49,8 @@ class TextFieldConfirmationDialogState(
         }
     }
 
-    fun dismiss(){
-        if(canUserInteractWithDialog){
+    fun dismiss() {
+        if (canUserInteractWithDialog) {
             confirmationText = ""
             coroutineScope.launch {
                 _event.emit(
@@ -60,16 +60,16 @@ class TextFieldConfirmationDialogState(
         }
     }
 
-    fun setText(newText:String){
+    fun setText(newText: String) {
         confirmationText = newText
     }
 
-    fun cleanResource(){
+    fun cleanResource() {
         coroutineScope.cancel()
     }
 }
 
-interface TextFieldConfirmationDialogEvent{
-    data class OnSubmitted(val submittedText:String):TextFieldConfirmationDialogEvent
-    data object OnDismissed:TextFieldConfirmationDialogEvent
+interface TextFieldConfirmationDialogEvent {
+    data class OnSubmitted(val submittedText: String) : TextFieldConfirmationDialogEvent
+    data object OnDismissed : TextFieldConfirmationDialogEvent
 }

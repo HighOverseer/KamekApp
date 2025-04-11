@@ -17,7 +17,7 @@ import java.util.concurrent.Executors
 @Stable
 class CameraState(
     private val coroutineScope: CoroutineScope
-){
+) {
     var isUsingBackCamera by mutableStateOf(true)
         private set
 
@@ -27,13 +27,13 @@ class CameraState(
     val imageCapture = ImageCapture.Builder()
         .build()
 
-    fun setToggleCameraLens(){
+    fun setToggleCameraLens() {
         isUsingBackCamera = !isUsingBackCamera
     }
 
     fun setIsCameraOpen(
-        newIsCameraOpen:Boolean
-    ){
+        newIsCameraOpen: Boolean
+    ) {
         isCameraOpen = newIsCameraOpen
     }
 
@@ -74,12 +74,12 @@ class CameraState(
         )
     }
 
-    fun cleanResource(){
+    fun cleanResource() {
         executor.shutdown()
     }
 }
 
-sealed interface ImageCaptureResult{
-    data class Success(val imageUriPath:String):ImageCaptureResult
-    data class Error(val exception: Exception):ImageCaptureResult
+sealed interface ImageCaptureResult {
+    data class Success(val imageUriPath: String) : ImageCaptureResult
+    data class Error(val exception: Exception) : ImageCaptureResult
 }
