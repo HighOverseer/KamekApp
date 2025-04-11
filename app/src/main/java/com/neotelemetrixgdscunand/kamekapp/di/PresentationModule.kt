@@ -5,7 +5,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelp
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtractor
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ImageDetectorHelperImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ModelLabelExtractorImpl
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.CapturedImageFileHandlerImpl
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CapturedImageFileHandlerImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

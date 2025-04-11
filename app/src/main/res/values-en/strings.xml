@@ -53,7 +53,7 @@
     <string name="get_image_from_gallery">Get Image From Gallery</string>
     <string name="selesai">Finish</string>
     <string name="upload">Upload</string>
-    <string name="masukan_nama_foto_disini">Enter Photo Name Here</string>
+    <string name="masukan_nama_foto_disini">Enter Session Name Here</string>
     <string name="batal">Cancel</string>
     <string name="error">Error: %1$s</string>
     <string name="nama_yang_dimasukkan_tidak_valid">The entered name is not valid..</string>

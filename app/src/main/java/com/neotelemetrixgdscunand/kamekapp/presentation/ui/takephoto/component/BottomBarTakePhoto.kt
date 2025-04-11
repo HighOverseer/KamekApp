@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,24 +38,24 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun BottomBarTakePhoto(
     modifier: Modifier = Modifier,
-    bottomBarStartMarginRatio: Float = 0.11864f,
-    bottomBarEndMarginRatio: Float = 0.09864f,
-    onCaptureImage: () -> Unit = {},
-    onGetImageFromGallery: () -> Unit = {}
+    captureImage: () -> Unit = {},
+    pickImageFromGallery: () -> Unit = {}
 ) {
     val parentModifier = remember {
         modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
             .background(color = Color.White)
             .padding(vertical = 24.dp)
     }
+
+    val bottomBarStartMarginRatio = 0.11864f
+    val bottomBarEndMarginRatio = 0.09864f
 
     Row(
         modifier = parentModifier
     ) {
         BoxWithConstraints(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxWidth()
+                .wrapContentHeight()
         ) {
             val bottomBarMarginStart = this@BoxWithConstraints.maxWidth * bottomBarStartMarginRatio
             val bottomBarMarginEnd = this@BoxWithConstraints.maxWidth * bottomBarEndMarginRatio
@@ -70,7 +70,7 @@ fun BottomBarTakePhoto(
 
                 Column(
                     modifier = Modifier
-                        .clickable(onClick = onGetImageFromGallery),
+                        .clickable(onClick = pickImageFromGallery),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -99,7 +99,7 @@ fun BottomBarTakePhoto(
                         color = Maroon55,
                         width = 4.dp
                     )
-                    .clickable(onClick = onCaptureImage)
+                    .clickable(onClick = captureImage)
             ) {
                 Box(
                     modifier = Modifier

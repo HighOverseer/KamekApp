@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -27,18 +28,19 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryTextField
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogState
 
 @Composable
-fun InputSessionNameDialog(
-    isShowDialog: Boolean = false,
-    onDismiss: () -> Unit = { },
+fun TextFieldConfirmationDialog(
     name: String = "",
     onValueNameChange: (String) -> Unit = {},
-    onSubmit: () -> Unit = {},
-    canUserInteract: Boolean = true
+    hintText:String = "",
+    state: TextFieldConfirmationDialogState = TextFieldConfirmationDialogState(
+        rememberCoroutineScope()
+    )
 ) {
 
-    if (isShowDialog) {
+    if (state.isShown) {
         val interactionSource = remember {
             MutableInteractionSource()
         }
@@ -46,11 +48,7 @@ fun InputSessionNameDialog(
         val isFocused by interactionSource.collectIsFocusedAsState()
 
         Dialog(
-            onDismissRequest = {
-                if (canUserInteract) {
-                    onDismiss()
-                }
-            }
+            onDismissRequest = state::dismiss
         ) {
             Card(
                 shape = RoundedCornerShape(8.dp),
@@ -68,12 +66,12 @@ fun InputSessionNameDialog(
 
                     PrimaryTextField(
                         contentPadding = PaddingValues(vertical = 13.5.dp, horizontal = 16.dp),
-                        hintText = stringResource(R.string.masukan_nama_foto_disini),
                         value = name,
+                        hintText = hintText,
                         onValueChange = onValueNameChange,
                         textColor = Black10,
                         backgroundColor = Grey90,
-                        enabled = canUserInteract,
+                        enabled = state.canUserInteractWithDialog,
                         isFocused = isFocused,
                         interactionSource = interactionSource,
                         isBordered = false
@@ -86,8 +84,8 @@ fun InputSessionNameDialog(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.batal),
                             contentPadding = PaddingValues(vertical = 14.dp),
-                            onClick = onDismiss,
-                            enabled = canUserInteract
+                            onClick = state::dismiss,
+                            enabled = state.canUserInteractWithDialog
                         )
 
                         Spacer(Modifier.width(14.dp))
@@ -97,8 +95,8 @@ fun InputSessionNameDialog(
                             modifier = Modifier.weight(1f),
                             text = stringResource(R.string.selesai),
                             contentPadding = PaddingValues(vertical = 14.dp),
-                            onClick = onSubmit,
-                            enabled = canUserInteract
+                            onClick = state::submit,
+                            enabled = state.canUserInteractWithDialog
                         )
 
                     }
@@ -113,9 +111,6 @@ fun InputSessionNameDialog(
 @Composable
 private fun InputSessionNameDialogPreview() {
     KamekAppTheme {
-        InputSessionNameDialog(
-            isShowDialog = true,
-            canUserInteract = false
-        )
+        TextFieldConfirmationDialog()
     }
 }

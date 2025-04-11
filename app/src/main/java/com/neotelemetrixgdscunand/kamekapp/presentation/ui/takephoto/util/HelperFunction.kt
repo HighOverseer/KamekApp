@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util
 
 import android.content.Context
 import android.net.Uri
@@ -21,31 +21,6 @@ suspend fun Context.getCameraProvider(): ProcessCameraProvider {
     }
 }
 
-fun captureImage(
-    imageCapture: ImageCapture,
-    context: Context,
-    onSuccess: (Uri) -> Unit,
-    onError: (ImageCaptureException) -> Unit = {}
-) {
-    val outputFile = createCustomTempFile(context)
-    val outputOptions = ImageCapture.OutputFileOptions
-        .Builder(outputFile)
-        .build()
-
-    imageCapture.takePicture(
-        outputOptions,
-        ContextCompat.getMainExecutor(context),
-        object : ImageCapture.OnImageSavedCallback {
-            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                onSuccess(outputFileResults.savedUri ?: outputFile.toUri())
-            }
-
-            override fun onError(exception: ImageCaptureException) {
-                onError(exception)
-            }
-        }
-    )
-}
 
 fun createCustomTempFile(context: Context, extension: String = "jpeg"): File {
     val fileDir = context.externalCacheDir

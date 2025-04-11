@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util
 
 import android.content.Context
 import android.net.Uri

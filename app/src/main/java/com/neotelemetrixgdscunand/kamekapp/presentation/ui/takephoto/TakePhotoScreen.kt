@@ -3,19 +3,13 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.ImageCapture
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,8 +21,11 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.BottomBarTakePhoto
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.CameraPreview
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.InputSessionNameDialog
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.TextFieldConfirmationDialog
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.TopBarTakePhoto
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CameraState
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogState
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TakePhotoUIEvent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 
@@ -78,14 +75,13 @@ fun TakePhotoScreen(
         }
     }
 
-    val uiState by viewModel.uiState.collectAsState()
-
     TakePhotoContent(
         modifier = modifier,
         isCameraPermissionGranted = isCameraPermissionGranted,
         navigateUp = navigateUp,
-        uiState = uiState,
-        onAction = viewModel::onAction
+        cameraState = viewModel.cameraState,
+        textFieldConfirmationDialogState = viewModel.textFieldConfirmationDialogState,
+        handlePickImageFromGalleryResult = viewModel::handleOnPickImageGalleryResult
     )
 }
 
@@ -94,31 +90,22 @@ fun TakePhotoContent(
     modifier: Modifier = Modifier,
     isCameraPermissionGranted: Boolean? = false,
     navigateUp: () -> Unit = { },
-    uiState: TakePhotoUIState = TakePhotoUIState(),
-    onAction: (TakePhotoUIAction) -> Unit = { }
+    cameraState: CameraState = CameraState(rememberCoroutineScope()),
+    textFieldConfirmationDialogState: TextFieldConfirmationDialogState = TextFieldConfirmationDialogState(
+        rememberCoroutineScope()
+    ),
+    handlePickImageFromGalleryResult:(String) -> Unit
 ) {
     val context = LocalContext.current
 
-    var sessionName by rememberSaveable { mutableStateOf("") }
-    val imageCapture = remember {
-        ImageCapture.Builder()
-            .build()
-    }
-
-    val cameraPreviewHeightRatio = 0.8f
-    val topBarHeightRatio = 0.089f
-    val bottomBarStartMarginRatio = 0.11864f
-    val bottomBarEndMarginRatio = 0.09864f
     if (isCameraPermissionGranted == true) {
 
         val photoPickerLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.PickVisualMedia()
         ) {
-            onAction(
-                TakePhotoUIAction.OnPickImageFromGalleryResult(
-                    it.toString()
-                )
-            )
+            if(it != null){
+                handlePickImageFromGalleryResult(it.toString())
+            }
         }
 
         Column(
@@ -126,79 +113,48 @@ fun TakePhotoContent(
         ) {
 
             TopBarTakePhoto(
-                topBarHeightRatio = topBarHeightRatio,
-                switchCameraLens = {
-                    onAction(
-                        TakePhotoUIAction.OnToggleIsUsingBackCamera
-                    )
-                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                switchCameraLens = cameraState::setToggleCameraLens,
                 cancelSession = navigateUp
             )
 
             CameraPreview(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(cameraPreviewHeightRatio),
-                isUsingBackCamera = uiState.isUsingBackCamera,
-                imageCapture,
-                uiState.isCameraOpen
+                    .weight(1f),
+                state = cameraState
             )
 
             BottomBarTakePhoto(
-                onCaptureImage = {
-                    captureImage(
-                        imageCapture,
-                        context,
-                        onSuccess = { uri ->
-                            onAction(
-                                TakePhotoUIAction.OnCaptureImageSuccess(
-                                    uri.toString()
-                                )
-                            )
-                        },
-                        onError = { error ->
-                            onAction(
-                                TakePhotoUIAction.OnCaptureImageError(
-                                    error
-                                )
-                            )
-                        }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                captureImage = {
+                    cameraState.captureImage(
+                        context
                     )
                 },
-                onGetImageFromGallery = {
+                pickImageFromGallery = {
                     photoPickerLauncher.launch(
                         PickVisualMediaRequest(
                             ActivityResultContracts.PickVisualMedia.ImageOnly
                         )
                     )
-                },
-                bottomBarStartMarginRatio = bottomBarStartMarginRatio,
-                bottomBarEndMarginRatio = bottomBarEndMarginRatio
+                }
             )
 
         }
 
-        InputSessionNameDialog(
-            isShowDialog = uiState.isConfirmationDialogShown,
-            name = sessionName,
-            canUserInteract = uiState.canUserInteractWithDialog,
+        TextFieldConfirmationDialog(
+            state = textFieldConfirmationDialogState,
+            name = textFieldConfirmationDialogState.confirmationText,
+            hintText = stringResource(R.string.masukan_nama_foto_disini),
             onValueNameChange = {
-                if (it.length < 50) {
-                    sessionName = it
+                if(it.length < 50){
+                    textFieldConfirmationDialogState.setText(it)
                 }
-            },
-            onDismiss = {
-                sessionName = ""
-                onAction(
-                    TakePhotoUIAction.OnConfirmationDialogDismissed
-                )
-            },
-            onSubmit = {
-                onAction(
-                    TakePhotoUIAction.OnConfirmationDialogSubmitted(
-                        sessionName
-                    )
-                )
             }
         )
     }

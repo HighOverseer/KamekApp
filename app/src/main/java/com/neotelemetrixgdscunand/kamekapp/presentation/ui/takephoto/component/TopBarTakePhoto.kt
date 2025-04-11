@@ -24,16 +24,13 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 @Composable
 fun TopBarTakePhoto(
     modifier: Modifier = Modifier,
-    topBarHeightRatio: Float = 0.089f,
     switchCameraLens: () -> Unit = {},
     cancelSession: () -> Unit = {}
 ) {
     val topBarModifier = remember {
         modifier
-            .fillMaxWidth()
-            .fillMaxHeight(topBarHeightRatio)
             .background(color = Color.White)
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 10.dp)
     }
 
     Row(
@@ -65,6 +62,9 @@ fun TopBarTakePhoto(
 @Composable
 private fun TopBarTakePhotoPreview() {
     KamekAppTheme {
-        TopBarTakePhoto()
+        TopBarTakePhoto(
+            modifier = Modifier
+                .fillMaxWidth()
+        )
     }
 }
