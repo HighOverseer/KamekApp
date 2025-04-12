@@ -13,7 +13,6 @@ import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResu
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtractor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -142,7 +141,7 @@ class ImageDetectorHelperImpl @Inject constructor(
                 )
             } else _result.emit(ImageDetectorResult.NoObjectDetected)
         } catch (e: Exception) {
-            if(e is CancellationException) throw e
+            if (e is CancellationException) throw e
 
             _result.emit(
                 ImageDetectorResult.Error(e)
@@ -151,7 +150,7 @@ class ImageDetectorHelperImpl @Inject constructor(
         return@withContext
     }
 
-    companion object{
+    companion object {
         private val INPUT_IMAGE_TYPE = DataType.FLOAT32
         private val OUTPUT_IMAGE_TYPE = DataType.FLOAT32
     }

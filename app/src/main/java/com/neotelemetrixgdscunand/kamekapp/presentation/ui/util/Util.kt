@@ -53,11 +53,11 @@ fun Modifier.dashedBorder(
     cap: StrokeCap = StrokeCap.Round
 ) = dashedBorder(brush = SolidColor(color), shape, strokeWidth, dashLength, gapLength, cap)
 
-inline fun <reified PopUpTo: Navigation> NavHostController.navigateToWithPopUpTo(
-    destination:Navigation,
-    isInclusive:Boolean = false
-){
-    navigate(destination){
+inline fun <reified PopUpTo : Navigation> NavHostController.navigateToWithPopUpTo(
+    destination: Navigation,
+    isInclusive: Boolean = false
+) {
+    navigate(destination) {
         popUpTo<PopUpTo> {
             inclusive = isInclusive
         }

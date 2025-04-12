@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.dicoding.asclepius.domain.common.StringRes
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
-import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
 import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
@@ -67,10 +66,10 @@ class DiagnosisResultViewModel @Inject constructor(
         }
     }
 
-    private fun listenToImageDetectorResult(){
+    private fun listenToImageDetectorResult() {
         viewModelScope.launch {
-            imageClassifierHelper.result.collect{ result ->
-                when(result){
+            imageClassifierHelper.result.collect { result ->
+                when (result) {
                     ImageDetectorResult.NoObjectDetected -> {
                         viewModelScope.launch {
                             _event.send(
@@ -78,6 +77,7 @@ class DiagnosisResultViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is ImageDetectorResult.Error -> {
                         viewModelScope.launch {
                             _event.send(
@@ -89,6 +89,7 @@ class DiagnosisResultViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is ImageDetectorResult.Success -> {
                         val extras = this@DiagnosisResultViewModel.extras
                         if (extras.newSessionName == null || extras.newUnsavedSessionImagePath == null) return@collect

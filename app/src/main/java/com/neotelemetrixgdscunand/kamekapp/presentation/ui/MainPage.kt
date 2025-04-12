@@ -36,11 +36,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainPage(
     modifier: Modifier = Modifier,
-    state:MainPageState = rememberMainPageState(),
+    state: MainPageState = rememberMainPageState(),
     mainNavHostController: NavHostController = rememberNavController(),
     provideIsCameraPermissionGranted: () -> Boolean? = { true },
     checkCameraPermission: (Context, ManagedActivityResultLauncher<String, Boolean>) -> Unit = { _, _ -> },
-    rememberCameraPermissionRequest: @Composable ()-> ManagedActivityResultLauncher<String, Boolean>
+    rememberCameraPermissionRequest: @Composable () -> ManagedActivityResultLauncher<String, Boolean>
 ) {
 
     val snackbarHostState = remember {

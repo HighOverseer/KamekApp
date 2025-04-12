@@ -93,10 +93,11 @@ fun DiagnosisResultScreen(
             viewModel.event
         ) { event ->
 
-            when(event){
+            when (event) {
                 is DiagnosisResultUIEvent.OnToastMessage -> {
                     showSnackbar(event.message.getValue(context))
                 }
+
                 DiagnosisResultUIEvent.OnInputImageInvalid -> {
                     val message =
                         context.getString(R.string.input_image_is_invalid_no_cocoa_detected)

@@ -51,7 +51,6 @@ fun LoginScreen(
 ) {
 
 
-
     LoginContent(
         modifier = modifier,
         navigateToOnBoarding = navigateToOnBoarding
@@ -119,7 +118,7 @@ fun LoginContent(
                 title = stringResource(R.string.email),
                 interactionSource = usernameInteractionSource,
                 onValueChange = {
-                    if(it.length <= textMaxLength){
+                    if (it.length <= textMaxLength) {
                         username = it
                     }
                 },
@@ -136,7 +135,7 @@ fun LoginContent(
                 title = stringResource(R.string.password),
                 interactionSource = passwordInteractionSource,
                 onValueChange = {
-                    if(it.length <= 30){
+                    if (it.length <= 30) {
                         password = it
                     }
                 },

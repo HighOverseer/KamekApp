@@ -159,7 +159,7 @@ fun HomeContent(
         )
 
         val configuration = LocalConfiguration.current
-        val lazyColumnMaxHeight = remember{
+        val lazyColumnMaxHeight = remember {
             val screenHeightDp = configuration.screenHeightDp.dp
             val multiplier = when (configuration.orientation) {
                 Configuration.ORIENTATION_PORTRAIT -> 2

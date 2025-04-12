@@ -3,7 +3,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface Navigation{
+sealed interface Navigation {
 
     @Serializable
     sealed interface Page : Navigation
@@ -12,16 +12,16 @@ sealed interface Navigation{
     sealed interface Route : Navigation
 
     @Serializable
-    data object Splash: Route
+    data object Splash : Route
 
     @Serializable
     data object OnBoarding : Route
 
     @Serializable
-    data object Auth : Page{
+    data object Auth : Page {
 
         @Serializable
-        sealed interface AuthRoute: Route
+        sealed interface AuthRoute : Route
 
         @Serializable
         data object Login : AuthRoute
@@ -34,10 +34,10 @@ sealed interface Navigation{
     data object Main : Page {
 
         @Serializable
-        sealed interface MainRoute: Route
+        sealed interface MainRoute : Route
 
         @Serializable
-        sealed class TopLevel(val canonicalName:String?) : MainRoute{
+        sealed class TopLevel(val canonicalName: String?) : MainRoute {
             @Serializable
             data object Home : TopLevel(
                 canonicalName = Home::class.java.canonicalName
@@ -87,7 +87,7 @@ sealed interface Navigation{
             val imagePath: String,
             val diagnosisSessionId: Int,
             val detectedCacaoId: Int
-        ): MainRoute
+        ) : MainRoute
     }
 }
 

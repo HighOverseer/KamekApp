@@ -18,7 +18,7 @@ fun rememberMainPageState(
     navHostController: NavHostController = rememberNavController(),
     showStatusBar: () -> Unit = { },
     hideStatusBar: () -> Unit = { }
-):MainPageState{
+): MainPageState {
     return remember(
         navHostController,
         showStatusBar,
@@ -35,27 +35,27 @@ fun rememberMainPageState(
 @Stable
 class MainPageState(
     private val navHostController: NavHostController,
-    private val showStatusBar:() -> Unit,
-    private val hideStatusBar:() -> Unit
-){
+    private val showStatusBar: () -> Unit,
+    private val hideStatusBar: () -> Unit
+) {
 
-    val navigationBarItems:List<NavigationBarItem>
+    val navigationBarItems: List<NavigationBarItem>
         @Composable get() = remember { getNavigationBarItems() }
 
-    val currentRoute:State<String?>
+    val currentRoute: State<String?>
         @Composable get() {
             val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-            return remember{
+            return remember {
                 derivedStateOf {
                     navBackStackEntry?.destination?.route
                 }
             }
         }
 
-    val isInTopLevel:State<Boolean>
-        @Composable get(){
+    val isInTopLevel: State<Boolean>
+        @Composable get() {
             val currentRoute by currentRoute
-            return remember{
+            return remember {
                 derivedStateOf {
                     isInTopLevelPage(currentRoute)
                 }
@@ -64,6 +64,7 @@ class MainPageState(
 
 
     private var isLastDestinationFromTakePictureScreen = false
+
     @Composable
     fun HandleStatusBarEffect() {
         val currentRoute by currentRoute
@@ -87,7 +88,7 @@ class MainPageState(
     fun navigateToTopLevel(
         nextDestination: Navigation.Main.TopLevel,
         currentRoute: String?
-    ){
+    ) {
         if (currentRoute != nextDestination::class.java.canonicalName) {
             navHostController.navigate(
                 nextDestination

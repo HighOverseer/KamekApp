@@ -39,7 +39,7 @@ fun TakePhotoScreen(
     navigateUp: () -> Unit = {},
     navigateToResult: (String, String) -> Unit = { _, _ -> },
     checkCameraPermission: (Context, ManagedActivityResultLauncher<String, Boolean>) -> Unit = { _, _ -> },
-    rememberCameraPermissionRequest: @Composable ()-> ManagedActivityResultLauncher<String, Boolean>
+    rememberCameraPermissionRequest: @Composable () -> ManagedActivityResultLauncher<String, Boolean>
 ) {
     val context = LocalContext.current
     val cameraPermissionRequest = rememberCameraPermissionRequest()
@@ -52,7 +52,7 @@ fun TakePhotoScreen(
                 context,
                 cameraPermissionRequest
             )
-        }else if (isCameraPermissionGranted == false) {
+        } else if (isCameraPermissionGranted == false) {
             showSnackBar(
                 permissionDeniedMessage
             )

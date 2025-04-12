@@ -86,7 +86,7 @@ fun NewsScreen(
 
     Box {
         val imageBackgroundSize = remember {
-            val imageAspectRatio = when(configuration.orientation){
+            val imageAspectRatio = when (configuration.orientation) {
                 Configuration.ORIENTATION_PORTRAIT -> 0.205f
                 else -> 0.5f
             }
@@ -102,7 +102,7 @@ fun NewsScreen(
             contentDescription = null
         )
 
-        val topMargin = remember{
+        val topMargin = remember {
             val topMarginRatio = 0.035f
             (topMarginRatio * configuration.screenHeightDp).dp
         }

@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -15,11 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 @Composable
 fun rememberKamekAppState(
     windowInsetsController: WindowInsetsControllerCompat
-): KamekAppState{
+): KamekAppState {
     return remember(windowInsetsController) {
         KamekAppState(
             windowInsetsController
@@ -43,17 +43,17 @@ class KamekAppState(
     }
 
     @Composable
-    fun rememberCameraPermissionRequest():ManagedActivityResultLauncher<String, Boolean>
-    = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        isCameraPermissionGranted = isGranted
-    }
+    fun rememberCameraPermissionRequest(): ManagedActivityResultLauncher<String, Boolean> =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            isCameraPermissionGranted = isGranted
+        }
 
     fun checkCameraPermission(
         context: Context,
-        cameraPermissionRequest:ManagedActivityResultLauncher<String, Boolean>
-    ){
+        cameraPermissionRequest: ManagedActivityResultLauncher<String, Boolean>
+    ) {
         val isAlreadyGranted = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.CAMERA

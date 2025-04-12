@@ -49,7 +49,7 @@ fun KamekApp(
 
         navigation<Navigation.Auth>(
             startDestination = Navigation.Auth.Login
-        ){
+        ) {
             composable<Navigation.Auth.Login> {
                 LoginScreen(
                     navigateToOnBoarding = {
@@ -66,7 +66,7 @@ fun KamekApp(
             }
         }
 
-        composable<Navigation.Main>{
+        composable<Navigation.Main> {
             val mainNavController = rememberNavController()
             val state = rememberMainPageState(
                 navHostController = mainNavController,

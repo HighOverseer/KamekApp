@@ -18,8 +18,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +48,7 @@ fun HomeDiagnosisHistory(
 ) {
 
     val configuration = LocalConfiguration.current
-    val cardMaxWidth = remember{
+    val cardMaxWidth = remember {
         val screenWidthDp = configuration.screenWidthDp.dp
         val maxWidth = when (configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
@@ -62,7 +60,7 @@ fun HomeDiagnosisHistory(
         maxWidth
     }
 
-    val cardModifier = remember{
+    val cardModifier = remember {
         modifier
             .width(cardMaxWidth)
             .wrapContentHeight()
