@@ -179,22 +179,22 @@
     <string name="sub_total_harga">Sub Total Harga</string>
 
     <string name="tingkat_kerusakan_rendah">Tingkat Kerusakan Rendah</string>
-    <string name="rendah_0_30_buah_rusak">Rendah: 10-30% buah rusak.</string>
-    <string name="rendah_0_10_rusak">Rendah : 0 - 10% Rusak</string>
-    <string name="rendah_11_20_rusak">Rendah : 11-20% Rusak</string>
-    <string name="rendah_21_30_rusak">Rendah : 21-30% Rusak</string>
+    <string name="rendah_0_30_buah_rusak">Rendah: 10–30% buah rusak.</string>
+    <string name="rendah_0_10_rusak">Rendah : 0 – 10% Rusak</string>
+    <string name="rendah_11_20_rusak">Rendah : 11–20% Rusak</string>
+    <string name="rendah_21_30_rusak">Rendah : 21–30% Rusak</string>
 
     <string name="tingkat_kerusakan_sedang">Tingkat Kerusakan Sedang</string>
-    <string name="sedang_31_60_buah_rusak">Sedang: 31-60% buah rusak</string>
-    <string name="sedang_31_40_rusak">Sedang : 31 - 40% Rusak</string>
-    <string name="sedang_41_50_rusak">Sedang : 41 - 50% Rusak</string>
-    <string name="sedang_51_60_rusak">Sedang : 51 - 60% Rusak</string>
+    <string name="sedang_31_60_buah_rusak">Sedang: 31–60% buah rusak</string>
+    <string name="sedang_31_40_rusak">Sedang : 31 – 40% Rusak</string>
+    <string name="sedang_41_50_rusak">Sedang : 41 – 50% Rusak</string>
+    <string name="sedang_51_60_rusak">Sedang : 51 – 60% Rusak</string>
 
     <string name="tingkat_kerusakan_berat">Tingkat Kerusakan Berat</string>
-    <string name="berat_61_90_buah_rusak">Berat: 61-90% buah rusak</string>
-    <string name="berat_61_70_rusak">Berat : 61 - 70% Rusak</string>
-    <string name="berat_71_80_rusak">Berat : 71 - 80% Rusak</string>
-    <string name="berat_81_90_rusak">Berat : 81 - 90% Rusak</string>
+    <string name="berat_61_90_buah_rusak">Berat: 61–90% buah rusak</string>
+    <string name="berat_61_70_rusak">Berat : 61 – 70% Rusak</string>
+    <string name="berat_71_80_rusak">Berat : 71 – 80% Rusak</string>
+    <string name="berat_81_90_rusak">Berat : 81 – 90% Rusak</string>
     <string name="kakao">Kakao %1$s</string>
     <string name="input_image_is_invalid_no_cocoa_detected">Input Gambar Invalid, Tidak Ada Kakao Yang Terdeteksi</string>
 </resources>
