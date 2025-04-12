@@ -90,9 +90,20 @@ fun DiagnosisResultScreen(
 
     LaunchedEffect(true) {
         lifecycleOwner.collectChannelWhenStarted(
-            viewModel.toastMessage
-        ) { message ->
-            showSnackbar(message.getValue(context))
+            viewModel.event
+        ) { event ->
+
+            when(event){
+                is DiagnosisResultUIEvent.OnToastMessage -> {
+                    showSnackbar(event.message.getValue(context))
+                }
+                DiagnosisResultUIEvent.OnInputImageInvalid -> {
+                    val message =
+                        context.getString(R.string.input_image_is_invalid_no_cocoa_detected)
+                    showSnackbar(message)
+                    navigateUp()
+                }
+            }
         }
     }
 

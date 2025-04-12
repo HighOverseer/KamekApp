@@ -41,8 +41,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsCategory
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchBar
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchCategory
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchBar
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchCategory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

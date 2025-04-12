@@ -196,4 +196,5 @@
     <string name="berat_71_80_rusak">Berat : 71 - 80% Rusak</string>
     <string name="berat_81_90_rusak">Berat : 81 - 90% Rusak</string>
     <string name="kakao">Kakao %1$s</string>
+    <string name="input_image_is_invalid_no_cocoa_detected">Input Gambar Invalid, Tidak Ada Kakao Yang Terdeteksi</string>
 </resources>

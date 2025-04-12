@@ -1,5 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.news
 
+import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,10 +47,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchBar
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.diagnosishistory.SearchCategory
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.WeeklyNews
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.component.home.getDummyWeeklyNewsItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchBar
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchCategory
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,16 +61,11 @@ fun NewsScreen(
 ) {
     val listState = rememberLazyListState()
     val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp
-
-    val topMargin = remember(screenHeightDp) {
-        val topMarginRatio = 0.035f
-        (topMarginRatio * screenHeightDp).dp
-    }
 
     var searchQuery by remember {
         mutableStateOf("")
     }
+
     val searchBarInteractionSource = remember {
         MutableInteractionSource()
     }
@@ -88,9 +85,12 @@ fun NewsScreen(
 
 
     Box {
-        val imageBackgroundSize = remember(screenHeightDp) {
-            val imageAspectRatio = 0.205
-            (screenHeightDp * imageAspectRatio).dp
+        val imageBackgroundSize = remember {
+            val imageAspectRatio = when(configuration.orientation){
+                Configuration.ORIENTATION_PORTRAIT -> 0.205f
+                else -> 0.5f
+            }
+            (configuration.screenHeightDp * imageAspectRatio).dp
         }
         Image(
             modifier = Modifier
@@ -102,12 +102,16 @@ fun NewsScreen(
             contentDescription = null
         )
 
+        val topMargin = remember{
+            val topMarginRatio = 0.035f
+            (topMarginRatio * configuration.screenHeightDp).dp
+        }
+
         LazyColumn(
             modifier = modifier,
             contentPadding = PaddingValues(top = topMargin, bottom = 32.dp),
             state = listState,
         ) {
-
 
             item {
                 IconButton(
@@ -177,6 +181,7 @@ fun NewsScreen(
                 LazyRow(
                     state = listCategoryState,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .background(color = Grey90),
                     contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)

@@ -5,17 +5,20 @@ import android.graphics.Bitmap
 import androidx.core.net.toUri
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.BoundingBoxProcessor
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.INPUT_IMAGE_TYPE
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.INPUT_MEAN
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.INPUT_STANDARD_DEVIATION
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.MODEL_PATH
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.OUTPUT_IMAGE_TYPE
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.TEMP_CLASSES
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorListener
+import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResult
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtractor
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
@@ -36,8 +39,6 @@ class ImageDetectorHelperImpl @Inject constructor(
     private val modelLabelExtractor: ModelLabelExtractor
 ) : ImageDetectorHelper {
 
-    private var imageDetectorListener: ImageDetectorListener? = null
-
     private var interpreter: Interpreter? = null
     private var labels = mutableListOf<String>()
 
@@ -51,13 +52,8 @@ class ImageDetectorHelperImpl @Inject constructor(
         .add(CastOp(INPUT_IMAGE_TYPE))
         .build()
 
-    override fun setImageDetectorListener(listener: ImageDetectorListener) {
-        imageDetectorListener = listener
-    }
-
-    override fun removeImageDetectorListener() {
-        imageDetectorListener = null
-    }
+    private val _result = MutableSharedFlow<ImageDetectorResult>()
+    override val result: SharedFlow<ImageDetectorResult> = _result.asSharedFlow()
 
     override suspend fun setupImageDetector() = withContext(Dispatchers.IO) {
         clearResource()
@@ -100,15 +96,23 @@ class ImageDetectorHelperImpl @Inject constructor(
         val isNeedSetupDetectorFirst =
             interpreter == null || tensorWidth == 0 || tensorHeight == 0 || numChannel == 0 || numElements == 0
         if (isNeedSetupDetectorFirst) {
+            ensureActive()
             setupImageDetector()
         }
+
+        ensureActive()
         val imageFile = File(imagePath)
         val imageUri = imageFile.toUri()
+        ensureActive()
         val imageBitmap = imageConverter.convertImageUriToBitmap(imageUri)
+        ensureActive()
         val resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, tensorWidth, tensorHeight, false)
 
+        ensureActive()
         val tensorImage = TensorImage(DataType.FLOAT32)
         tensorImage.load(resizedBitmap)
+
+        ensureActive()
         val processedImage = imageProcessor.process(tensorImage)
         val imageBuffer = processedImage.buffer
 
@@ -121,6 +125,7 @@ class ImageDetectorHelperImpl @Inject constructor(
             OUTPUT_IMAGE_TYPE
         )
 
+        ensureActive()
         try {
             interpreter?.run(imageBuffer, output.buffer)
             val bestBoxes = BoundingBoxProcessor.getBoundingBox(
@@ -129,14 +134,26 @@ class ImageDetectorHelperImpl @Inject constructor(
                 numElements = numElements,
                 labels = labels
             )
+
+            ensureActive()
             if (bestBoxes != null) {
-                imageDetectorListener?.onDetect(bestBoxes, imageBitmap.width, imageBitmap.height)
-            } else imageDetectorListener?.onEmptyDetect()
+                _result.emit(
+                    ImageDetectorResult.Success(bestBoxes)
+                )
+            } else _result.emit(ImageDetectorResult.NoObjectDetected)
         } catch (e: Exception) {
-            imageDetectorListener?.onError(e)
+            if(e is CancellationException) throw e
+
+            _result.emit(
+                ImageDetectorResult.Error(e)
+            )
         }
         return@withContext
     }
 
+    companion object{
+        private val INPUT_IMAGE_TYPE = DataType.FLOAT32
+        private val OUTPUT_IMAGE_TYPE = DataType.FLOAT32
+    }
 
 }

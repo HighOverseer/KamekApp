@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 
 
 fun Modifier.dashedBorder(
@@ -50,3 +52,14 @@ fun Modifier.dashedBorder(
     gapLength: Dp = 4.dp,
     cap: StrokeCap = StrokeCap.Round
 ) = dashedBorder(brush = SolidColor(color), shape, strokeWidth, dashLength, gapLength, cap)
+
+inline fun <reified PopUpTo: Navigation> NavHostController.navigateToWithPopUpTo(
+    destination:Navigation,
+    isInclusive:Boolean = false
+){
+    navigate(destination){
+        popUpTo<PopUpTo> {
+            inclusive = isInclusive
+        }
+    }
+}

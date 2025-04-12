@@ -4,12 +4,12 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.jetbrains.kotlin.kapt)
-    id ("kotlin-parcelize")
+    alias(libs.plugins.jetbrains.kotlin.plugin.compose)
 }
 
 android {
     namespace = "com.neotelemetrixgdscunand.kamekapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.neotelemetrixgdscunand.kamekapp"

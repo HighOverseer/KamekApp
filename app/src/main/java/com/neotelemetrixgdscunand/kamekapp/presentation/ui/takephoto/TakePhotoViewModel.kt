@@ -52,7 +52,7 @@ class TakePhotoViewModel @Inject constructor(
                     is ImageCaptureResult.Error -> {
                         val message = StringRes.Dynamic(result.exception.message.toString())
                         _uiEvent.send(
-                            TakePhotoUIEvent.ToastMessageEvent(message)
+                            TakePhotoUIEvent.OnToastMessage(message)
                         )
                     }
                 }
@@ -70,7 +70,7 @@ class TakePhotoViewModel @Inject constructor(
                                 StringRes.Static(R.string.nama_yang_dimasukkan_tidak_valid)
                             viewModelScope.launch {
                                 _uiEvent.send(
-                                    TakePhotoUIEvent.ToastMessageEvent(message)
+                                    TakePhotoUIEvent.OnToastMessage(message)
                                 )
                             }
                         } else {

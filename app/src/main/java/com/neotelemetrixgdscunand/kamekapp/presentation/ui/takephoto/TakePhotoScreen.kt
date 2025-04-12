@@ -1,5 +1,7 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 
+import android.content.Context
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.neotelemetrixgdscunand.kamekapp.MainActivity
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.BottomBarTakePhoto
@@ -33,22 +34,25 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 fun TakePhotoScreen(
     modifier: Modifier = Modifier,
     viewModel: TakePhotoViewModel = hiltViewModel(),
-    isCameraPermissionGranted: Boolean?,
+    provideIsCameraPermissionGranted: () -> Boolean? = { true },
     showSnackBar: (String) -> Unit = {},
     navigateUp: () -> Unit = {},
-    navigateToResult: (String, String) -> Unit = { _, _ -> }
+    navigateToResult: (String, String) -> Unit = { _, _ -> },
+    checkCameraPermission: (Context, ManagedActivityResultLauncher<String, Boolean>) -> Unit = { _, _ -> },
+    rememberCameraPermissionRequest: @Composable ()-> ManagedActivityResultLauncher<String, Boolean>
 ) {
     val context = LocalContext.current
-
-    LaunchedEffect(true) {
-        if (isCameraPermissionGranted == null && context is MainActivity) {
-            context.checkCameraPermission()
-        }
-    }
-
+    val cameraPermissionRequest = rememberCameraPermissionRequest()
+    val isCameraPermissionGranted = provideIsCameraPermissionGranted()
     val permissionDeniedMessage = stringResource(R.string.fitur_tidak_bisa_diakses)
+
     LaunchedEffect(isCameraPermissionGranted) {
-        if (isCameraPermissionGranted == false) {
+        if (isCameraPermissionGranted == null) {
+            checkCameraPermission(
+                context,
+                cameraPermissionRequest
+            )
+        }else if (isCameraPermissionGranted == false) {
             showSnackBar(
                 permissionDeniedMessage
             )
@@ -61,7 +65,7 @@ fun TakePhotoScreen(
             viewModel.uiEvent
         ) {
             when (it) {
-                is TakePhotoUIEvent.ToastMessageEvent -> {
+                is TakePhotoUIEvent.OnToastMessage -> {
                     showSnackBar(it.message.getValue(context))
                 }
 
@@ -83,6 +87,7 @@ fun TakePhotoScreen(
         textFieldConfirmationDialogState = viewModel.textFieldConfirmationDialogState,
         handlePickImageFromGalleryResult = viewModel::handleOnPickImageGalleryResult
     )
+
 }
 
 @Composable
@@ -166,7 +171,13 @@ fun TakePhotoContent(
 private fun TakePhotoScreenPreview() {
     KamekAppTheme {
         TakePhotoScreen(
-            isCameraPermissionGranted = true
+            rememberCameraPermissionRequest = {
+                rememberLauncherForActivityResult(
+                    ActivityResultContracts.RequestPermission()
+                ) {
+
+                }
+            }
         )
     }
 }

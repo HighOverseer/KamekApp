@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.neotelemetrixgdscunand.kamekapp.R
@@ -59,7 +60,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.Primar
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = { },
-    navigateToTopLevelPage: () -> Unit = {}
+    navigateToMainPage: () -> Unit = {}
 ) {
     var selectedTabIndex by remember {
         mutableIntStateOf(0)
@@ -105,7 +106,6 @@ fun OnBoardingScreen(
         constraintSet = constraints
     ) {
         val configuration = LocalConfiguration.current
-        val screenWidthDp = configuration.screenWidthDp
         val onBoardingImageAspectRatio = 1.88f
         val leftCloudWidthRatio = 0.55f
         val leftCloudHeightRatio = 0.1138f
@@ -114,10 +114,10 @@ fun OnBoardingScreen(
         val birdAspectRatio = 5.02f
         val birdWidthToParentRatio = 0.2f
         val birdWidth = remember {
-            (screenWidthDp * birdWidthToParentRatio).dp
+            (configuration.screenWidthDp * birdWidthToParentRatio).dp
         }
         val buttonWidthMin = remember {
-            (screenWidthDp * 0.456f).dp
+            (configuration.screenWidthDp * 0.456f).dp
         }
 
 
@@ -264,7 +264,7 @@ fun OnBoardingScreen(
             onClick = {
                 if (selectedTabIndex < 2) {
                     selectedTabIndex++
-                } else navigateToTopLevelPage()
+                } else navigateToMainPage()
             }
         )
     }
@@ -273,16 +273,11 @@ fun OnBoardingScreen(
 @Composable
 private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
     val configuration = LocalConfiguration.current
-    var screenWidthDp by remember {
-        mutableIntStateOf(configuration.screenWidthDp)
+    val screenWidthDp = remember {
+        configuration.screenWidthDp.dp
     }
-    var screenHeightDp by remember {
-        mutableIntStateOf(configuration.screenHeightDp)
-    }
-
-    LaunchedEffect(configuration) {
-        screenHeightDp = configuration.screenHeightDp
-        screenWidthDp = configuration.screenWidthDp
+    val screenHeightDp = remember {
+        configuration.screenHeightDp.dp
     }
 
     val birdToLeftCloudMargin = remember(selectedTabIndex) {
@@ -293,7 +288,7 @@ private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
             1 -> -0.75f
             else -> -0.9f
         }
-        (cloudHeight * birdToLeftCloudMarginRatio).dp
+        cloudHeight * birdToLeftCloudMarginRatio
     }
 
     val birdToParentMargin = remember(selectedTabIndex) {
@@ -302,11 +297,11 @@ private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
             1 -> 0.3f
             else -> 0.76f
         }
-        (screenWidthDp * birdToParentMarginRatio).dp
+        (screenWidthDp * birdToParentMarginRatio)
     }
 
     val leftCloudToParentMargin = remember(selectedTabIndex) {
-        val leftCloudWidthEstimation = (screenWidthDp * 0.55f).dp
+        val leftCloudWidthEstimation = (screenWidthDp * 0.55f)
         val ratio = when (selectedTabIndex) {
             0 -> 0f
             1 -> -0.45f
@@ -316,7 +311,7 @@ private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
     }
 
     val rightCloudToParentMargin = remember(selectedTabIndex) {
-        val rightCloudWidthEstimation = (screenWidthDp * 0.40f).dp
+        val rightCloudWidthEstimation = (screenWidthDp * 0.40f)
         val ratio = when (selectedTabIndex) {
             0, 1 -> -0.2f
             else -> 0f
@@ -360,14 +355,14 @@ private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
         label = ""
     )
 
+    // Just Need One To Trigger
+    return remember(animateBirdToParentMargin) {
+        val rightCloudToLeftCloudMarginRatio = -0.0356f
+        val rightCloudToLeftCloudMargin = (rightCloudToLeftCloudMarginRatio * screenHeightDp)
 
-    val rightCloudToLeftCloudMarginRatio = -0.0356f
-    val rightCloudToLeftCloudMargin = (rightCloudToLeftCloudMarginRatio * screenHeightDp).dp
+        val leftCloudToHeadlineMarginRatio = 0.061f
+        val leftCloudToHeadlineMargin = (screenHeightDp * leftCloudToHeadlineMarginRatio)
 
-    val leftCloudToHeadlineMarginRatio = 0.061f
-    val leftCloudToHeadlineMargin = (screenHeightDp * leftCloudToHeadlineMarginRatio).dp
-
-    return remember(selectedTabIndex, screenWidthDp, screenHeightDp) {
         ConstraintSet {
             val onBoardingImage = createRefFor(LayoutUtil.ON_BOARDING_IMAGE_ID)
             val headline = createRefFor(LayoutUtil.HEADLINE_ID)

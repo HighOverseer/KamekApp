@@ -47,38 +47,14 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.SmallL
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    navigateToTopLevelPage: () -> Unit = {}
+    navigateToOnBoarding: () -> Unit = {}
 ) {
 
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    val usernameInteractionSource = remember { MutableInteractionSource() }
-    val passwordInteractionSource = remember { MutableInteractionSource() }
-    var isPasswordVisible by remember { mutableStateOf(false) }
-    val textMaxLength = 30
+
 
     LoginContent(
         modifier = modifier,
-        username = username,
-        password = password,
-        onUsernameChange = {
-            if (it.length <= textMaxLength) {
-                username = it
-            }
-
-        },
-        onPasswordChange = {
-            if (it.length <= textMaxLength) {
-                password = it
-            }
-        },
-        usernameInteractionSource = usernameInteractionSource,
-        passwordInteractionSource = passwordInteractionSource,
-        isPasswordVisible = isPasswordVisible,
-        changePasswordVisibility = {
-            isPasswordVisible = it
-        },
-        navigateToTopLevelPage = navigateToTopLevelPage
+        navigateToOnBoarding = navigateToOnBoarding
     )
 }
 
@@ -86,24 +62,8 @@ fun LoginScreen(
 @Composable
 fun LoginContent(
     modifier: Modifier = Modifier,
-    username: String = "",
-    password: String = "",
-    onUsernameChange: (String) -> Unit = {},
-    onPasswordChange: (String) -> Unit = {},
-    isPasswordVisible: Boolean = false,
-    changePasswordVisibility: (Boolean) -> Unit = {},
-    usernameInteractionSource: MutableInteractionSource = MutableInteractionSource(),
-    passwordInteractionSource: MutableInteractionSource = MutableInteractionSource(),
-    navigateToTopLevelPage: () -> Unit = {}
+    navigateToOnBoarding: () -> Unit = {}
 ) {
-    val configuration = LocalConfiguration.current
-    val topMarginToContentDp = (configuration.screenHeightDp * 0.0838f).dp
-    val headlineToLogoMarginDp = (configuration.screenHeightDp * 0.0805f).dp
-    val formToHeadlineMarginDp = (configuration.screenHeightDp * 0.0697f).dp
-    val buttonToFormMarginDp = (configuration.screenHeightDp * 0.0872f).dp
-
-    val isUsernameTextFieldFocused by usernameInteractionSource.collectIsFocusedAsState()
-    val isPasswordTextFieldFocused by passwordInteractionSource.collectIsFocusedAsState()
 
     val scrollState = rememberScrollState()
     Column(
@@ -111,6 +71,12 @@ fun LoginContent(
             .fillMaxSize()
             .verticalScroll(scrollState),
     ) {
+
+        val configuration = LocalConfiguration.current
+        val topMarginToContentDp = (configuration.screenHeightDp * 0.0838f).dp
+        val headlineToLogoMarginDp = (configuration.screenHeightDp * 0.0805f).dp
+        val formToHeadlineMarginDp = (configuration.screenHeightDp * 0.0697f).dp
+        val buttonToFormMarginDp = (configuration.screenHeightDp * 0.0872f).dp
 
         Spacer(
             modifier = Modifier
@@ -139,10 +105,24 @@ fun LoginContent(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
 
+            val usernameInteractionSource = remember { MutableInteractionSource() }
+            val passwordInteractionSource = remember { MutableInteractionSource() }
+            val isUsernameTextFieldFocused by usernameInteractionSource.collectIsFocusedAsState()
+            val isPasswordTextFieldFocused by passwordInteractionSource.collectIsFocusedAsState()
+
+            var username by remember { mutableStateOf("") }
+            var password by remember { mutableStateOf("") }
+            var isPasswordVisible by remember { mutableStateOf(false) }
+            val textMaxLength = 30
+
             AuthTextField(
                 title = stringResource(R.string.email),
                 interactionSource = usernameInteractionSource,
-                onValueChange = onUsernameChange,
+                onValueChange = {
+                    if(it.length <= textMaxLength){
+                        username = it
+                    }
+                },
                 hintText = stringResource(R.string.masukan_email_kamu_disini),
                 value = username,
                 isFocused = isUsernameTextFieldFocused
@@ -155,7 +135,11 @@ fun LoginContent(
             AuthTextField(
                 title = stringResource(R.string.password),
                 interactionSource = passwordInteractionSource,
-                onValueChange = onPasswordChange,
+                onValueChange = {
+                    if(it.length <= 30){
+                        password = it
+                    }
+                },
                 value = password,
                 hintText = stringResource(R.string.masukkan_password_kamu_disini),
                 isFocused = isPasswordTextFieldFocused,
@@ -165,7 +149,7 @@ fun LoginContent(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .clickable {
-                                changePasswordVisibility(!isPasswordVisible)
+                                isPasswordVisible = !isPasswordVisible
                             },
                         imageVector = if (isPasswordVisible)
                             ImageVector
@@ -200,7 +184,7 @@ fun LoginContent(
                 modifier = Modifier
                     .fillMaxWidth(),
                 text = stringResource(R.string.masuk),
-                onClick = navigateToTopLevelPage
+                onClick = navigateToOnBoarding
             )
 
             Spacer(Modifier.height(32.dp))

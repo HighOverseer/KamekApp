@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.CacaoImageDetailRoute
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class CacaoImageDetailViewModel @Inject constructor(
     val boundingBox: BoundingBox
 
     init {
-        val extras = savedStateHandle.toRoute<CacaoImageDetailRoute>()
+        val extras = savedStateHandle.toRoute<Navigation.Main.CacaoImageDetail>()
         val selectedDiagnosisSession = repository.getDiagnosisSession(extras.diagnosisSessionId)
 
         imagePath = selectedDiagnosisSession.imageUrlOrPath

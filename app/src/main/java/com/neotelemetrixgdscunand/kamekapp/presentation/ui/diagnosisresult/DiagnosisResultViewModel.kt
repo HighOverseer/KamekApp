@@ -12,8 +12,8 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorListener
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.DiagnosisResultRoute
+import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResult
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -37,12 +37,94 @@ class DiagnosisResultViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DiagnosisResultUIState())
     val uiState = _uiState.asStateFlow()
 
-    private val _toastMessage = Channel<StringRes>()
-    val toastMessage = _toastMessage.receiveAsFlow()
+    private val _event = Channel<DiagnosisResultUIEvent>()
+    val event = _event.receiveAsFlow()
 
     private var detectImageJob: Job? = null
 
-    private val extras = savedStateHandle.toRoute<DiagnosisResultRoute>()
+    private val extras = savedStateHandle.toRoute<Navigation.Main.DiagnosisResult>()
+
+    init {
+        listenToImageDetectorResult()
+        val isFromNewSession =
+            extras.newSessionName != null && extras.newUnsavedSessionImagePath != null
+
+        if (isFromNewSession) {
+            detectImage(extras.newUnsavedSessionImagePath as String)
+        } else {
+            extras.sessionId?.let { sessionId ->
+                val selectedDiagnosisSession = repository.getDiagnosisSession(sessionId)
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        diagnosisSession = selectedDiagnosisSession,
+                        imagePreviewPath = selectedDiagnosisSession.imageUrlOrPath
+                    )
+                }
+            }
+
+        }
+    }
+
+    private fun listenToImageDetectorResult(){
+        viewModelScope.launch {
+            imageClassifierHelper.result.collect{ result ->
+                when(result){
+                    ImageDetectorResult.NoObjectDetected -> {
+                        viewModelScope.launch {
+                            _event.send(
+                                DiagnosisResultUIEvent.OnInputImageInvalid
+                            )
+                        }
+                    }
+                    is ImageDetectorResult.Error -> {
+                        viewModelScope.launch {
+                            _event.send(
+                                DiagnosisResultUIEvent.OnToastMessage(
+                                    StringRes.Dynamic(
+                                        result.exception.message.toString()
+                                    )
+                                )
+                            )
+                        }
+                    }
+                    is ImageDetectorResult.Success -> {
+                        val extras = this@DiagnosisResultViewModel.extras
+                        if (extras.newSessionName == null || extras.newUnsavedSessionImagePath == null) return@collect
+
+                        val detectedCacaos = result.boundingBoxes.mapIndexed { index, item ->
+                            if (detectImageJob?.isActive == false) return@collect
+
+                            DetectedCacao(
+                                cacaoNumber = index.plus(1).toShort(),
+                                boundingBox = item,
+                                disease = CacaoDisease.getDiseaseFromName(
+                                    name = item.label
+                                ) ?: return@collect
+                            )
+                        }
+
+                        if (detectImageJob?.isActive == false) return@collect
+
+                        val newSessionId = saveDiagnosisResult(
+                            sessionName = extras.newSessionName,
+                            imagePath = extras.newUnsavedSessionImagePath,
+                            predictedPrice = 1680f,
+                            detectedCacaos = detectedCacaos
+                        )
+
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                diagnosisSession = repository.getDiagnosisSession(newSessionId)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun saveDiagnosisResult(
         sessionName: String,
@@ -70,78 +152,6 @@ class DiagnosisResultViewModel @Inject constructor(
         return newDiagnosisSession.id
     }
 
-    private val imageDetectorListener = object : ImageDetectorListener {
-        override fun onEmptyDetect() {
-            TODO("Not yet implemented")
-        }
-
-        override fun onDetect(boundingBoxes: List<BoundingBox>, imageWidth: Int, imageHeight: Int) {
-            val extras = this@DiagnosisResultViewModel.extras
-            if (extras.newSessionName == null || extras.newUnsavedSessionImagePath == null) return
-
-            val detectedCacaos = boundingBoxes.mapIndexed { index, item ->
-                if (detectImageJob?.isActive == false) return
-
-                DetectedCacao(
-                    cacaoNumber = index.plus(1).toShort(),
-                    boundingBox = item,
-                    disease = CacaoDisease.getDiseaseFromName(
-                        name = item.label
-                    ) ?: return
-                )
-            }
-
-            if (detectImageJob?.isActive == false) return
-
-            val newSessionId = saveDiagnosisResult(
-                sessionName = extras.newSessionName,
-                imagePath = extras.newUnsavedSessionImagePath,
-                predictedPrice = 1680f,
-                detectedCacaos = detectedCacaos
-            )
-
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    diagnosisSession = repository.getDiagnosisSession(newSessionId)
-                )
-            }
-        }
-
-        override fun onError(e: Exception) {
-            viewModelScope.launch {
-                _toastMessage.send(
-                    StringRes.Dynamic(
-                        e.message.toString()
-                    )
-                )
-            }
-        }
-    }
-
-    init {
-        imageClassifierHelper.setImageDetectorListener(listener = imageDetectorListener)
-        val isFromNewSession =
-            extras.newSessionName != null && extras.newUnsavedSessionImagePath != null
-
-        if (isFromNewSession) {
-            detectImage(extras.newUnsavedSessionImagePath as String)
-        } else {
-            extras.sessionId?.let { sessionId ->
-                val selectedDiagnosisSession = repository.getDiagnosisSession(sessionId)
-
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        diagnosisSession = selectedDiagnosisSession,
-                        imagePreviewPath = selectedDiagnosisSession.imageUrlOrPath
-                    )
-                }
-            }
-
-        }
-    }
-
     fun changeSelectedTab() {
         _uiState.update {
             it.copy(
@@ -165,10 +175,7 @@ class DiagnosisResultViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        imageClassifierHelper.apply {
-            clearResource()
-            removeImageDetectorListener()
-        }
+        imageClassifierHelper.clearResource()
         super.onCleared()
     }
 

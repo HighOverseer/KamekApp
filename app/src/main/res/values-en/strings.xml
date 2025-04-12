@@ -199,4 +199,5 @@
     <string name="berat_81_90_rusak">Severe: 81 – 90% Damaged</string>
     <string name="kakao">Cocoa %1$s</string>
 
+    <string name="input_image_is_invalid_no_cocoa_detected">Input Image is Invalid, No Cocoa Detected</string>
 </resources>
