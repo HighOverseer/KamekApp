@@ -1,34 +1,50 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +56,8 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
+import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45Alpha70
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.DiagnosisHistory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchBar
@@ -47,6 +65,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishis
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchHistoryCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.TakePhotoSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.dashedBorder
+import kotlinx.coroutines.launch
 
 @Composable
 fun DiagnosisScreen(
@@ -77,10 +96,6 @@ fun DiagnosisContent(
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> }
 ) {
 
-    var searchQuery by remember {
-        mutableStateOf("")
-    }
-
     val selectedSearchHistoryCategory by remember {
         mutableStateOf(SearchHistoryCategory.ALL)
     }
@@ -91,60 +106,20 @@ fun DiagnosisContent(
             .padding(start = 16.dp, end = 16.dp)
     }
 
-    val listCategoryState = rememberLazyListState()
     val parentListState = rememberLazyListState()
 
-    val topMarginRatio = 0.049f
-
-    val firstCardToTitleRatio = 0.057f
-
-    val secondHeadlineToCardMarginRatio = 0.0422f
-
-    val searchBarInteractionSource = remember {
-        MutableInteractionSource()
-    }
-
-    val isSearchBarFocused by searchBarInteractionSource.collectIsFocusedAsState()
-
-    val cardModifier = remember {
-        Modifier
-            .fillMaxWidth()
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .dashedBorder(
-                color = Maroon55,
-                shape = RoundedCornerShape(8.dp),
-                strokeWidth = 1.dp,
-                gapLength = 16.dp,
-                dashLength = 16.dp
-            )
-            .padding(
-                horizontal = 12.dp,
-                vertical = 35.dp
-            )
-    }
-
-    val stickyHeaderModifier = remember {
-        Modifier
-            .fillMaxWidth()
-            .background(color = Grey90)
-            .padding(horizontal = 16.dp)
-    }
-
-    BoxWithConstraints(
-        modifier = modifier
-    ) {
-        val maxHeight = this.maxHeight
-
+    Box {
         LazyColumn(
-            modifier = Modifier,
+            modifier = modifier,
             state = parentListState
         ) {
 
             item {
-                Spacer(Modifier.height(topMarginRatio * maxHeight))
+                val configuration = LocalConfiguration.current
+                val screenHeightDp = configuration.screenHeightDp.dp
+
+                val topMarginRatio = 0.039f
+                Spacer(Modifier.height(topMarginRatio * screenHeightDp))
 
                 Column(
                     modifier = Modifier
@@ -160,29 +135,34 @@ fun DiagnosisContent(
                         style = MaterialTheme.typography.headlineSmall,
                         color = Black10
                     )
-                    Spacer(Modifier.height(maxHeight * firstCardToTitleRatio))
+
+                    val firstCardToTitleRatio = 0.037f
+                    Spacer(Modifier.height(screenHeightDp * firstCardToTitleRatio))
                 }
             }
 
 
             item {
+                TakePhotoSection(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp), onClick = navigateToTakePhoto)
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    TakePhotoSection(modifier = cardModifier, onClick = navigateToTakePhoto)
-                }
-
+                Spacer(Modifier.height(16.dp))
             }
 
             stickyHeader {
+                val stickyHeaderModifier = remember {
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = Grey90)
+                        .padding(horizontal = 16.dp)
+                }
+
                 Column(
                     modifier = stickyHeaderModifier
                 ) {
 
-                    Spacer(Modifier.height(maxHeight * secondHeadlineToCardMarginRatio))
+                    Spacer(Modifier.height(16.dp))
 
                     Text(
                         stringResource(R.string.riwayat_diagnosis),
@@ -192,22 +172,32 @@ fun DiagnosisContent(
 
                     Spacer(Modifier.height(16.dp))
 
+                    val searchBarInteractionSource = remember {
+                        MutableInteractionSource()
+                    }
+
+                    val isSearchBarFocused by searchBarInteractionSource.collectIsFocusedAsState()
+                    var searchQuery by remember {
+                        mutableStateOf("")
+                    }
                     SearchBar(
                         query = searchQuery,
                         onQueryChange = {
                             searchQuery = it
                         },
                         hint = stringResource(R.string.cari_histori_hasil_diagnosis),
-                        interactionSource = searchBarInteractionSource,
+                        provideInteractionSource = { searchBarInteractionSource },
                         isActive = isSearchBarFocused,
                     )
 
                     Spacer(Modifier.height(12.dp))
                 }
 
+                val listCategoryState = rememberLazyListState()
                 LazyRow(
                     state = listCategoryState,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .background(color = Grey90),
                     contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -220,15 +210,11 @@ fun DiagnosisContent(
                     }
                 }
 
+                Spacer(Modifier.height(8.dp))
+
             }
 
-            itemsIndexed(diagnosisSessionPreviews, { _, it -> it.id }) { index, item ->
-                Spacer(
-                    Modifier.height(
-                        if (index == 0) 8.dp else 16.dp
-                    )
-                )
-
+            items(diagnosisSessionPreviews, {it.id }) { item ->
                 DiagnosisHistory(
                     modifier = diagnosisHistoryModifier
                         .clickable {
@@ -236,10 +222,48 @@ fun DiagnosisContent(
                         },
                     item = item,
                 )
+
+                Spacer(Modifier.height(16.dp))
+            }
+        }
+
+        val isScrollUpButtonVisible by remember {
+            derivedStateOf {
+                parentListState.firstVisibleItemIndex > 1
+            }
+        }
+
+        AnimatedVisibility(
+            visible = isScrollUpButtonVisible,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .fillMaxHeight(0.15f)
+                .fillMaxWidth(0.25f)
+        ) {
+            val coroutineScope = rememberCoroutineScope()
+            IconButton(
+                onClick = {
+                    coroutineScope.launch {
+                        parentListState.animateScrollToItem(index = 0)
+                    }
+                },
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .background(Maroon45Alpha70, shape = CircleShape)
+                        .padding(8.dp)
+                ){
+                    Icon(
+                        modifier = Modifier.fillMaxSize(),
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = null,
+                        tint = Color.White,
+                    )
+                }
             }
         }
     }
-
 }
 
 
@@ -247,7 +271,17 @@ fun DiagnosisContent(
 @Composable
 private fun DiagnosisScreenPreview() {
     KamekAppTheme {
-        DiagnosisScreen()
+        DiagnosisContent(
+            diagnosisSessionPreviews = List(10){
+                DiagnosisSessionPreview(
+                    id = it,
+                    title = "Example",
+                    imageUrlOrPath = "",
+                    date = "12-05-2024",
+                    predictedPrice = 1400f
+                )
+            }
+        )
     }
 
 }

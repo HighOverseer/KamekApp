@@ -7,5 +7,5 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 data class NavigationBarItem(
     val titleRestId: Int,
     val iconResId: Int,
-    val route: Navigation.Main.TopLevel
+    val route: Navigation.Main.MainRoute
 )

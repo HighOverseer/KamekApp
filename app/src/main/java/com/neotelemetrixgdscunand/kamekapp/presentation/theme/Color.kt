@@ -16,6 +16,7 @@ val Maroon50 = Color(0xFF671717)
 val Maroon60 = Color(0xFF9B2828)
 val Maroon53 = Color(0xFF6F1111)
 val Maroon45 = Color(0xFF580C0C)
+val Maroon45Alpha70 = Maroon45.copy(alpha = 0.7f)
 
 val Grey60 = Color(0xFF908E8E)
 val Grey68 = Color(0xFFBEBEBE)

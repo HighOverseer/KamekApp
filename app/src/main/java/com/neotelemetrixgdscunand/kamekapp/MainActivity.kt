@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.compose.rememberNavController
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.KamekApp
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.rememberKamekAppState
@@ -23,12 +24,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KamekAppTheme {
+                val rootNavHostController = rememberNavController()
                 val appState = rememberKamekAppState(
-                    windowInsetsController
+                    windowInsetsController,
+                    rootNavHostController
                 )
 
                 KamekApp(
-                    appState = appState
+                    appState = appState,
+                    rootNavHostController = rootNavHostController
                 )
             }
         }

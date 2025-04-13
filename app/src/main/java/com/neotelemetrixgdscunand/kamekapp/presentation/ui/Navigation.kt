@@ -1,5 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui
 
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation.Main.MainRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -40,50 +41,47 @@ sealed interface Navigation {
         sealed interface MainRoute : Route
 
         @Serializable
-        sealed interface TopLevel : MainRoute {
-            @Serializable
-            data object Home : TopLevel
-
-            @Serializable
-            data object Diagnosis : TopLevel
-
-            @Serializable
-            data object Account : TopLevel
-        }
+        data object Home : MainRoute
 
         @Serializable
-        data object TakePhoto : MainRoute
+        data object Diagnosis : MainRoute
 
         @Serializable
-        data class DiagnosisResult(
-            val newUnsavedSessionImagePath: String?,
-            val newSessionName: String?,
-            val sessionId: Int?
-        ) : MainRoute
-
-        @Serializable
-        data object News : MainRoute
-
-        @Serializable
-        data object NewsDetail : MainRoute
-
-        @Serializable
-        data object Shop : MainRoute
-
-        @Serializable
-        data object Weather : MainRoute
-
-        @Serializable
-        data object Notification : MainRoute
-
-        @Serializable
-        data object CacaoRequest : MainRoute
-
-        @Serializable
-        data class CacaoImageDetail(
-            val imagePath: String,
-            val diagnosisSessionId: Int,
-            val detectedCacaoId: Int?
-        ) : MainRoute
+        data object Account : MainRoute
     }
+
+    @Serializable
+    data object TakePhoto : Route
+
+    @Serializable
+    data class DiagnosisResult(
+        val newUnsavedSessionImagePath: String?,
+        val newSessionName: String?,
+        val sessionId: Int?
+    ) : Route
+
+    @Serializable
+    data object News : Route
+
+    @Serializable
+    data object NewsDetail : Route
+
+    @Serializable
+    data object Shop : Route
+
+    @Serializable
+    data object Weather : Route
+
+    @Serializable
+    data object Notification : Route
+
+    @Serializable
+    data object CacaoRequest : Route
+
+    @Serializable
+    data class CacaoImageDetail(
+        val imagePath: String,
+        val diagnosisSessionId: Int,
+        val detectedCacaoId: Int?
+    ) : Route
 }

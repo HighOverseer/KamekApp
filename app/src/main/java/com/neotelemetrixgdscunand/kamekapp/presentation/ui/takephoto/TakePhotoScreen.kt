@@ -5,6 +5,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -103,20 +105,12 @@ fun TakePhotoContent(
 ) {
     val context = LocalContext.current
 
-    if (isCameraPermissionGranted == true) {
+    Column(
+        modifier
+            .fillMaxSize()
+    ) {
 
-        val photoPickerLauncher = rememberLauncherForActivityResult(
-            ActivityResultContracts.PickVisualMedia()
-        ) {
-            if (it != null) {
-                handlePickImageFromGalleryResult(it.toString())
-            }
-        }
-
-        Column(
-            modifier.fillMaxSize()
-        ) {
-
+        if(isCameraPermissionGranted == true){
             TopBarTakePhoto(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -131,6 +125,14 @@ fun TakePhotoContent(
                     .weight(1f),
                 state = cameraState
             )
+
+            val photoPickerLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.PickVisualMedia()
+            ) {
+                if (it != null) {
+                    handlePickImageFromGalleryResult(it.toString())
+                }
+            }
 
             BottomBarTakePhoto(
                 modifier = Modifier
@@ -149,20 +151,21 @@ fun TakePhotoContent(
                     )
                 }
             )
-
         }
 
-        TextFieldConfirmationDialog(
-            state = textFieldConfirmationDialogState,
-            name = textFieldConfirmationDialogState.confirmationText,
-            hintText = stringResource(R.string.masukan_nama_foto_disini),
-            onValueNameChange = {
-                if (it.length < 50) {
-                    textFieldConfirmationDialogState.setText(it)
-                }
-            }
-        )
+
     }
+
+    TextFieldConfirmationDialog(
+        state = textFieldConfirmationDialogState,
+        name = textFieldConfirmationDialogState.confirmationText,
+        hintText = stringResource(R.string.masukan_nama_foto_disini),
+        onValueNameChange = {
+            if (it.length < 50) {
+                textFieldConfirmationDialogState.setText(it)
+            }
+        }
+    )
 }
 
 

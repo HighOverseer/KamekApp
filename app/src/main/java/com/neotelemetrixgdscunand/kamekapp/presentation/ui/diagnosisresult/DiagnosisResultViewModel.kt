@@ -47,7 +47,7 @@ class DiagnosisResultViewModel @Inject constructor(
 
     private var detectImageJob: Job? = null
 
-    private val extras = savedStateHandle.toRoute<Navigation.Main.DiagnosisResult>()
+    private val extras = savedStateHandle.toRoute<Navigation.DiagnosisResult>()
 
     private fun initFromExtras(){
         val isFromNewSession =

@@ -21,14 +21,13 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Shadow
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.rememberMainPageState
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.NavigationBarItem
 
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     navigationBarItems: List<NavigationBarItem> = emptyList(),
-    onSelectedNavigation: (Navigation.Main.TopLevel) -> Unit = {},
+    onSelectedNavigation: (Navigation.Main.MainRoute) -> Unit = {},
     currentRoute: String? = null
 ) {
 
@@ -41,10 +40,9 @@ fun BottomNavigationBar(
         containerColor = Color.White
     ) {
         navigationBarItems.forEach {
-            val isSelected = currentRoute == it.route::class.java.canonicalName
+            val isSelected = currentRoute == it.route.stringVal
 
             NavigationBarItem(
-
                 colors = NavigationBarItemDefaults.colors(
                     unselectedIconColor = Grey65,
                     selectedIconColor = Maroon55,

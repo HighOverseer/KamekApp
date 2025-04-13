@@ -27,7 +27,7 @@ class CacaoImageDetailViewModel @Inject constructor(
     val invalidSession = _invalidSessionEvent.receiveAsFlow()
 
     init {
-        val extras = savedStateHandle.toRoute<Navigation.Main.CacaoImageDetail>()
+        val extras = savedStateHandle.toRoute<Navigation.CacaoImageDetail>()
         val selectedDiagnosisSession = repository.getDiagnosisSession(extras.diagnosisSessionId)
 
         imagePath = selectedDiagnosisSession.imageUrlOrPath

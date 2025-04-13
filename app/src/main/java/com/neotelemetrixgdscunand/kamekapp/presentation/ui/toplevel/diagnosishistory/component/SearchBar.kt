@@ -38,7 +38,7 @@ fun SearchBar(
     query: String = "",
     onQueryChange: (String) -> Unit = {},
     hint: String = "",
-    interactionSource: MutableInteractionSource = MutableInteractionSource(),
+    provideInteractionSource: () -> MutableInteractionSource = { MutableInteractionSource() },
     backgroundColor: Color = Color.White
 ) {
     val modifierLocal = remember {
@@ -57,7 +57,7 @@ fun SearchBar(
         modifier = modifierLocal,
         value = query,
         onValueChange = onQueryChange,
-        interactionSource = interactionSource,
+        interactionSource = provideInteractionSource(),
         decorationBox = @Composable { innerTextField: @Composable () -> Unit ->
             Row(
                 verticalAlignment = Alignment.CenterVertically

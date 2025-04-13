@@ -1,5 +1,10 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
@@ -13,6 +18,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 
 
@@ -52,3 +58,13 @@ fun Modifier.dashedBorder(
     gapLength: Dp = 4.dp,
     cap: StrokeCap = StrokeCap.Round
 ) = dashedBorder(brush = SolidColor(color), shape, strokeWidth, dashLength, gapLength, cap)
+
+//@Composable
+//fun NavHostController.getCurrentRoute(): State<String?> {
+//    val navBackStackEntry by currentBackStackEntryAsState()
+//    return remember {
+//        derivedStateOf {
+//            navBackStackEntry?.destination?.route
+//        }
+//    }
+//}

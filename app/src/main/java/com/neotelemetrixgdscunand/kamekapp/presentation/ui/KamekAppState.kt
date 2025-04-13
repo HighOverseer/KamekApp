@@ -7,7 +7,10 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,30 +18,38 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun rememberKamekAppState(
-    windowInsetsController: WindowInsetsControllerCompat
+    windowInsetsController: WindowInsetsControllerCompat,
+    rootNavHostController: NavHostController
 ): KamekAppState {
-    return remember(windowInsetsController) {
+    return remember(
+        windowInsetsController,
+        rootNavHostController
+    ) {
         KamekAppState(
-            windowInsetsController
+            windowInsetsController,
+            rootNavHostController
         )
     }
 }
 
 @Stable
 class KamekAppState(
-    private val windowInsetsController: WindowInsetsControllerCompat
+    private val windowInsetsController: WindowInsetsControllerCompat,
+    private val rootNavHostController: NavHostController
 ) {
     private var isCameraPermissionGranted by mutableStateOf<Boolean?>(null)
     val provideIsCameraPermissionGranted = { isCameraPermissionGranted }
 
-    fun hideStatusBar() {
+    private fun hideStatusBar() {
         windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
     }
 
-    fun showStatusBar() {
+    private fun showStatusBar() {
         windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
     }
 
@@ -66,4 +77,29 @@ class KamekAppState(
         } else isCameraPermissionGranted = true
     }
 
+    private val currentRoute: State<String?>
+        @Composable get() {
+            val navBackStackEntry by rootNavHostController.currentBackStackEntryAsState()
+            return remember {
+                derivedStateOf {
+                    navBackStackEntry?.destination?.route
+                }
+            }
+        }
+
+    private var isLastDestinationFromTakePictureScreen = false
+
+    @Composable
+    fun HandleStatusBarEffect() {
+        val currentRoute by currentRoute
+        LaunchedEffect(currentRoute) {
+            if (currentRoute == Navigation.TakePhoto.stringVal) {
+                hideStatusBar()
+                isLastDestinationFromTakePictureScreen = true
+            } else if (isLastDestinationFromTakePictureScreen) {
+                showStatusBar()
+                isLastDestinationFromTakePictureScreen = false
+            }
+        }
+    }
 }

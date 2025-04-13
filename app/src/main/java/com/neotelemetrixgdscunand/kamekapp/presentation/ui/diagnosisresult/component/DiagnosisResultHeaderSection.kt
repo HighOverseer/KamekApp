@@ -19,8 +19,6 @@ fun DiagnosisResultHeaderSection(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, top = 24.dp, end = 16.dp)
     ) {
         Text(
             sessionName,
@@ -37,8 +35,6 @@ fun DiagnosisResultHeaderSectionLoading(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, top = 24.dp, end = 16.dp)
     ) {
 
         Text(

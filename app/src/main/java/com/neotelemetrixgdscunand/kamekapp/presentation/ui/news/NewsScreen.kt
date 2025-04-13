@@ -172,7 +172,7 @@ fun NewsScreen(
                         searchQuery = it
                     },
                     hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
-                    interactionSource = searchBarInteractionSource,
+                    provideInteractionSource = { searchBarInteractionSource },
                     isActive = isSearchBarFocused,
                 )
 
