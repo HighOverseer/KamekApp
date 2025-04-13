@@ -167,7 +167,12 @@ fun ShopScreen(
             LazyVerticalGrid(
                 modifier = Modifier
                     .background(color = Grey90),
-                contentPadding = PaddingValues(top = 16.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
+                contentPadding = PaddingValues(
+                    top = 16.dp,
+                    bottom = 24.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                ),
                 state = lazyGridState,
                 columns = GridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,10 +27,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -62,9 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.rememberAsyncImagePainter
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseCacaos
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
@@ -89,7 +84,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.compo
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
-import kotlin.math.exp
 
 @Composable
 fun DiagnosisResultScreen(
@@ -253,13 +247,15 @@ fun DiagnosisResultContent(
             item {
                 if (uiState.isLoading) {
                     DiagnosisResultHeaderSectionLoading(
-                        Modifier.fillMaxWidth()
+                        Modifier
+                            .fillMaxWidth()
                             .padding(start = 16.dp, top = 24.dp, end = 16.dp),
                         sessionName = uiState.diagnosisSession.title
                     )
                 } else DiagnosisResultHeaderSection(
-                    Modifier.fillMaxWidth()
-                    .padding(start = 16.dp, top = 24.dp, end = 16.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 24.dp, end = 16.dp),
                     sessionName = uiState.diagnosisSession.title
                 )
             }
@@ -577,7 +573,7 @@ fun DiagnosisResultContent2(
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    val topAppBarHeightDp = remember{
+    val topAppBarHeightDp = remember {
         configuration.screenHeightDp.dp / 3
     }
 
@@ -642,21 +638,25 @@ fun DiagnosisResultContent2(
                 }
             )
         }
-    ){ innerPadding ->
-        Column(Modifier
-            .fillMaxSize()
-            .padding(innerPadding)) {
+    ) { innerPadding ->
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
 
-            if(uiState.isLoading){
+            if (uiState.isLoading) {
                 DiagnosisResultHeaderSectionLoading(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(start = 16.dp, top = 16.dp, end = 16.dp),
                     sessionName = uiState.diagnosisSession.title
                 )
-            }else{
+            } else {
                 DiagnosisResultHeaderSection(
-                    modifier = Modifier.fillMaxWidth()
-                    .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp),
                     sessionName = uiState.diagnosisSession.title
                 )
             }
@@ -674,7 +674,7 @@ fun DiagnosisResultContent2(
                 Modifier
                     .verticalScroll(scrollState)
             ) {
-                if(isDiagnosisTabSelected){
+                if (isDiagnosisTabSelected) {
                     Column(
                         modifier
                             .fillMaxWidth()
@@ -692,8 +692,8 @@ fun DiagnosisResultContent2(
                         )
                         Spacer(Modifier.height(16.dp))
 
-                        groupedDetectedDiseaseKeys.forEachIndexed{ index, diseaseKey->
-                            key(diseaseKey){
+                        groupedDetectedDiseaseKeys.forEachIndexed { index, diseaseKey ->
+                            key(diseaseKey) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -722,7 +722,8 @@ fun DiagnosisResultContent2(
                                 Spacer(Modifier.height(12.dp))
 
                                 DetectedCacaoImageGrid(
-                                    detectedCacaos = groupedDetectedDisease[diseaseKey] ?: emptyList(),
+                                    detectedCacaos = groupedDetectedDisease[diseaseKey]
+                                        ?: emptyList(),
                                     onItemClicked = navigateToCacaoImageDetail
                                 )
                                 Spacer(Modifier.height(8.dp))
@@ -768,7 +769,8 @@ fun DiagnosisResultContent2(
                                     },
                                     modifier = Modifier.padding(bottom = 8.dp),
                                     diseaseName = stringResource(diseaseKey.nameResId),
-                                    detectedCacaos = groupedDetectedDisease[diseaseKey] ?: emptyList(),
+                                    detectedCacaos = groupedDetectedDisease[diseaseKey]
+                                        ?: emptyList(),
                                     diseaseCause = stringResource(diseaseKey.causeStringResId),
                                     diseaseSymptoms = stringResource(diseaseKey.symptomStringResId),
                                     seedCondition = stringResource(diseaseKey.seedConditionStringResId),
@@ -777,7 +779,7 @@ fun DiagnosisResultContent2(
                             }
                         }
                     }
-                }else{
+                } else {
                     if (uiState.isLoading) {
                         PriceAnalysisContentLoading()
                     } else {
@@ -839,7 +841,7 @@ fun DiagnosisResultContent2(
 
                         Spacer(Modifier.height(16.dp))
 
-                        repeat(3){
+                        repeat(3) {
                             key(it) {
                                 PriceAnalysisContent(
                                     modifier = outermostPaddingModifier,
@@ -849,7 +851,7 @@ fun DiagnosisResultContent2(
                                 )
                                 Spacer(Modifier.height(16.dp))
                             }
-                            
+
                         }
                     }
                 }

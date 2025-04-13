@@ -62,7 +62,7 @@ fun KamekApp(
                 }
             )
         }
-    ){ innerPadding ->
+    ) { innerPadding ->
         NavHost(
             modifier = modifier
                 .padding(innerPadding)

@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui
 
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation.Main.MainRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,7 +9,7 @@ sealed interface Navigation {
     sealed interface Page : Navigation
 
     @Serializable
-    sealed interface Route: Navigation{
+    sealed interface Route : Navigation {
         val stringVal: String?
             get() = this::class.java.canonicalName
     }

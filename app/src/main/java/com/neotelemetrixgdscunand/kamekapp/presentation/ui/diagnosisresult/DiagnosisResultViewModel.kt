@@ -49,7 +49,7 @@ class DiagnosisResultViewModel @Inject constructor(
 
     private val extras = savedStateHandle.toRoute<Navigation.DiagnosisResult>()
 
-    private fun initFromExtras(){
+    private fun initFromExtras() {
         val isFromNewSession =
             extras.newSessionName != null && extras.newUnsavedSessionImagePath != null
 

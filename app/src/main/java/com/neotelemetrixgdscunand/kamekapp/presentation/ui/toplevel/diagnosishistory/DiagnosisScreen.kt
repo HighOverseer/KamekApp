@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -21,12 +20,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -56,15 +51,12 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45Alpha70
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.DiagnosisHistory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchHistoryCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.TakePhotoSection
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.dashedBorder
 import kotlinx.coroutines.launch
 
 @Composable
@@ -143,9 +135,11 @@ fun DiagnosisContent(
 
 
             item {
-                TakePhotoSection(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp), onClick = navigateToTakePhoto)
+                TakePhotoSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp), onClick = navigateToTakePhoto
+                )
 
                 Spacer(Modifier.height(16.dp))
             }
@@ -214,7 +208,7 @@ fun DiagnosisContent(
 
             }
 
-            items(diagnosisSessionPreviews, {it.id }) { item ->
+            items(diagnosisSessionPreviews, { it.id }) { item ->
                 DiagnosisHistory(
                     modifier = diagnosisHistoryModifier
                         .clickable {
@@ -253,7 +247,7 @@ fun DiagnosisContent(
                         .size(42.dp)
                         .background(Maroon45Alpha70, shape = CircleShape)
                         .padding(8.dp)
-                ){
+                ) {
                     Icon(
                         modifier = Modifier.fillMaxSize(),
                         imageVector = Icons.Default.KeyboardArrowUp,
@@ -272,7 +266,7 @@ fun DiagnosisContent(
 private fun DiagnosisScreenPreview() {
     KamekAppTheme {
         DiagnosisContent(
-            diagnosisSessionPreviews = List(10){
+            diagnosisSessionPreviews = List(10) {
                 DiagnosisSessionPreview(
                     id = it,
                     title = "Example",

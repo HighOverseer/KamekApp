@@ -26,7 +26,7 @@ fun CacaoImageDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: CacaoImageDetailViewModel = hiltViewModel(),
     navigateUp: () -> Unit = { },
-    showSnackbar:(String) -> Unit = { }
+    showSnackbar: (String) -> Unit = { }
 ) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -34,7 +34,7 @@ fun CacaoImageDetailScreen(
     LaunchedEffect(true) {
         lifecycleOwner.collectChannelWhenStarted(
             viewModel.invalidSession
-        ){
+        ) {
             showSnackbar(invalidSessionMessage)
         }
     }
@@ -55,7 +55,7 @@ fun CacaoImageDetailContent(
     boundingBoxes: List<BoundingBox>
 ) {
     val configuration = LocalConfiguration.current
-    val topToArrowMargin = remember{
+    val topToArrowMargin = remember {
         val topToArrowMarginRatio = 0.04571f
         configuration.screenHeightDp.dp * topToArrowMarginRatio
     }

@@ -9,7 +9,6 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,13 +32,13 @@ class CacaoImageDetailViewModel @Inject constructor(
         imagePath = selectedDiagnosisSession.imageUrlOrPath
         val boundingBoxes = mutableListOf<BoundingBox>()
 
-        if(extras.detectedCacaoId == null){
+        if (extras.detectedCacaoId == null) {
             boundingBoxes.addAll(
                 selectedDiagnosisSession.detectedCacaos.map {
                     it.boundingBox
                 }
             )
-        }else{
+        } else {
             selectedDiagnosisSession
                 .detectedCacaos
                 .find { it.id == extras.detectedCacaoId }
