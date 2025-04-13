@@ -18,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -37,14 +38,18 @@ class DiagnosisResultViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<DiagnosisResultUIEvent>()
-    val event = _event.receiveAsFlow()
+    val event = _event
+        .receiveAsFlow()
+        .onStart {
+            listenToImageDetectorResult()
+            initFromExtras()
+        }
 
     private var detectImageJob: Job? = null
 
     private val extras = savedStateHandle.toRoute<Navigation.Main.DiagnosisResult>()
 
-    init {
-        listenToImageDetectorResult()
+    private fun initFromExtras(){
         val isFromNewSession =
             extras.newSessionName != null && extras.newUnsavedSessionImagePath != null
 
@@ -151,14 +156,6 @@ class DiagnosisResultViewModel @Inject constructor(
             newDiagnosisSession = newDiagnosisSession
         )
         return newDiagnosisSession.id
-    }
-
-    fun changeSelectedTab() {
-        _uiState.update {
-            it.copy(
-                isDiagnosisTabSelected = !it.isDiagnosisTabSelected
-            )
-        }
     }
 
     private fun detectImage(imagePath: String) {

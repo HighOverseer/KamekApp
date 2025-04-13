@@ -14,6 +14,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,14 +31,14 @@ class TakePhotoViewModel @Inject constructor(
     private var capturedPhotoImagePath: String? = null
 
     private val _uiEvent = Channel<TakePhotoUIEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+    val uiEvent = _uiEvent
+        .receiveAsFlow()
+        .onStart {
+            listenToImageCaptureResult()
+            listenToTextFieldConfirmationDialogEvent()
+        }
 
     private var submitJob: Job? = null
-
-    init {
-        listenToImageCaptureResult()
-        listenToTextFieldConfirmationDialogEvent()
-    }
 
     private fun listenToImageCaptureResult() {
         viewModelScope.launch {

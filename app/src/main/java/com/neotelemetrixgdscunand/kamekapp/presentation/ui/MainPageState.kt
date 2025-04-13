@@ -69,7 +69,7 @@ class MainPageState(
     fun HandleStatusBarEffect() {
         val currentRoute by currentRoute
         LaunchedEffect(currentRoute) {
-            if (currentRoute == Navigation.Main.TakePhoto::class.java.canonicalName) {
+            if (currentRoute == Navigation.Main.TakePhoto.stringVal) {
                 hideStatusBar()
                 isLastDestinationFromTakePictureScreen = true
             } else if (isLastDestinationFromTakePictureScreen) {
@@ -80,9 +80,9 @@ class MainPageState(
     }
 
     private fun isInTopLevelPage(currentRoute: String?): Boolean {
-        return currentRoute == Navigation.Main.TopLevel.Home.canonicalName
-                || currentRoute == Navigation.Main.TopLevel.Diagnosis.canonicalName
-                || currentRoute == Navigation.Main.TopLevel.Account.canonicalName
+        return currentRoute == Navigation.Main.TopLevel.Home.stringVal
+                || currentRoute == Navigation.Main.TopLevel.Diagnosis.stringVal
+                || currentRoute == Navigation.Main.TopLevel.Account.stringVal
     }
 
     fun navigateToTopLevel(

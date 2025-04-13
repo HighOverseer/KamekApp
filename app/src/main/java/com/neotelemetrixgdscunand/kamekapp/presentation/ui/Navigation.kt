@@ -9,7 +9,10 @@ sealed interface Navigation {
     sealed interface Page : Navigation
 
     @Serializable
-    sealed interface Route : Navigation
+    sealed interface Route: Navigation{
+        val stringVal: String?
+            get() = this::class.java.canonicalName
+    }
 
     @Serializable
     data object Splash : Route
@@ -37,21 +40,15 @@ sealed interface Navigation {
         sealed interface MainRoute : Route
 
         @Serializable
-        sealed class TopLevel(val canonicalName: String?) : MainRoute {
+        sealed interface TopLevel : MainRoute {
             @Serializable
-            data object Home : TopLevel(
-                canonicalName = Home::class.java.canonicalName
-            )
+            data object Home : TopLevel
 
             @Serializable
-            data object Diagnosis : TopLevel(
-                canonicalName = Diagnosis::class.java.canonicalName
-            )
+            data object Diagnosis : TopLevel
 
             @Serializable
-            data object Account : TopLevel(
-                canonicalName = Account::class.java.canonicalName
-            )
+            data object Account : TopLevel
         }
 
         @Serializable
@@ -86,8 +83,7 @@ sealed interface Navigation {
         data class CacaoImageDetail(
             val imagePath: String,
             val diagnosisSessionId: Int,
-            val detectedCacaoId: Int
+            val detectedCacaoId: Int?
         ) : MainRoute
     }
 }
-

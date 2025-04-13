@@ -3,6 +3,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,7 +83,7 @@ fun DiagnosisResultScreen(
     viewModel: DiagnosisResultViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
     showSnackbar: (String) -> Unit = { },
-    navigateToCacaoImageDetail: (Int, Int, String) -> Unit = { _, _, _ -> }
+    navigateToCacaoImageDetail: (Int, Int?, String) -> Unit = { _, _, _ -> },
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -111,11 +113,7 @@ fun DiagnosisResultScreen(
     DiagnosisResultContent(
         modifier = modifier,
         navigateUp = navigateUp,
-        isLoadingProvider = { uiState.isLoading },
-        imagePreviewPath = uiState.imagePreviewPath,
-        diagnosisSession = uiState.diagnosisSession,
-        changeSelectedTab = viewModel::changeSelectedTab,
-        isDiagnosisTabSelectedProvider = { uiState.isDiagnosisTabSelected },
+        uiState = uiState,
         navigateToCacaoImageDetail = { detectedCacaoId ->
             uiState.imagePreviewPath?.apply {
                 navigateToCacaoImageDetail(
@@ -134,12 +132,8 @@ fun DiagnosisResultScreen(
 fun DiagnosisResultContent(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
-    isLoadingProvider: () -> Boolean = { false },
-    imagePreviewPath: String? = null,
-    diagnosisSession: DiagnosisSession,
-    changeSelectedTab: () -> Unit = {},
-    isDiagnosisTabSelectedProvider: () -> Boolean = { true },
-    navigateToCacaoImageDetail: (Int) -> Unit = { }
+    uiState: DiagnosisResultUIState = DiagnosisResultUIState(),
+    navigateToCacaoImageDetail: (Int?) -> Unit = { }
 ) {
 
     val imageAspectRatio = 1.26f
@@ -147,18 +141,14 @@ fun DiagnosisResultContent(
     val listState = rememberLazyListState()
 
     val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp.dp
 
-    val topToArrowMargin = screenHeightDp * topToArrowMarginRatio
+    val topToArrowMargin = remember {
+        configuration.screenHeightDp.dp * topToArrowMarginRatio
+    }
 
-    val image = rememberAsyncImagePainter(
-        model = imagePreviewPath,
-        placeholder = painterResource(R.drawable.ic_camera),
-        contentScale = ContentScale.Crop
-    )
 
-    val groupedDetectedDisease = remember(diagnosisSession) {
-        diagnosisSession.detectedCacaos.groupBy {
+    val groupedDetectedDisease = remember(uiState.diagnosisSession) {
+        uiState.diagnosisSession.detectedCacaos.groupBy {
             it.disease
         }
     }
@@ -196,6 +186,8 @@ fun DiagnosisResultContent(
             .sizeIn(minWidth = 24.dp, minHeight = 24.dp)
     }
 
+    var isDiagnosisTabSelected by rememberSaveable { mutableStateOf(true) }
+
     Box {
 
         LazyColumn(
@@ -210,19 +202,28 @@ fun DiagnosisResultContent(
                         .fillMaxWidth()
                         .aspectRatio(imageAspectRatio)
                 ) {
+
+                    val image = rememberAsyncImagePainter(
+                        model = uiState.imagePreviewPath,
+                        placeholder = painterResource(R.drawable.ic_camera),
+                        contentScale = ContentScale.Crop
+                    )
+
                     Image(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .align(Alignment.Center),
+                            .fillMaxSize()
+                            .align(Alignment.Center)
+                            .clickable {
+                                navigateToCacaoImageDetail(null)
+                            },
                         painter = image,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                     )
 
                     val context = LocalContext.current
-                    val adjustedBoundingBox = remember(diagnosisSession) {
-                        diagnosisSession.detectedCacaos.map {
+                    val adjustedBoundingBox = remember(uiState.diagnosisSession) {
+                        uiState.diagnosisSession.detectedCacaos.map {
                             it.getBoundingBoxWithItsNameAsTheLabel(context)
                         }
                     }
@@ -237,26 +238,26 @@ fun DiagnosisResultContent(
             }
 
             item {
-                if (isLoadingProvider()) {
+                if (uiState.isLoading) {
                     DiagnosisResultHeaderSectionLoading(
-                        sessionName = diagnosisSession.title
+                        sessionName = uiState.diagnosisSession.title
                     )
                 } else DiagnosisResultHeaderSection(
-                    sessionName = diagnosisSession.title
+                    sessionName = uiState.diagnosisSession.title
                 )
             }
 
             stickyHeader {
                 DiagnosisResultTabSection(
-                    isDiagnosisTabSelected = isDiagnosisTabSelectedProvider(),
+                    isDiagnosisTabSelected = isDiagnosisTabSelected,
                     changeSelectedTab = {
-                        val isReselectedTab = it == isDiagnosisTabSelectedProvider()
-                        if (!isReselectedTab) changeSelectedTab()
+                        val isReselectedTab = it == isDiagnosisTabSelected
+                        if (!isReselectedTab) isDiagnosisTabSelected = it
                     }
                 )
             }
 
-            if (isDiagnosisTabSelectedProvider()) {
+            if (isDiagnosisTabSelected) {
                 item {
                     Column(
                         modifier
@@ -347,15 +348,15 @@ fun DiagnosisResultContent(
                     Spacer(Modifier.height(16.dp))
 
                     val context = LocalContext.current
-                    if (isLoadingProvider()) DiagnosisBottomContentLoading() else DiagnosisBottomContent(
-                        preventions = remember(diagnosisSession) {
-                            diagnosisSession.detectedCacaos.firstOrNull()?.let { item ->
+                    if (uiState.isLoading) DiagnosisBottomContentLoading() else DiagnosisBottomContent(
+                        preventions = remember(uiState.diagnosisSession) {
+                            uiState.diagnosisSession.detectedCacaos.firstOrNull()?.let { item ->
                                 item.disease.controlStringResId.map {
                                     context.getString(it)
                                 }
                             } ?: emptyList()
                         },
-                        solution = diagnosisSession.detectedCacaos.firstOrNull()?.disease?.solutionStringResId?.let {
+                        solution = uiState.diagnosisSession.detectedCacaos.firstOrNull()?.disease?.solutionStringResId?.let {
                             stringResource(it)
                         } ?: ""
                     )
@@ -374,7 +375,7 @@ fun DiagnosisResultContent(
                 }
 
 
-                if (isLoadingProvider()) {
+                if (uiState.isLoading) {
                     item {
                         DiagnosisDiseaseDetailsLoading()
                     }
@@ -401,7 +402,7 @@ fun DiagnosisResultContent(
 
 
             } else {
-                if (isLoadingProvider()) {
+                if (uiState.isLoading) {
                     item {
                         PriceAnalysisContentLoading()
                     }
@@ -477,7 +478,7 @@ fun DiagnosisResultContent(
                             PriceAnalysisContent(
                                 modifier = outermostPaddingModifier,
                                 damageLevelCategory = damageLevelCategoryInfo[it],
-                                diagnosisSession = diagnosisSession,
+                                diagnosisSession = uiState.diagnosisSession,
                                 onDetectedCacaoImageClicked = navigateToCacaoImageDetail
                             )
                             Spacer(Modifier.height(16.dp))
@@ -502,7 +503,7 @@ fun DiagnosisResultContent(
 private fun DiagnosisResultScreenPreview() {
     KamekAppTheme {
         DiagnosisResultContent(
-            diagnosisSession = DiagnosisSession()
+
         )
     }
 }

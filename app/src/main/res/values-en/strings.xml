@@ -200,4 +200,5 @@
     <string name="kakao">Cocoa %1$s</string>
 
     <string name="input_image_is_invalid_no_cocoa_detected">Input Image is Invalid, No Cocoa Detected</string>
+    <string name="invalid_session_please_try_again">Invalid Session, Please Try Again..</string>
 </resources>

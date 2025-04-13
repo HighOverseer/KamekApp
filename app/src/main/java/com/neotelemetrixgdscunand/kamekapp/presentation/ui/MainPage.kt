@@ -245,7 +245,14 @@ fun MainPage(
 
             composable<Navigation.Main.CacaoImageDetail> {
                 CacaoImageDetailScreen(
-                    navigateUp = mainNavHostController::navigateUp
+                    navigateUp = mainNavHostController::navigateUp,
+                    showSnackbar = { message ->
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message
+                            )
+                        }
+                    }
                 )
             }
         }
