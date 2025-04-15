@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -26,7 +25,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.account.AccountScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.DiagnosisScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeScreen
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,8 +46,8 @@ fun MainPage(
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()
-    val showSnackbar:(String) -> Unit = remember {
-        { message:String  ->
+    val showSnackbar: (String) -> Unit = remember {
+        { message: String ->
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(message)
             }
@@ -59,7 +57,7 @@ fun MainPage(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val shouldShowTopAppBar by state.shouldShowTopAppBar
     val scaffoldModifier = remember(shouldShowTopAppBar) {
-        if(shouldShowTopAppBar) {
+        if (shouldShowTopAppBar) {
             modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         } else modifier
     }

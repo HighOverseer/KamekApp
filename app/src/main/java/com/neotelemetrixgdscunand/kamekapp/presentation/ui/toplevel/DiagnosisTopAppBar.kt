@@ -36,7 +36,7 @@ private const val topAppBarSubComposeId = "topAppBar"
 @Composable
 fun DiagnosisTopAppBar(
     modifier: Modifier = Modifier,
-    scrollBehaviourProvider : @Composable () -> TopAppBarScrollBehavior = { TopAppBarDefaults.exitUntilCollapsedScrollBehavior() },
+    scrollBehaviourProvider: @Composable () -> TopAppBarScrollBehavior = { TopAppBarDefaults.exitUntilCollapsedScrollBehavior() },
     onClick: () -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
@@ -44,27 +44,30 @@ fun DiagnosisTopAppBar(
 
     var expandedHeightPx by remember {
         val screenHeightDp = configuration.screenHeightDp.dp
-        val initialValueDp = when(configuration.orientation){
+        val initialValueDp = when (configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> screenHeightDp / 2
             else -> screenHeightDp
         }
-        val initialValuePx = with(density){ initialValueDp.toPx() }
+        val initialValuePx = with(density) { initialValueDp.toPx() }
         mutableIntStateOf(initialValuePx.toInt())
     }
 
-    val expandedHeightDp = remember(expandedHeightPx){
-        with(density){ expandedHeightPx.toDp() }
+    val expandedHeightDp = remember(expandedHeightPx) {
+        with(density) { expandedHeightPx.toDp() }
     }
 
     TopAppBar(
         modifier = modifier,
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Grey90, scrolledContainerColor = Grey90),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Grey90,
+            scrolledContainerColor = Grey90
+        ),
         expandedHeight = expandedHeightDp,
         title = {},
         scrollBehavior = scrollBehaviourProvider(),
         actions = {
             SubcomposeLayout { constraints ->
-                val contentMeasurable = subcompose(topAppBarSubComposeId){
+                val contentMeasurable = subcompose(topAppBarSubComposeId) {
                     val screenHeightDp = configuration.screenHeightDp.dp
 
                     val topMarginRatio = 0.039f
@@ -100,8 +103,8 @@ fun DiagnosisTopAppBar(
                 val height = placeables.sumOf { it.height }
                 expandedHeightPx = height
 
-                layout(constraints.maxWidth, height){
-                    placeables.forEach{
+                layout(constraints.maxWidth, height) {
+                    placeables.forEach {
                         it.placeRelative(0, 0)
                     }
                 }

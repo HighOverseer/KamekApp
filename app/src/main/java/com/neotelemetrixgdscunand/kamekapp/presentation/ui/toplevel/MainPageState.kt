@@ -46,7 +46,7 @@ class MainPageState(
         Navigation.Main.Account.stringVal to Navigation.Main.Account,
     )
 
-    val currentSelectedTopLevelRoute:State<Navigation.Main.MainRoute?>
+    val currentSelectedTopLevelRoute: State<Navigation.Main.MainRoute?>
         @Composable get() {
             val navBackStackEntry by navHostController.currentBackStackEntryAsState()
             return remember {
@@ -57,7 +57,7 @@ class MainPageState(
             }
         }
 
-    val shouldShowTopAppBar:State<Boolean>
+    val shouldShowTopAppBar: State<Boolean>
         @Composable get() {
             val currentRoute by currentSelectedTopLevelRoute
             return remember {
@@ -78,7 +78,7 @@ class MainPageState(
         val shouldShowTopAppBar by shouldShowTopAppBar
         val scrollBehavior = scrollBehaviorProvider()
         LaunchedEffect(shouldShowTopAppBar) {
-            if(shouldShowTopAppBar){
+            if (shouldShowTopAppBar) {
                 //Make sure Top App Bar Expanded Before AnimationVisibility start
                 scrollBehavior.state.heightOffset = 0f
             }

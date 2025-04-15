@@ -24,7 +24,7 @@ class DiagnosisViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val diagnosisHistoryPreview:StateFlow<ImmutableList<DiagnosisSessionPreview>> =
+    val diagnosisHistoryPreview: StateFlow<ImmutableList<DiagnosisSessionPreview>> =
         repository.getAllSavedDiagnosisSessionPreviews()
             .map { it.toPersistentList() }
             .flowOn(Dispatchers.Default)

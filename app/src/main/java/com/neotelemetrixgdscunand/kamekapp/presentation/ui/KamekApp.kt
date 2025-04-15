@@ -45,8 +45,8 @@ fun KamekApp(
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()
-    val showSnackbar:(String) -> Unit  = remember{
-        { message:String ->
+    val showSnackbar: (String) -> Unit = remember {
+        { message: String ->
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(message)
             }

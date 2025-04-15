@@ -87,7 +87,7 @@ class KamekAppState(
             }
         }
 
-    private val shouldShowStatusBar:State<Boolean>
+    private val shouldShowStatusBar: State<Boolean>
         @Composable get() {
             val currentRoute by currentRoute
             return remember {
@@ -101,9 +101,9 @@ class KamekAppState(
     fun HandleStatusBarVisibilityEffect() {
         val shouldShowStatusBar by shouldShowStatusBar
         LaunchedEffect(shouldShowStatusBar) {
-            if(shouldShowStatusBar){
+            if (shouldShowStatusBar) {
                 showStatusBar()
-            }else{
+            } else {
                 hideStatusBar()
             }
         }

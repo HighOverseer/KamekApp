@@ -45,7 +45,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishis
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchHistoryCategory
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -55,7 +54,7 @@ fun DiagnosisScreen(
     modifier: Modifier = Modifier,
     viewModel: DiagnosisViewModel = hiltViewModel(),
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
-    expandTopAppBar:()-> Unit = { },
+    expandTopAppBar: () -> Unit = { },
 ) {
 
     val diagnosisHistories by viewModel.diagnosisHistoryPreview.collectAsState()
@@ -75,7 +74,7 @@ fun DiagnosisContent(
     modifier: Modifier = Modifier,
     diagnosisSessionPreviews: ImmutableList<DiagnosisSessionPreview> = persistentListOf(),
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
-    expandTopAppBar:()-> Unit = { },
+    expandTopAppBar: () -> Unit = { },
 ) {
 
     val selectedSearchHistoryCategory by remember {
@@ -92,7 +91,7 @@ fun DiagnosisContent(
         }
         val configuration = LocalConfiguration.current
         val contentPadding = remember(diagnosisSessionPreviews) {
-            val divider = if(diagnosisSessionPreviews.size < 5) 3 else 10
+            val divider = if (diagnosisSessionPreviews.size < 5) 3 else 10
             PaddingValues(bottom = configuration.screenHeightDp.dp / divider)
         }
         val parentListState = rememberLazyListState()
@@ -113,12 +112,12 @@ fun DiagnosisContent(
             state = parentListState,
             contentPadding = contentPadding
         ) {
-            stickyHeader{
+            stickyHeader {
                 Column(
                     Modifier
                         .padding(horizontal = 16.dp)
                         .background(Grey90)
-                ){
+                ) {
                     Spacer(Modifier.height(16.dp))
 
                     Text(
@@ -208,7 +207,7 @@ fun DiagnosisContent(
 private fun DiagnosisScreenPreview() {
     KamekAppTheme {
         DiagnosisContent(
-            diagnosisSessionPreviews = List(10){
+            diagnosisSessionPreviews = List(10) {
                 DiagnosisSessionPreview(
                     id = it,
                     title = "Example",

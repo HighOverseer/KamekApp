@@ -21,16 +21,16 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val diagnosisHistory:StateFlow<ImmutableList<DiagnosisSessionPreview>> =
+    val diagnosisHistory: StateFlow<ImmutableList<DiagnosisSessionPreview>> =
         repository.getAllSavedDiagnosisSessionPreviews()
-        .map {
-            it.toPersistentList()
-        }
-        .flowOn(Dispatchers.Default)
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            persistentListOf()
-        )
+            .map {
+                it.toPersistentList()
+            }
+            .flowOn(Dispatchers.Default)
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                persistentListOf()
+            )
 
 }

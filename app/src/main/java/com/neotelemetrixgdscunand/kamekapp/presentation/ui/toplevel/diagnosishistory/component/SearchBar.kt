@@ -35,7 +35,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 fun SearchBar(
     modifier: Modifier = Modifier,
     isActive: Boolean = false,
-    queryProvider: () -> String = { "" } ,
+    queryProvider: () -> String = { "" },
     onQueryChange: (String) -> Unit = {},
     hint: String = "",
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
