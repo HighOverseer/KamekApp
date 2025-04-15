@@ -38,6 +38,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.compone
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.SectionHeadline
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun HomeScreen(
@@ -75,7 +77,7 @@ fun HomeContent(
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
     navigateToNewsDetail: () -> Unit = {},
-    diagnosisSessionPreviews: List<DiagnosisSessionPreview> = emptyList(),
+    diagnosisSessionPreviews: ImmutableList<DiagnosisSessionPreview> = persistentListOf(),
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
     navigateToNotification: () -> Unit = {},
     showSnackbar: (String) -> Unit = {}

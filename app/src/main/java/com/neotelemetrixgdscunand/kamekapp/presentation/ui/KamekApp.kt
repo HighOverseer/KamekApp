@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -46,8 +45,15 @@ fun KamekApp(
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()
+    val showSnackbar:(String) -> Unit  = remember{
+        { message:String ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
+            }
+        }
+    }
 
-    appState.HandleStatusBarEffect()
+    appState.HandleStatusBarVisibilityEffect()
 
     Scaffold(
         containerColor = Grey90,
@@ -169,14 +175,7 @@ fun KamekApp(
             composable<Navigation.TakePhoto> {
                 TakePhotoScreen(
                     provideIsCameraPermissionGranted = appState.provideIsCameraPermissionGranted,
-                    showSnackBar = { message ->
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                    },
+                    showSnackBar = showSnackbar,
                     navigateUp = rootNavHostController::navigateUp,
                     navigateToResult = { newSessionName, newUnsavedSessionImagePath ->
                         rootNavHostController.navigate(
@@ -199,11 +198,7 @@ fun KamekApp(
             composable<Navigation.DiagnosisResult> {
                 DiagnosisResultScreen(
                     navigateUp = rootNavHostController::navigateUp,
-                    showSnackbar = {
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(it)
-                        }
-                    },
+                    showSnackbar = showSnackbar,
                     navigateToCacaoImageDetail = { sessionId, detectedCacaoId, imagePreviewPath ->
                         rootNavHostController.navigate(
                             Navigation.CacaoImageDetail(
@@ -263,13 +258,7 @@ fun KamekApp(
             composable<Navigation.CacaoImageDetail> {
                 CacaoImageDetailScreen(
                     navigateUp = rootNavHostController::navigateUp,
-                    showSnackbar = { message ->
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(
-                                message
-                            )
-                        }
-                    }
+                    showSnackbar = showSnackbar
                 )
             }
 

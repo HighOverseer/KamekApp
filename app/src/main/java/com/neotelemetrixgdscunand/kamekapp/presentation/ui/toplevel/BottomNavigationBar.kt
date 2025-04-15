@@ -22,13 +22,15 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Shadow
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.NavigationBarItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
-    navigationBarItems: List<NavigationBarItem> = emptyList(),
+    navigationBarItems: ImmutableList<NavigationBarItem> = persistentListOf(),
     onSelectedNavigation: (Navigation.Main.MainRoute) -> Unit = {},
-    currentRoute: String? = null
+    currentSelectedRoute: Navigation.Main.MainRoute? = null
 ) {
 
     BottomAppBar(
@@ -40,7 +42,7 @@ fun BottomNavigationBar(
         containerColor = Color.White
     ) {
         navigationBarItems.forEach {
-            val isSelected = currentRoute == it.route.stringVal
+            val isSelected = currentSelectedRoute == it.route
 
             NavigationBarItem(
                 colors = NavigationBarItemDefaults.colors(

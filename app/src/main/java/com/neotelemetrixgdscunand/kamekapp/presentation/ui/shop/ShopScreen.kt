@@ -133,13 +133,13 @@ fun ShopScreen(
             SearchBar(
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
-                query = searchQuery,
+                queryProvider = { searchQuery },
                 onQueryChange = {
                     searchQuery = it
                 },
                 backgroundColor = Grey90,
                 hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
-                provideInteractionSource = { searchBarInteractionSource },
+                interactionSource = searchBarInteractionSource,
                 isActive = isSearchBarFocused,
             )
 
@@ -178,6 +178,7 @@ fun ShopScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+
                 items(
                     shopItems.size,
                     key = { index ->

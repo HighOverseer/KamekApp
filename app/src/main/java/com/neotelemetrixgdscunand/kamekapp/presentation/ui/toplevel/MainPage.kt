@@ -1,16 +1,20 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,6 +26,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.account.AccountScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.DiagnosisScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeScreen
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,13 +47,26 @@ fun MainPage(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-
     val coroutineScope = rememberCoroutineScope()
-    val currentRoute by state.currentRoute
+    val showSnackbar:(String) -> Unit = remember {
+        { message:String  ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
+            }
+        }
+    }
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val shouldShowTopAppBar by state.shouldShowTopAppBar
+    val scaffoldModifier = remember(shouldShowTopAppBar) {
+        if(shouldShowTopAppBar) {
+            modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        } else modifier
+    }
 
     Scaffold(
+        modifier = scaffoldModifier,
         containerColor = Grey90,
-        modifier = modifier,
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
@@ -57,16 +75,32 @@ fun MainPage(
                 }
             )
         },
+        topBar = {
+            state.HandleTopAppBarInitialExpandedHeightEffect(
+                scrollBehaviorProvider = { scrollBehavior }
+            )
+
+            AnimatedVisibility(shouldShowTopAppBar) {
+                DiagnosisTopAppBar(
+                    scrollBehaviourProvider = { scrollBehavior },
+                    onClick = navigateToTakePhoto
+                )
+            }
+        },
         bottomBar = {
-            val isInTopLevel by state.isInTopLevel
             val navigationBarItems = state.navigationBarItems
+            val currentTopLevelRoute by state.currentSelectedTopLevelRoute
+            val isInTopLevel = currentTopLevelRoute != null
 
             if (isInTopLevel) {
                 BottomNavigationBar(
                     navigationBarItems = navigationBarItems,
-                    currentRoute = currentRoute,
+                    currentSelectedRoute = currentTopLevelRoute,
                     onSelectedNavigation = { nextDestination ->
-                        state.navigateToTopLevel(nextDestination, currentRoute)
+                        state.navigateToTopLevel(
+                            nextDestination,
+                            currentTopLevelRoute
+                        )
                     }
                 )
             }
@@ -85,17 +119,15 @@ fun MainPage(
                     navigateToNewsDetail = navigateToNewsDetail,
                     navigateToDiagnosisResult = navigateToDiagnosisResult,
                     navigateToNotification = navigateToNotification,
-                    showSnackbar = { message ->
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(message = message)
-                        }
-                    }
+                    showSnackbar = showSnackbar
                 )
             }
             composable<Navigation.Main.Diagnosis> {
                 DiagnosisScreen(
-                    navigateToTakePhoto = navigateToTakePhoto,
-                    navigateToDiagnosisResult = navigateToDiagnosisResult
+                    navigateToDiagnosisResult = navigateToDiagnosisResult,
+                    expandTopAppBar = {
+                        scrollBehavior.state.heightOffset = 0f
+                    },
                 )
             }
 

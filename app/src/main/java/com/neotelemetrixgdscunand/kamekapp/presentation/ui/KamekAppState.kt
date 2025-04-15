@@ -87,18 +87,24 @@ class KamekAppState(
             }
         }
 
-    private var isLastDestinationFromTakePictureScreen = false
+    private val shouldShowStatusBar:State<Boolean>
+        @Composable get() {
+            val currentRoute by currentRoute
+            return remember {
+                derivedStateOf {
+                    currentRoute != Navigation.TakePhoto.stringVal
+                }
+            }
+        }
 
     @Composable
-    fun HandleStatusBarEffect() {
-        val currentRoute by currentRoute
-        LaunchedEffect(currentRoute) {
-            if (currentRoute == Navigation.TakePhoto.stringVal) {
-                hideStatusBar()
-                isLastDestinationFromTakePictureScreen = true
-            } else if (isLastDestinationFromTakePictureScreen) {
+    fun HandleStatusBarVisibilityEffect() {
+        val shouldShowStatusBar by shouldShowStatusBar
+        LaunchedEffect(shouldShowStatusBar) {
+            if(shouldShowStatusBar){
                 showStatusBar()
-                isLastDestinationFromTakePictureScreen = false
+            }else{
+                hideStatusBar()
             }
         }
     }

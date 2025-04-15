@@ -39,7 +39,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.
 @Composable
 fun DiagnosisHistory(
     modifier: Modifier = Modifier,
-    item: DiagnosisSessionPreview
+    item: DiagnosisSessionPreview,
+    onClick: () -> Unit = { }
 ) {
     val cardModifier = remember {
         modifier
@@ -59,7 +60,8 @@ fun DiagnosisHistory(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
             contentColor = Color.White
-        )
+        ),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth()

@@ -167,12 +167,12 @@ fun NewsScreen(
                 SearchBar(
                     modifier = Modifier
                         .padding(horizontal = 16.dp),
-                    query = searchQuery,
+                    queryProvider = { searchQuery },
                     onQueryChange = {
                         searchQuery = it
                     },
                     hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
-                    provideInteractionSource = { searchBarInteractionSource },
+                    interactionSource = searchBarInteractionSource,
                     isActive = isSearchBarFocused,
                 )
 

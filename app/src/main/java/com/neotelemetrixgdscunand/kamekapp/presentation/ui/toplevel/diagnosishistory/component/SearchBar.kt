@@ -35,13 +35,13 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 fun SearchBar(
     modifier: Modifier = Modifier,
     isActive: Boolean = false,
-    query: String = "",
+    queryProvider: () -> String = { "" } ,
     onQueryChange: (String) -> Unit = {},
     hint: String = "",
-    provideInteractionSource: () -> MutableInteractionSource = { MutableInteractionSource() },
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     backgroundColor: Color = Color.White
 ) {
-    val modifierLocal = remember {
+    val localModifier = remember {
         modifier
             .fillMaxWidth()
             .border(
@@ -54,10 +54,10 @@ fun SearchBar(
     }
 
     BasicTextField(
-        modifier = modifierLocal,
-        value = query,
+        modifier = localModifier,
+        value = queryProvider(),
         onValueChange = onQueryChange,
-        interactionSource = provideInteractionSource(),
+        interactionSource = interactionSource,
         decorationBox = @Composable { innerTextField: @Composable () -> Unit ->
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -73,7 +73,7 @@ fun SearchBar(
 
                 Spacer(Modifier.width(8.dp))
 
-                if (!isActive && query.isEmpty()) {
+                if (!isActive && queryProvider().isEmpty()) {
                     Text(
                         text = hint,
                         style = MaterialTheme.typography.labelMedium,

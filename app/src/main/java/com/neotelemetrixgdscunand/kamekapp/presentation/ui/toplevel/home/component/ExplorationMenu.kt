@@ -56,7 +56,7 @@ fun ExplorationMenu(
         }
         Spacer(Modifier.height(8.dp))
         Text(
-            label,
+            text = label,
             style = MaterialTheme.typography.labelMedium,
             color = Black10,
         )

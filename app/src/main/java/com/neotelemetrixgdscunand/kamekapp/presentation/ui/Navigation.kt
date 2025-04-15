@@ -1,7 +1,10 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui
 
+
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
 
+@Stable
 @Serializable
 sealed interface Navigation {
 

@@ -98,6 +98,7 @@ dependencies {
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.kotlinx.collections.immutable)
 
 }
 

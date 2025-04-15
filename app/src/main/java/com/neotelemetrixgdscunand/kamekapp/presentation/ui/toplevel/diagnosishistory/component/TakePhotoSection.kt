@@ -60,10 +60,9 @@ fun TakePhotoSection(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
         modifier = cardModifier,
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-            contentColor = Color.White
-        ),
-
+                containerColor = Color.White,
+                contentColor = Color.White
+            ),
         ) {
 
         Column(

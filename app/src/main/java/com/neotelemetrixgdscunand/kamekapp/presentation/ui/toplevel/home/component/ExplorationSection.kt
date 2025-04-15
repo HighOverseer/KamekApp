@@ -29,7 +29,6 @@ fun ExplorationSection(
     showSnackbar: (String) -> Unit = {}
 ) {
 
-
     Column(
         modifier,
     ) {
@@ -42,13 +41,15 @@ fun ExplorationSection(
         Spacer(Modifier.height(16.dp))
 
         val configuration = LocalConfiguration.current
-        val orientation = remember(configuration) {
-            configuration.orientation
+        val horizontalArrangement = remember {
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Arrangement.SpaceBetween
+            } else Arrangement.SpaceAround
         }
 
         Row(
             Modifier.fillMaxWidth(),
-            horizontalArrangement = if (orientation == Configuration.ORIENTATION_PORTRAIT) Arrangement.SpaceBetween else Arrangement.SpaceAround
+            horizontalArrangement = horizontalArrangement
         ) {
             ExplorationMenu(
                 iconResId = R.drawable.ic_weather_menu,
