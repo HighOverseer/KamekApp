@@ -24,11 +24,12 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45Alpha70
 @Composable
 fun ScrollUpButton(
     modifier: Modifier = Modifier, onClick: () -> Unit = { },
-    lazyListStateProvider: () -> LazyListState
+    lazyListStateProvider: () -> LazyListState,
+    indexItemThreshold:Int = 0
 ) {
     val isScrollUpButtonVisible by remember {
         derivedStateOf {
-            lazyListStateProvider().firstVisibleItemIndex > 0
+            lazyListStateProvider().firstVisibleItemIndex > indexItemThreshold
         }
     }
 

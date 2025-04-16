@@ -1,17 +1,10 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +18,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.account.AccountScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.DiagnosisScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeScreen
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,65 +31,42 @@ fun MainPage(
     navigateToNewsDetail: () -> Unit = {},
     navigateToDiagnosisResult: (Int) -> Unit = {},
     navigateToNotification: () -> Unit = {},
-    navigateToTakePhoto: () -> Unit = {}
+    navigateToTakePhoto: () -> Unit = {},
+    showSnackbar: (String) -> Unit = {}
 ) {
 
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
-    val coroutineScope = rememberCoroutineScope()
-    val showSnackbar: (String) -> Unit = remember {
-        { message: String ->
-            coroutineScope.launch {
-                snackbarHostState.showSnackbar(message)
-            }
-        }
-    }
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val shouldShowTopAppBar by state.shouldShowTopAppBar
-    val scaffoldModifier = remember(shouldShowTopAppBar) {
-        if (shouldShowTopAppBar) {
-            modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-        } else modifier
-    }
+    val scrollBehavior = state.exitUntilCollapsedScrollBehavior
 
     Scaffold(
-        modifier = scaffoldModifier,
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         containerColor = Grey90,
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    Text(data.visuals.message)
-                }
-            )
-        },
         topBar = {
-            state.HandleTopAppBarInitialExpandedHeightEffect(
-                scrollBehaviorProvider = { scrollBehavior }
+            state.HandleTopAppBarInitialExpandedHeightEffect()
+
+            DiagnosisTopAppBar(
+                isVisibleProvider = { state.isTopBarShown },
+                scrollBehavior = scrollBehavior,
+                onClick = navigateToTakePhoto,
+                visibilityAnimationDurationMillis = MainPageState
+                    .TopAppBarVisibilityAnimationDurationMillis
             )
 
-            AnimatedVisibility(shouldShowTopAppBar) {
-                DiagnosisTopAppBar(
-                    scrollBehaviourProvider = { scrollBehavior },
-                    onClick = navigateToTakePhoto
-                )
-            }
         },
         bottomBar = {
+            val currentSelectedAndNavigateTopLevelRoute by state.currentSelectedAndNavigatedTopLevelRoute
             val navigationBarItems = state.navigationBarItems
-            val currentTopLevelRoute by state.currentSelectedTopLevelRoute
-            val isInTopLevel = currentTopLevelRoute != null
+            val isInTopLevel = currentSelectedAndNavigateTopLevelRoute != null
 
             if (isInTopLevel) {
                 BottomNavigationBar(
                     navigationBarItems = navigationBarItems,
-                    currentSelectedRoute = currentTopLevelRoute,
-                    onSelectedNavigation = { nextDestination ->
+                    selectedNavigationProvider = {
+                        state.currentJustSelectedTopLevelRoute ?: currentSelectedAndNavigateTopLevelRoute
+                    },
+                    onSelectedNavigation = { selectedNavigation ->
                         state.navigateToTopLevel(
-                            nextDestination,
-                            currentTopLevelRoute
+                            selectedNavigation,
+                            currentSelectedAndNavigateTopLevelRoute
                         )
                     }
                 )
@@ -123,9 +92,7 @@ fun MainPage(
             composable<Navigation.Main.Diagnosis> {
                 DiagnosisScreen(
                     navigateToDiagnosisResult = navigateToDiagnosisResult,
-                    expandTopAppBar = {
-                        scrollBehavior.state.heightOffset = 0f
-                    },
+                    expandTopAppBar = state::expandTopAppBar,
                 )
             }
 

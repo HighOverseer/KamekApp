@@ -6,7 +6,9 @@ import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.immutableListOf
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +28,7 @@ class DiagnosisViewModel @Inject constructor(
 
     val diagnosisHistoryPreview: StateFlow<ImmutableList<DiagnosisSessionPreview>> =
         repository.getAllSavedDiagnosisSessionPreviews()
-            .map { it.toPersistentList() }
+            .map { it.toImmutableList() }
             .flowOn(Dispatchers.Default)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), persistentListOf())
 

@@ -3,6 +3,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,18 +36,20 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
-    isActive: Boolean = false,
     queryProvider: () -> String = { "" },
     onQueryChange: (String) -> Unit = {},
     hint: String = "",
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     backgroundColor: Color = Color.White
 ) {
+
+    val isSearchBarFocused by interactionSource.collectIsFocusedAsState()
+
     val localModifier = remember {
         modifier
             .fillMaxWidth()
             .border(
-                color = if (isActive) Maroon55 else Color.Transparent,
+                color = if (isSearchBarFocused) Maroon55 else Color.Transparent,
                 width = 1.dp,
                 shape = RoundedCornerShape(8.dp)
             )
@@ -68,12 +72,12 @@ fun SearchBar(
                     imageVector = ImageVector
                         .vectorResource(R.drawable.ic_search),
                     contentDescription = null,
-                    tint = if (isActive) Black10 else Grey60
+                    tint = if (isSearchBarFocused) Black10 else Grey60
                 )
 
                 Spacer(Modifier.width(8.dp))
 
-                if (!isActive && queryProvider().isEmpty()) {
+                if (!isSearchBarFocused && queryProvider().isEmpty()) {
                     Text(
                         text = hint,
                         style = MaterialTheme.typography.labelMedium,

@@ -3,12 +3,14 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,6 +37,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.rememberMain
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.WeatherScreen
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KamekApp(
     modifier: Modifier = Modifier,
@@ -122,13 +125,19 @@ fun KamekApp(
 
             composable<Navigation.Main> {
                 val mainNavController = rememberNavController()
+                val topAppBarState = rememberTopAppBarState()
+                val mainPageCoroutineScope = rememberCoroutineScope()
+
                 val state = rememberMainPageState(
                     navHostController = mainNavController,
+                    topAppBarState = topAppBarState,
+                    coroutineScope = mainPageCoroutineScope,
                 )
 
                 MainPage(
                     state = state,
                     mainNavHostController = mainNavController,
+                    showSnackbar = showSnackbar,
                     navigateToNews = {
                         rootNavHostController.navigate(
                             Navigation.News
@@ -174,7 +183,7 @@ fun KamekApp(
 
             composable<Navigation.TakePhoto> {
                 TakePhotoScreen(
-                    provideIsCameraPermissionGranted = appState.provideIsCameraPermissionGranted,
+                    isCameraPermissionGrantedProvider = appState.isCameraPermissionGrantedProvider,
                     showSnackBar = showSnackbar,
                     navigateUp = rootNavHostController::navigateUp,
                     navigateToResult = { newSessionName, newUnsavedSessionImagePath ->

@@ -32,7 +32,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFi
 
 @Composable
 fun TextFieldConfirmationDialog(
-    name: String = "",
+    textProvider: () -> String = { "" },
     onValueNameChange: (String) -> Unit = {},
     hintText: String = "",
     state: TextFieldConfirmationDialogState = TextFieldConfirmationDialogState(
@@ -66,7 +66,7 @@ fun TextFieldConfirmationDialog(
 
                     PrimaryTextField(
                         contentPadding = PaddingValues(vertical = 13.5.dp, horizontal = 16.dp),
-                        value = name,
+                        value = textProvider(),
                         hintText = hintText,
                         onValueChange = onValueNameChange,
                         textColor = Black10,

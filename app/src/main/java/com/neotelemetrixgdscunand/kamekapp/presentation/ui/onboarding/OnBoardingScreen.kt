@@ -2,9 +2,13 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,9 +32,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,11 +47,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -53,6 +65,9 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey71
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -61,11 +76,59 @@ fun OnBoardingScreen(
     navigateUp: () -> Unit = { },
     navigateToMainPage: () -> Unit = {}
 ) {
-    var selectedTabIndex by remember {
+    var selectedTabIndex by rememberSaveable{
         mutableIntStateOf(0)
     }
 
-    val constraints = rememberConstraintSet(selectedTabIndex)
+    val constraints = rememberConstraintSet()
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp =
+        configuration.screenHeightDp.dp
+    val screenWidthDp =
+        configuration.screenWidthDp.dp
+
+    val birdLeftCloudYOffset = remember {
+        Animatable(0f)
+    }
+
+    val birdLeftParentXOffset = remember {
+        Animatable(0f)
+    }
+
+    val leftCloudParentXOffset = remember {
+        Animatable(0f)
+    }
+
+    val rightCloudParentXOffset = remember {
+        Animatable(0f)
+    }
+
+    val density = LocalDensity.current
+    LaunchedEffect(selectedTabIndex) {
+        with(density){
+            val targetBirdToLeftCloudMargin =
+                getBirdToLeftCloudMargin(selectedTabIndex, screenHeightDp).toPx()
+            val targetBirdToParentMargin =
+                getBirdToParentMargin(selectedTabIndex, screenWidthDp).toPx()
+            val targetLeftCloudToParentMargin =
+                getLeftCloudToParentMargin(selectedTabIndex, screenWidthDp).toPx()
+            val targetRightCloudToParentMargin =
+                getRightCloudToParentMargin(selectedTabIndex, screenWidthDp).toPx()
+
+            val animationSpec = spring<Float>(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+
+            val birdLeftCloudAnim = async { birdLeftCloudYOffset.animateTo(targetBirdToLeftCloudMargin, animationSpec) }
+            val birdToParentAnim = async { birdLeftParentXOffset.animateTo(targetBirdToParentMargin, animationSpec) }
+            val leftCloudToParentAnim = async { leftCloudParentXOffset.animateTo(targetLeftCloudToParentMargin, animationSpec) }
+            val rightCloudToParentAnim = async { rightCloudParentXOffset.animateTo(targetRightCloudToParentMargin, animationSpec) }
+
+            awaitAll(birdLeftCloudAnim, birdToParentAnim, leftCloudToParentAnim, rightCloudToParentAnim)
+        }
+    }
 
     val onBoardingImageResId = remember(selectedTabIndex) {
         when (selectedTabIndex) {
@@ -119,11 +182,16 @@ fun OnBoardingScreen(
             (configuration.screenWidthDp * 0.456f).dp
         }
 
-
         Image(
             modifier = Modifier
                 .width(birdWidth)
                 .aspectRatio(birdAspectRatio)
+                .offset {
+                    IntOffset(
+                        x = birdLeftParentXOffset.value.roundToInt(),
+                        y = -birdLeftCloudYOffset.value.roundToInt()
+                    )
+                }
                 .layoutId(LayoutUtil.BIRD_ID),
             painter = painterResource(R.drawable.bird),
             contentScale = ContentScale.Crop,
@@ -134,7 +202,14 @@ fun OnBoardingScreen(
             modifier = Modifier
                 .fillMaxHeight(rightCloudHeightRatio)
                 .fillMaxWidth(rightCloudWidthRatio)
-                .layoutId(LayoutUtil.RIGHT_CLOUD_ID),
+                .layoutId(LayoutUtil.RIGHT_CLOUD_ID)
+                .offset {
+                    IntOffset(
+                        x = -rightCloudParentXOffset.value.roundToInt(),
+                        y = 0
+                    )
+
+                },
             painter = painterResource(
                 R.drawable.right_cloud
             ),
@@ -144,10 +219,16 @@ fun OnBoardingScreen(
 
 
         Image(
-            modifier = Modifier
-                .fillMaxHeight(leftCloudHeightRatio)
+            modifier = Modifier.
+                fillMaxHeight(leftCloudHeightRatio)
                 .fillMaxWidth(leftCloudWidthRatio)
-                .layoutId(LayoutUtil.LEFT_CLOUD_ID),
+                .layoutId(LayoutUtil.LEFT_CLOUD_ID)
+                .offset {
+                    IntOffset(
+                        x = leftCloudParentXOffset.value.roundToInt(),
+                        y = 0
+                    )
+                },
             painter = painterResource(
                 R.drawable.left_cloud
             ),
@@ -155,10 +236,13 @@ fun OnBoardingScreen(
             contentScale = ContentScale.Crop
         )
 
-        Text(
-            modifier = Modifier
+        val headlineResIdModifier = remember(selectedTabIndex) {
+            Modifier
                 .fillMaxWidth()
-                .layoutId(LayoutUtil.HEADLINE_ID),
+                .layoutId(LayoutUtil.HEADLINE_ID)
+        }
+        Text(
+            modifier = headlineResIdModifier,
             textAlign = TextAlign.Center,
             text = stringResource(headlineResId),
             style = MaterialTheme.typography.headlineLarge,
@@ -166,12 +250,15 @@ fun OnBoardingScreen(
         )
 
 
-        AnimatedContent(
-            modifier = Modifier
+        val animatedContentModifier = remember {
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .aspectRatio(onBoardingImageAspectRatio)
-                .layoutId(LayoutUtil.ON_BOARDING_IMAGE_ID),
+                .layoutId(LayoutUtil.ON_BOARDING_IMAGE_ID)
+        }
+        AnimatedContent(
+            modifier = animatedContentModifier,
             targetState = onBoardingImageResId,
             label = ""
         ) { targetOnBoardingImageResId ->
@@ -205,7 +292,7 @@ fun OnBoardingScreen(
             horizontalArrangement = Arrangement.Center
 
         ) {
-            Box(
+            val firstBulletPointModifier = remember(selectedTabIndex) {
                 Modifier
                     .size(10.dp)
                     .clip(CircleShape)
@@ -214,9 +301,11 @@ fun OnBoardingScreen(
                             drawCircle(color = if (selectedTabIndex == 0) Orange90 else Grey71)
                         }
                     }
-            )
+            }
+            Box(firstBulletPointModifier)
             Spacer(Modifier.width(8.dp))
-            Box(
+
+            val secondBulletPointModifier = remember(selectedTabIndex) {
                 Modifier
                     .size(10.dp)
                     .clip(CircleShape)
@@ -225,9 +314,11 @@ fun OnBoardingScreen(
                             drawCircle(color = if (selectedTabIndex == 1) Orange90 else Grey71)
                         }
                     }
-            )
+            }
+            Box(secondBulletPointModifier)
             Spacer(Modifier.width(8.dp))
-            Box(
+
+            val thirdBulletPointModifier = remember(selectedTabIndex) {
                 Modifier
                     .size(10.dp)
                     .clip(CircleShape)
@@ -236,15 +327,20 @@ fun OnBoardingScreen(
                             drawCircle(color = if (selectedTabIndex == 2) Orange90 else Grey71)
                         }
                     }
-            )
+            }
+            Box(thirdBulletPointModifier)
         }
 
 
-        PrimaryButton(
-            modifier = Modifier
+        val buttonModifier = remember{
+            Modifier
                 .height(44.dp)
                 .widthIn(min = buttonWidthMin)
-                .layoutId(LayoutUtil.BUTTON_ID),
+                .layoutId(LayoutUtil.BUTTON_ID)
+        }
+
+        PrimaryButton(
+            modifier = buttonModifier,
             contentPadding = PaddingValues(horizontal = 40.dp, vertical = 12.5.dp),
             text = if (selectedTabIndex < 2) {
                 stringResource(R.string.selanjutnya)
@@ -269,93 +365,56 @@ fun OnBoardingScreen(
     }
 }
 
+val getBirdToLeftCloudMargin = { selectedTabIndex:Int, screenHeightDp: Dp ->
+    val leftCloudHeightToParentRatio = 0.1138f
+    val cloudHeight = screenHeightDp * leftCloudHeightToParentRatio
+    val birdToLeftCloudMarginRatio = when (selectedTabIndex) {
+        0 -> 0f
+        1 -> -0.75f
+        else -> -0.9f
+    }
+    cloudHeight * birdToLeftCloudMarginRatio
+}
+
+val getBirdToParentMargin = { selectedTabIndex: Int, screenWidthDp: Dp ->
+    val birdToParentMarginRatio = when (selectedTabIndex) {
+        0 -> 0.135f
+        1 -> 0.3f
+        else -> 0.76f
+    }
+    (screenWidthDp * birdToParentMarginRatio)
+}
+
+val getLeftCloudToParentMargin = { selectedTabIndex: Int, screenWidthDp: Dp ->
+    val leftCloudWidthEstimation = (screenWidthDp * 0.55f)
+    val ratio = when (selectedTabIndex) {
+        0 -> 0f
+        1 -> -0.45f
+        else -> -0.7f
+    }
+    (leftCloudWidthEstimation * ratio)
+}
+
+val getRightCloudToParentMargin = { selectedTabIndex: Int, screenWidthDp: Dp ->
+    val rightCloudWidthEstimation = (screenWidthDp * 0.40f)
+    val ratio = when (selectedTabIndex) {
+        0, 1 -> -0.2f
+        else -> 0f
+    }
+    (rightCloudWidthEstimation * ratio)
+}
+
 @Composable
-private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
+private fun rememberConstraintSet(): ConstraintSet {
     val configuration = LocalConfiguration.current
-    val screenWidthDp = remember {
-        configuration.screenWidthDp.dp
-    }
-    val screenHeightDp = remember {
-        configuration.screenHeightDp.dp
-    }
+    return remember{
+        val screenHeightDp =
+            configuration.screenHeightDp.dp
 
-    val birdToLeftCloudMargin = remember(selectedTabIndex) {
-        val leftCloudHeightToParentRatio = 0.1138f
-        val cloudHeight = screenHeightDp * leftCloudHeightToParentRatio
-        val birdToLeftCloudMarginRatio = when (selectedTabIndex) {
-            0 -> 0f
-            1 -> -0.75f
-            else -> -0.9f
-        }
-        cloudHeight * birdToLeftCloudMarginRatio
-    }
+        val screenWidthDp =
+            configuration.screenWidthDp.dp
 
-    val birdToParentMargin = remember(selectedTabIndex) {
-        val birdToParentMarginRatio = when (selectedTabIndex) {
-            0 -> 0.135f
-            1 -> 0.3f
-            else -> 0.76f
-        }
-        (screenWidthDp * birdToParentMarginRatio)
-    }
 
-    val leftCloudToParentMargin = remember(selectedTabIndex) {
-        val leftCloudWidthEstimation = (screenWidthDp * 0.55f)
-        val ratio = when (selectedTabIndex) {
-            0 -> 0f
-            1 -> -0.45f
-            else -> -0.7f
-        }
-        (leftCloudWidthEstimation * ratio)
-    }
-
-    val rightCloudToParentMargin = remember(selectedTabIndex) {
-        val rightCloudWidthEstimation = (screenWidthDp * 0.40f)
-        val ratio = when (selectedTabIndex) {
-            0, 1 -> -0.2f
-            else -> 0f
-        }
-        (rightCloudWidthEstimation * ratio)
-    }
-
-    val animateRightCloudToParentMargin by animateDpAsState(
-        targetValue = rightCloudToParentMargin,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = ""
-    )
-
-    val animateLeftCloudToParentMargin by animateDpAsState(
-        targetValue = leftCloudToParentMargin,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = ""
-    )
-
-    val animateBirdToParentMargin by animateDpAsState(
-        targetValue = birdToParentMargin,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = ""
-    )
-
-    val animateBirdToLeftCloudMargin by animateDpAsState(
-        targetValue = birdToLeftCloudMargin,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = ""
-    )
-
-    // Just Need One To Trigger
-    return remember(animateBirdToParentMargin) {
         val rightCloudToLeftCloudMarginRatio = -0.0356f
         val rightCloudToLeftCloudMargin = (rightCloudToLeftCloudMarginRatio * screenHeightDp)
 
@@ -374,16 +433,16 @@ private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
 
             constrain(leftCloud) {
                 bottom.linkTo(headline.top, margin = leftCloudToHeadlineMargin)
-                start.linkTo(parent.start, margin = animateLeftCloudToParentMargin)
+                start.linkTo(parent.start, margin = getLeftCloudToParentMargin(0, screenWidthDp))
             }
 
             constrain(bird) {
-                start.linkTo(parent.start, margin = animateBirdToParentMargin)
-                bottom.linkTo(leftCloud.top, margin = animateBirdToLeftCloudMargin)
+                start.linkTo(parent.start, margin = getBirdToParentMargin(0, screenWidthDp))
+                bottom.linkTo(leftCloud.top, margin = getBirdToLeftCloudMargin(0, screenHeightDp))
             }
 
             constrain(rightCloud) {
-                end.linkTo(parent.end, margin = animateRightCloudToParentMargin)
+                end.linkTo(parent.end, margin = getRightCloudToParentMargin(0, screenWidthDp))
                 bottom.linkTo(leftCloud.top, margin = rightCloudToLeftCloudMargin)
             }
 
@@ -414,7 +473,7 @@ private fun rememberConstraintSet(selectedTabIndex: Int): ConstraintSet {
 
 @Preview(showBackground = true)
 @Composable
-private fun OnBoardingScreenPreview() {
+private fun OnBoardingScreenPreview2() {
     KamekAppTheme {
         OnBoardingScreen()
     }

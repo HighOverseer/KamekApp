@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -37,9 +38,11 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.compone
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.PriceInfoSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.SectionHeadline
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsItem
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun HomeScreen(
@@ -84,8 +87,8 @@ fun HomeContent(
 ) {
 
 
-    val weeklyNewsItems = remember {
-        getDummyWeeklyNewsItems()
+    val weeklyNewsItems:ImmutableList<WeeklyNewsItem> = remember {
+        getDummyWeeklyNewsItems().toImmutableList()
     }
 
     val scrollState = rememberScrollState()
@@ -192,6 +195,15 @@ fun HomeContent(
                 )
             }
         }
+
+//        weeklyNewsItems.forEach {
+//            key(it.id) {
+//                WeeklyNews(
+//                    modifier = weeklyItemModifier,
+//                    item = it
+//                )
+//            }
+//        }
     }
 }
 

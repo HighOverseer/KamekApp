@@ -48,6 +48,36 @@ fun getDummyWeeklyNewsItems(): List<WeeklyNewsItem> {
             imageUrl = imageUrlItems[4],
             date = "October 14, 2024",
         ),
+        WeeklyNewsItem(
+            id = 5,
+            title = "Chocolate Faces Shortages, Cocoa Prices Soar by 98% in 3 Months",
+            imageUrl = imageUrlItems[0],
+            date = "March 22, 2024",
+        ),
+        WeeklyNewsItem(
+            id = 6,
+            title = "Definition, Symptoms, and Types of Diseases in Plant Growth",
+            imageUrl = imageUrlItems[1],
+            date = "May 10, 2024",
+        ),
+        WeeklyNewsItem(
+            id = 7,
+            title = "Cocoa Shortages in West Africa",
+            imageUrl = imageUrlItems[2],
+            date = "September 21, 2024",
+        ),
+        WeeklyNewsItem(
+            id = 8,
+            title = "Indonesia's Cocoa Industry Faces Challenges",
+            imageUrl = imageUrlItems[3],
+            date = "October 2, 2024",
+        ),
+        WeeklyNewsItem(
+            id = 9,
+            title = "Cocoa Farmers in Indonesia Struggling with Climate Change and Pest Infestations",
+            imageUrl = imageUrlItems[4],
+            date = "October 14, 2024",
+        ),
     )
 
 }

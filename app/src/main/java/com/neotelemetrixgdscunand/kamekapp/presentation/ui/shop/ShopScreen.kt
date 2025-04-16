@@ -122,7 +122,6 @@ fun ShopScreen(
             val searchBarInteractionSource = remember {
                 MutableInteractionSource()
             }
-            val isSearchBarFocused by searchBarInteractionSource.collectIsFocusedAsState()
 
             var searchQuery by remember {
                 mutableStateOf("")
@@ -140,7 +139,6 @@ fun ShopScreen(
                 backgroundColor = Grey90,
                 hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
                 interactionSource = searchBarInteractionSource,
-                isActive = isSearchBarFocused,
             )
 
             Spacer(Modifier.height(8.dp))

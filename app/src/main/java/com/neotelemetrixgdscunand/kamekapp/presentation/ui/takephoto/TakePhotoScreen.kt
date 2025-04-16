@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.BottomBarTakePhoto
@@ -34,7 +35,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 fun TakePhotoScreen(
     modifier: Modifier = Modifier,
     viewModel: TakePhotoViewModel = hiltViewModel(),
-    provideIsCameraPermissionGranted: () -> Boolean? = { true },
+    isCameraPermissionGrantedProvider: () -> Boolean? = { false },
     showSnackBar: (String) -> Unit = {},
     navigateUp: () -> Unit = {},
     navigateToResult: (String, String) -> Unit = { _, _ -> },
@@ -43,7 +44,7 @@ fun TakePhotoScreen(
 ) {
     val context = LocalContext.current
     val cameraPermissionRequest = rememberCameraPermissionRequest()
-    val isCameraPermissionGranted = provideIsCameraPermissionGranted()
+    val isCameraPermissionGranted = isCameraPermissionGrantedProvider()
     val permissionDeniedMessage = stringResource(R.string.fitur_tidak_bisa_diakses)
 
     LaunchedEffect(isCameraPermissionGranted) {
@@ -150,13 +151,11 @@ fun TakePhotoContent(
                 }
             )
         }
-
-
     }
 
     TextFieldConfirmationDialog(
+        textProvider = { textFieldConfirmationDialogState.confirmationText },
         state = textFieldConfirmationDialogState,
-        name = textFieldConfirmationDialogState.confirmationText,
         hintText = stringResource(R.string.masukan_nama_foto_disini),
         onValueNameChange = {
             if (it.length < 50) {

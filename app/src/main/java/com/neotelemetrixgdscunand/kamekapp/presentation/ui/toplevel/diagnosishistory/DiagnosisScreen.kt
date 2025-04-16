@@ -46,6 +46,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishis
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchHistoryCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
@@ -105,7 +106,7 @@ fun DiagnosisContent(
                     date = "12-05-2024",
                     predictedPrice = 1400f
                 )
-            }.toPersistentList()
+            }.toImmutableList()
         }
         LazyColumn(
             modifier = lazyColumnModifier,
@@ -132,7 +133,6 @@ fun DiagnosisContent(
                         MutableInteractionSource()
                     }
 
-                    val isSearchBarFocused by searchBarInteractionSource.collectIsFocusedAsState()
                     var searchQuery by remember {
                         mutableStateOf("")
                     }
@@ -143,7 +143,6 @@ fun DiagnosisContent(
                         },
                         hint = stringResource(R.string.cari_histori_hasil_diagnosis),
                         interactionSource = searchBarInteractionSource,
-                        isActive = isSearchBarFocused,
                     )
 
                     Spacer(Modifier.height(12.dp))
@@ -215,7 +214,7 @@ private fun DiagnosisScreenPreview() {
                     date = "12-05-2024",
                     predictedPrice = 1400f
                 )
-            }.toPersistentList()
+            }.toImmutableList()
         )
     }
 

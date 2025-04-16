@@ -43,7 +43,7 @@ class KamekAppState(
     private val rootNavHostController: NavHostController
 ) {
     private var isCameraPermissionGranted by mutableStateOf<Boolean?>(null)
-    val provideIsCameraPermissionGranted = { isCameraPermissionGranted }
+    val isCameraPermissionGrantedProvider = { isCameraPermissionGranted }
 
     private fun hideStatusBar() {
         windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())

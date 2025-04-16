@@ -2,6 +2,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
@@ -30,7 +31,7 @@ fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     navigationBarItems: ImmutableList<NavigationBarItem> = persistentListOf(),
     onSelectedNavigation: (Navigation.Main.MainRoute) -> Unit = {},
-    currentSelectedRoute: Navigation.Main.MainRoute? = null
+    selectedNavigationProvider: @Composable () -> Navigation.Main.MainRoute? = { null }
 ) {
 
     BottomAppBar(
@@ -41,8 +42,9 @@ fun BottomNavigationBar(
             ),
         containerColor = Color.White
     ) {
+        val selectedNavigation = selectedNavigationProvider()
         navigationBarItems.forEach {
-            val isSelected = currentSelectedRoute == it.route
+            val isSelected = selectedNavigation == it.route
 
             NavigationBarItem(
                 colors = NavigationBarItemDefaults.colors(
@@ -78,6 +80,7 @@ fun BottomNavigationBar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun BottomNavigationBarPreview() {
