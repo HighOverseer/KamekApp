@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.NavigationBarItem
@@ -53,7 +52,7 @@ fun rememberMainPageState(
 @OptIn(ExperimentalMaterial3Api::class)
 class MainPageState(
     private val navHostController: NavHostController,
-    private val topAppBarState:TopAppBarState,
+    private val topAppBarState: TopAppBarState,
     private val coroutineScope: CoroutineScope
 ) {
 
@@ -80,7 +79,7 @@ class MainPageState(
     var currentJustSelectedTopLevelRoute by mutableStateOf<Navigation.Main.MainRoute?>(null)
         private set
 
-    val exitUntilCollapsedScrollBehavior:TopAppBarScrollBehavior
+    val exitUntilCollapsedScrollBehavior: TopAppBarScrollBehavior
         @Composable get() {
             val shouldShowTopAppBar by shouldShowTopAppBar
             return TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
@@ -102,7 +101,7 @@ class MainPageState(
     var isTopBarShown by mutableStateOf(false)
         private set
 
-    fun expandTopAppBar(){
+    fun expandTopAppBar() {
         topAppBarState.heightOffset = 0f
     }
 
@@ -118,20 +117,20 @@ class MainPageState(
         }
     }
 
-    private var navigationJob:Job? = null
+    private var navigationJob: Job? = null
     fun navigateToTopLevel(
         nextDestination: Navigation.Main.MainRoute,
         currentSelectedTopLevelRoute: Navigation.Main.MainRoute? = Navigation.Main.Home
     ) {
         if (currentSelectedTopLevelRoute == nextDestination) return
 
-        if(navigationJob != null) return
+        if (navigationJob != null) return
 
         navigationJob = coroutineScope.launch {
             this@MainPageState.currentJustSelectedTopLevelRoute = nextDestination
 
             val isExitingDiagnosisRoute = currentSelectedTopLevelRoute == Navigation.Main.Diagnosis
-            if(isExitingDiagnosisRoute){
+            if (isExitingDiagnosisRoute) {
                 isTopBarShown = false
                 delay(TopAppBarVisibilityAnimationDurationMillis.toLong())
             }
@@ -148,10 +147,8 @@ class MainPageState(
                 launchSingleTop = true
                 restoreState = true
             }
-        }.apply { invokeOnCompletion { navigationJob = null }}
+        }.apply { invokeOnCompletion { navigationJob = null } }
     }
-
-
 
 
     private fun getNavigationBarItems(): ImmutableList<NavigationBarItem> {
@@ -174,7 +171,7 @@ class MainPageState(
         )
     }
 
-    companion object{
+    companion object {
         const val TopAppBarVisibilityAnimationDurationMillis = 200
     }
 }

@@ -1,14 +1,8 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,10 +16,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -40,7 +32,6 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.TakePhotoSection
-import kotlinx.coroutines.delay
 
 private const val topAppBarSubComposeId = "topAppBar"
 
@@ -50,7 +41,7 @@ fun DiagnosisTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior,
     isVisibleProvider: () -> Boolean = { false },
-    visibilityAnimationDurationMillis:Int = DefaultDurationMillis,
+    visibilityAnimationDurationMillis: Int = DefaultDurationMillis,
     onClick: () -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
@@ -74,7 +65,7 @@ fun DiagnosisTopAppBar(
         isVisibleProvider(),
         animationSpec = tween(visibilityAnimationDurationMillis)
     ) { it ->
-        if(it){
+        if (it) {
             TopAppBar(
                 modifier = modifier,
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -132,7 +123,6 @@ fun DiagnosisTopAppBar(
             )
         }
     }
-
 
 
 }

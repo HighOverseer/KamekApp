@@ -4,11 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,9 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -76,7 +70,7 @@ fun OnBoardingScreen(
     navigateUp: () -> Unit = { },
     navigateToMainPage: () -> Unit = {}
 ) {
-    var selectedTabIndex by rememberSaveable{
+    var selectedTabIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
 
@@ -106,7 +100,7 @@ fun OnBoardingScreen(
 
     val density = LocalDensity.current
     LaunchedEffect(selectedTabIndex) {
-        with(density){
+        with(density) {
             val targetBirdToLeftCloudMargin =
                 getBirdToLeftCloudMargin(selectedTabIndex, screenHeightDp).toPx()
             val targetBirdToParentMargin =
@@ -121,12 +115,29 @@ fun OnBoardingScreen(
                 stiffness = Spring.StiffnessLow
             )
 
-            val birdLeftCloudAnim = async { birdLeftCloudYOffset.animateTo(targetBirdToLeftCloudMargin, animationSpec) }
-            val birdToParentAnim = async { birdLeftParentXOffset.animateTo(targetBirdToParentMargin, animationSpec) }
-            val leftCloudToParentAnim = async { leftCloudParentXOffset.animateTo(targetLeftCloudToParentMargin, animationSpec) }
-            val rightCloudToParentAnim = async { rightCloudParentXOffset.animateTo(targetRightCloudToParentMargin, animationSpec) }
+            val birdLeftCloudAnim =
+                async { birdLeftCloudYOffset.animateTo(targetBirdToLeftCloudMargin, animationSpec) }
+            val birdToParentAnim =
+                async { birdLeftParentXOffset.animateTo(targetBirdToParentMargin, animationSpec) }
+            val leftCloudToParentAnim = async {
+                leftCloudParentXOffset.animateTo(
+                    targetLeftCloudToParentMargin,
+                    animationSpec
+                )
+            }
+            val rightCloudToParentAnim = async {
+                rightCloudParentXOffset.animateTo(
+                    targetRightCloudToParentMargin,
+                    animationSpec
+                )
+            }
 
-            awaitAll(birdLeftCloudAnim, birdToParentAnim, leftCloudToParentAnim, rightCloudToParentAnim)
+            awaitAll(
+                birdLeftCloudAnim,
+                birdToParentAnim,
+                leftCloudToParentAnim,
+                rightCloudToParentAnim
+            )
         }
     }
 
@@ -219,8 +230,8 @@ fun OnBoardingScreen(
 
 
         Image(
-            modifier = Modifier.
-                fillMaxHeight(leftCloudHeightRatio)
+            modifier = Modifier
+                .fillMaxHeight(leftCloudHeightRatio)
                 .fillMaxWidth(leftCloudWidthRatio)
                 .layoutId(LayoutUtil.LEFT_CLOUD_ID)
                 .offset {
@@ -332,7 +343,7 @@ fun OnBoardingScreen(
         }
 
 
-        val buttonModifier = remember{
+        val buttonModifier = remember {
             Modifier
                 .height(44.dp)
                 .widthIn(min = buttonWidthMin)
@@ -365,7 +376,7 @@ fun OnBoardingScreen(
     }
 }
 
-val getBirdToLeftCloudMargin = { selectedTabIndex:Int, screenHeightDp: Dp ->
+val getBirdToLeftCloudMargin = { selectedTabIndex: Int, screenHeightDp: Dp ->
     val leftCloudHeightToParentRatio = 0.1138f
     val cloudHeight = screenHeightDp * leftCloudHeightToParentRatio
     val birdToLeftCloudMarginRatio = when (selectedTabIndex) {
@@ -407,7 +418,7 @@ val getRightCloudToParentMargin = { selectedTabIndex: Int, screenWidthDp: Dp ->
 @Composable
 private fun rememberConstraintSet(): ConstraintSet {
     val configuration = LocalConfiguration.current
-    return remember{
+    return remember {
         val screenHeightDp =
             configuration.screenHeightDp.dp
 

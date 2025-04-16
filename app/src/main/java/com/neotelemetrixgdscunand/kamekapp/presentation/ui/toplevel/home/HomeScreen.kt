@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -87,7 +86,7 @@ fun HomeContent(
 ) {
 
 
-    val weeklyNewsItems:ImmutableList<WeeklyNewsItem> = remember {
+    val weeklyNewsItems: ImmutableList<WeeklyNewsItem> = remember {
         getDummyWeeklyNewsItems().toImmutableList()
     }
 

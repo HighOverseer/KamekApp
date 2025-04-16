@@ -61,7 +61,8 @@ fun MainPage(
                 BottomNavigationBar(
                     navigationBarItems = navigationBarItems,
                     selectedNavigationProvider = {
-                        state.currentJustSelectedTopLevelRoute ?: currentSelectedAndNavigateTopLevelRoute
+                        state.currentJustSelectedTopLevelRoute
+                            ?: currentSelectedAndNavigateTopLevelRoute
                     },
                     onSelectedNavigation = { selectedNavigation ->
                         state.navigateToTopLevel(

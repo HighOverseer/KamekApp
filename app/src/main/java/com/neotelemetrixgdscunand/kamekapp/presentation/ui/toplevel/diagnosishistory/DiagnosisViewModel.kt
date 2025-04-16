@@ -6,10 +6,8 @@ import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.immutableListOf
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted

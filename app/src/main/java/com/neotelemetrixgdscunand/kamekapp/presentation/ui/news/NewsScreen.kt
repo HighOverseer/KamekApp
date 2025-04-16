@@ -52,7 +52,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
@@ -360,7 +359,7 @@ fun NewsScreen2(
                     }
                 )
             }
-        ){ innerPadding ->
+        ) { innerPadding ->
 
             var searchQuery by remember {
                 mutableStateOf("")
@@ -409,7 +408,7 @@ fun NewsScreen2(
                         Modifier
                             .fillMaxWidth()
                             .background(Grey90)
-                        .height(12.dp)
+                            .height(12.dp)
                     )
 
                     LazyRow(
