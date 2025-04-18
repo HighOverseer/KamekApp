@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
@@ -13,8 +13,15 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 fun DiagnosisResultHeaderSection(
     modifier: Modifier = Modifier,
     sessionName: String = "",
+    isLoadingProvider: () -> Boolean = { false }
 ) {
-    Column(
+    if(isLoadingProvider()){
+        DiagnosisResultHeaderSectionLoading(
+            modifier = modifier,
+            sessionName = sessionName
+        )
+
+    }else Column(
         modifier = modifier
     ) {
         Text(
@@ -23,6 +30,7 @@ fun DiagnosisResultHeaderSection(
             color = Black10
         )
     }
+
 }
 
 @Composable

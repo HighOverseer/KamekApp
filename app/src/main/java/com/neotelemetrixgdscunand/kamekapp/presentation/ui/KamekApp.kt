@@ -12,9 +12,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,7 +39,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.rememberMain
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.WeatherScreen
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KamekApp(
     modifier: Modifier = Modifier,
@@ -56,7 +57,8 @@ fun KamekApp(
         }
     }
 
-    appState.HandleStatusBarVisibilityEffect()
+    val shouldShowStatusBar by appState.shouldShowStatusBar.collectAsStateWithLifecycle()
+    appState.HandleStatusBarVisibilityEffect(shouldShowStatusBar)
 
     Scaffold(
         containerColor = Grey90,
@@ -125,19 +127,16 @@ fun KamekApp(
 
             composable<Navigation.Main> {
                 val mainNavController = rememberNavController()
-                val topAppBarState = rememberTopAppBarState()
                 val mainPageCoroutineScope = rememberCoroutineScope()
 
                 val state = rememberMainPageState(
                     navHostController = mainNavController,
-                    topAppBarState = topAppBarState,
                     coroutineScope = mainPageCoroutineScope,
                 )
 
                 MainPage(
                     state = state,
                     mainNavHostController = mainNavController,
-                    showSnackbar = showSnackbar,
                     navigateToNews = {
                         rootNavHostController.navigate(
                             Navigation.News
@@ -194,8 +193,8 @@ fun KamekApp(
                                 newUnsavedSessionImagePath = newUnsavedSessionImagePath
                             )
                         ) {
-                            popUpTo<Navigation.Main.Diagnosis> {
-                                inclusive = false
+                            popUpTo<Navigation.TakePhoto> {
+                                inclusive = true
                             }
                         }
                     },

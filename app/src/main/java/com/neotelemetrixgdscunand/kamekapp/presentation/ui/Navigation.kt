@@ -87,3 +87,4 @@ sealed interface Navigation {
         val detectedCacaoId: Int?
     ) : Route
 }
+

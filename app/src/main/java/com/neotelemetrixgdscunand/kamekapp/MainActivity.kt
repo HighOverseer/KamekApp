@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.rememberNavController
@@ -25,9 +26,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             KamekAppTheme {
                 val rootNavHostController = rememberNavController()
+                val coroutineScope = rememberCoroutineScope()
                 val appState = rememberKamekAppState(
+                    rootNavHostController,
+                    coroutineScope,
                     windowInsetsController,
-                    rootNavHostController
                 )
 
                 KamekApp(

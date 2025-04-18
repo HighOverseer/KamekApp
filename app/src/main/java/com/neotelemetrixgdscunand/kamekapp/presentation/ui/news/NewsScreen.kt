@@ -65,175 +65,9 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.compone
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun NewsScreen(
-    modifier: Modifier = Modifier,
-    navigateUp: () -> Unit = {},
-    navigateToDetail: () -> Unit = {}
-) {
-    val listState = rememberLazyListState()
-    val configuration = LocalConfiguration.current
-
-    var searchQuery by remember {
-        mutableStateOf("")
-    }
-
-    val searchBarInteractionSource = remember {
-        MutableInteractionSource()
-    }
-
-    var selectedNewsCategory by remember {
-        mutableStateOf(NewsCategory.ALL)
-    }
-
-    var newsItems = remember {
-        getDummyWeeklyNewsItems()
-    }
-
-    val weeklyItemModifier = remember {
-        Modifier
-            .padding(start = 16.dp, end = 16.dp)
-    }
-
-
-    Box {
-        val imageBackgroundSize = remember {
-            val imageAspectRatio = when (configuration.orientation) {
-                Configuration.ORIENTATION_PORTRAIT -> 0.205f
-                else -> 0.5f
-            }
-            (configuration.screenHeightDp * imageAspectRatio).dp
-        }
-        Image(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .width(imageBackgroundSize)
-                .aspectRatio(0.655f),
-            painter = painterResource(R.drawable.news_bg),
-            contentScale = ContentScale.FillBounds,
-            contentDescription = null
-        )
-
-        val topMargin = remember {
-            val topMarginRatio = 0.035f
-            (topMarginRatio * configuration.screenHeightDp).dp
-        }
-
-        LazyColumn(
-            modifier = modifier,
-            contentPadding = PaddingValues(top = topMargin, bottom = 32.dp),
-            state = listState,
-        ) {
-
-            item {
-                IconButton(
-                    modifier = Modifier
-                        .padding(start = 8.dp),
-                    onClick = navigateUp,
-
-                    ) {
-                    Icon(
-                        modifier = Modifier
-                            .size(20.dp),
-                        imageVector = ImageVector
-                            .vectorResource(R.drawable.ic_arrow_left),
-                        contentDescription = stringResource(R.string.kembali),
-                        tint = Black10
-                    )
-                }
-            }
-
-            item {
-                Spacer(Modifier.height(16.dp))
-            }
-
-            item {
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    text = stringResource(R.string.dunia_tanaman),
-                    style = MaterialTheme.typography.displaySmall,
-                    color = Maroon55
-                )
-
-                Spacer(Modifier.height(8.dp))
-
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    text = stringResource(R.string.pelajari_dan_cari_cerita_terbaru_seputar_dunia_pertanian),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Grey60
-                )
-            }
-
-            item {
-                Spacer(Modifier.height(32.dp))
-            }
-
-
-            stickyHeader {
-                val listCategoryState = rememberLazyListState()
-
-                SearchBar(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    queryProvider = { searchQuery },
-                    onQueryChange = {
-                        searchQuery = it
-                    },
-                    hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
-                    interactionSource = searchBarInteractionSource
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                LazyRow(
-                    state = listCategoryState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = Grey90),
-                    contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(NewsCategory.entries, key = { it.ordinal }) {
-                        SearchCategory(
-                            isSelected = it == selectedNewsCategory,
-                            text = stringResource(it.textResId)
-                        )
-                    }
-                }
-            }
-
-            itemsIndexed(newsItems, key = { _, it -> it.id }) { index, item ->
-                Spacer(
-                    Modifier.height(
-                        if (index == 0) 8.dp else 16.dp
-                    )
-                )
-
-                WeeklyNews(
-                    modifier = weeklyItemModifier
-                        .clickable(onClick = navigateToDetail),
-                    item = item
-                )
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFF5F5F5)
-@Composable
-private fun NewsScreenPreview() {
-    KamekAppTheme {
-        NewsScreen()
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun NewsScreen2(
+fun NewsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
     navigateToDetail: () -> Unit = {}
@@ -463,8 +297,8 @@ fun NewsScreen2(
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F5F5)
 @Composable
-private fun NewsScreenPreview2() {
+private fun NewsScreenPreview() {
     KamekAppTheme {
-        NewsScreen2()
+        NewsScreen()
     }
 }

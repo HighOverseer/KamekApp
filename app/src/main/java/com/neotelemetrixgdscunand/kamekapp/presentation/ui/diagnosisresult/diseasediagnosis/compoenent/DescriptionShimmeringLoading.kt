@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer

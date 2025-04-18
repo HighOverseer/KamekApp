@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,11 +29,14 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseCacaos
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun DetectedCacaoImageGrid(
     modifier: Modifier = Modifier,
-    detectedCacaos: List<DetectedCacao> = listOf(),
+    detectedCacaos: ImmutableList<DetectedCacao> = persistentListOf(),
     onItemClicked: (Int) -> Unit = { }
 ) {
 
@@ -99,7 +102,7 @@ private fun DetectedCacaoImageGridPreview() {
     KamekAppTheme {
         Column(Modifier.wrapContentSize()) {
             DetectedCacaoImageGrid(
-                detectedCacaos = getDetectedDiseaseCacaos()
+                detectedCacaos = getDetectedDiseaseCacaos().toImmutableList()
             )
         }
     }

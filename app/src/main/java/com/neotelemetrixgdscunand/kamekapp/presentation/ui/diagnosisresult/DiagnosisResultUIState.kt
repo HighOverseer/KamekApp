@@ -1,9 +1,10 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult
 
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
 
 data class DiagnosisResultUIState(
     val isLoading: Boolean = false,
-    val diagnosisSession: DiagnosisSession = DiagnosisSession(),
+    val diagnosisSession: DiagnosisSessionComposeStable = DiagnosisSessionComposeStable(),
     val imagePreviewPath: String? = null
 )

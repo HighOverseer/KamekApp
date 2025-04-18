@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -95,17 +96,6 @@ fun DiagnosisContent(
         }
         val parentListState = rememberLazyListState()
 
-        val list = remember {
-            List(10) {
-                DiagnosisSessionPreview(
-                    id = it,
-                    title = "Example",
-                    imageUrlOrPath = "",
-                    date = "12-05-2024",
-                    predictedPrice = 1400f
-                )
-            }.toImmutableList()
-        }
         LazyColumn(
             modifier = lazyColumnModifier,
             state = parentListState,
@@ -116,6 +106,7 @@ fun DiagnosisContent(
                     Modifier
                         .padding(horizontal = 16.dp)
                         .background(Grey90)
+                        .wrapContentSize()
                 ) {
                     Spacer(Modifier.height(16.dp))
 
@@ -166,7 +157,7 @@ fun DiagnosisContent(
 
                 Spacer(Modifier.height(8.dp))
             }
-            items(list, key = { it.id }, contentType = { it::class }) { item ->
+            items(diagnosisSessionPreviews, key = { it.id }, contentType = { it::class }) { item ->
                 DiagnosisHistory(
                     modifier = Modifier
                         .fillMaxWidth()

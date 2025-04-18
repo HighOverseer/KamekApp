@@ -14,33 +14,47 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberKamekAppState(
+    rootNavHostController: NavHostController = rememberNavController(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     windowInsetsController: WindowInsetsControllerCompat,
-    rootNavHostController: NavHostController
 ): KamekAppState {
     return remember(
+        rootNavHostController,
+        coroutineScope,
         windowInsetsController,
-        rootNavHostController
     ) {
         KamekAppState(
+            rootNavHostController,
+            coroutineScope,
             windowInsetsController,
-            rootNavHostController
         )
     }
 }
 
 @Stable
 class KamekAppState(
+    rootNavHostController: NavHostController,
+    coroutineScope: CoroutineScope,
     private val windowInsetsController: WindowInsetsControllerCompat,
-    private val rootNavHostController: NavHostController
 ) {
     private var isCameraPermissionGranted by mutableStateOf<Boolean?>(null)
     val isCameraPermissionGrantedProvider = { isCameraPermissionGranted }
@@ -77,29 +91,42 @@ class KamekAppState(
         } else isCameraPermissionGranted = true
     }
 
-    private val currentRoute: State<String?>
-        @Composable get() {
-            val navBackStackEntry by rootNavHostController.currentBackStackEntryAsState()
-            return remember {
-                derivedStateOf {
-                    navBackStackEntry?.destination?.route
-                }
+    private val currentRouteStringVal:StateFlow<String?> =
+        rootNavHostController.currentBackStackEntryFlow
+            .map { value: NavBackStackEntry ->
+                value.destination.route
             }
-        }
+            .stateIn(
+                coroutineScope,
+                SharingStarted.WhileSubscribed(5000L),
+                null
+            )
 
-    private val shouldShowStatusBar: State<Boolean>
-        @Composable get() {
-            val currentRoute by currentRoute
-            return remember {
-                derivedStateOf {
-                    currentRoute != Navigation.TakePhoto.stringVal
-                }
+//    private val currentRouteStringVal:StateFlow<Navigation.Route?> =
+//        rootNavHostController.currentBackStackEntryFlow
+//            .map { value: NavBackStackEntry ->
+//                value.toRoute<Navigation.Route>()
+//            }
+//            .stateIn(
+//                coroutineScope,
+//                SharingStarted.WhileSubscribed(5000L),
+//                null
+//            )
+
+    val shouldShowStatusBar:StateFlow<Boolean> =
+        currentRouteStringVal
+            .map { value ->
+                value != Navigation.TakePhoto.stringVal
             }
-        }
+            .distinctUntilChanged()
+            .stateIn(
+                coroutineScope,
+                SharingStarted.WhileSubscribed(5000L),
+                true
+            )
 
     @Composable
-    fun HandleStatusBarVisibilityEffect() {
-        val shouldShowStatusBar by shouldShowStatusBar
+    fun HandleStatusBarVisibilityEffect(shouldShowStatusBar: Boolean) {
         LaunchedEffect(shouldShowStatusBar) {
             if (shouldShowStatusBar) {
                 showStatusBar()

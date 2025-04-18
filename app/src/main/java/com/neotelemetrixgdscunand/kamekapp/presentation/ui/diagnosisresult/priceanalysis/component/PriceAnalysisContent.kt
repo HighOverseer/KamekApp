@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,17 +28,25 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange80
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.SecondaryDescription
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.TitleShimmeringLoading
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DescriptionShimmeringLoading
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toImmutableMap
 
 @Composable
 fun PriceAnalysisContent(
     modifier: Modifier = Modifier,
     isInitiallyExpanded: Boolean = true,
-    diagnosisSession: DiagnosisSession,
+    groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
+        mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
     damageLevelCategory: DamageLevelCategory = DamageLevelCategory.High,
     onDetectedCacaoImageClicked: (Int) -> Unit = { }
 ) {
@@ -105,7 +113,7 @@ fun PriceAnalysisContent(
             Spacer(Modifier.height(24.dp))
 
             PriceAnalysisDetails(
-                diagnosisSession = diagnosisSession,
+                groupedDetectedDisease = groupedDetectedDisease,
                 subDamageLevelSubCategory = damageLevelCategory.firstSubLevelCategory,
                 onDetectedCacaoImageClicked = onDetectedCacaoImageClicked
             )
@@ -113,7 +121,7 @@ fun PriceAnalysisContent(
             Spacer(Modifier.height(16.dp))
 
             PriceAnalysisDetails(
-                diagnosisSession = diagnosisSession,
+                groupedDetectedDisease = groupedDetectedDisease,
                 subDamageLevelSubCategory = damageLevelCategory.secondSubLevelCategory,
                 onDetectedCacaoImageClicked = onDetectedCacaoImageClicked
             )
@@ -121,7 +129,7 @@ fun PriceAnalysisContent(
             Spacer(Modifier.height(16.dp))
 
             PriceAnalysisDetails(
-                diagnosisSession = diagnosisSession,
+                groupedDetectedDisease = groupedDetectedDisease,
                 subDamageLevelSubCategory = damageLevelCategory.thirdSubLevelCategory,
                 onDetectedCacaoImageClicked = onDetectedCacaoImageClicked
             )
@@ -249,7 +257,7 @@ fun PriceAnalysisContentLoading(modifier: Modifier = Modifier) {
 @Composable
 private fun PriceAnalysisContentPreview() {
     KamekAppTheme {
-        PriceAnalysisContent(diagnosisSession = DiagnosisSession())
+        PriceAnalysisContent()
     }
 }
 

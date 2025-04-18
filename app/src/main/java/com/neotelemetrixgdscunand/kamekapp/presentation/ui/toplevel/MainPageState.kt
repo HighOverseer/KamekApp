@@ -1,22 +1,17 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
@@ -26,38 +21,36 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun rememberMainPageState(
     navHostController: NavHostController = rememberNavController(),
-    topAppBarState: TopAppBarState = rememberTopAppBarState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ): MainPageState {
     return remember(
         navHostController,
-        topAppBarState,
         coroutineScope
     ) {
         MainPageState(
             navHostController = navHostController,
-            topAppBarState = topAppBarState,
             coroutineScope = coroutineScope
         )
     }
 }
 
 @Stable
-@OptIn(ExperimentalMaterial3Api::class)
 class MainPageState(
     private val navHostController: NavHostController,
-    private val topAppBarState: TopAppBarState,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
 ) {
 
-    val navigationBarItems: ImmutableList<NavigationBarItem>
-        @Composable get() = remember { getNavigationBarItems() }
+    val bottomNavigationBarItems: ImmutableList<NavigationBarItem> = getNavigationBarItems()
 
     private val topLevelRoutesStringValMap = mapOf(
         Navigation.Main.Home.stringVal to Navigation.Main.Home,
@@ -65,52 +58,62 @@ class MainPageState(
         Navigation.Main.Account.stringVal to Navigation.Main.Account,
     )
 
-    val currentSelectedAndNavigatedTopLevelRoute: State<Navigation.Main.MainRoute?>
-        @Composable get() {
-            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-            return remember {
-                derivedStateOf {
-                    val currentRoute = navBackStackEntry?.destination?.route
+    private val currentSelectedAndNavigatedTopLevelRoute: StateFlow<Navigation.Main.MainRoute?> =
+        navHostController.currentBackStackEntryFlow
+                .map {
+                    val currentRoute = it.destination.route
                     topLevelRoutesStringValMap[currentRoute]
                 }
-            }
-        }
-
-    var currentJustSelectedTopLevelRoute by mutableStateOf<Navigation.Main.MainRoute?>(null)
-        private set
-
-    val exitUntilCollapsedScrollBehavior: TopAppBarScrollBehavior
-        @Composable get() {
-            val shouldShowTopAppBar by shouldShowTopAppBar
-            return TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-                topAppBarState,
-                canScroll = { shouldShowTopAppBar }
+                .distinctUntilChanged()
+            .stateIn(
+                coroutineScope,
+                SharingStarted.WhileSubscribed(5000L),
+                null
             )
-        }
 
-    private val shouldShowTopAppBar: State<Boolean>
-        @Composable get() {
-            val currentRoute by currentSelectedAndNavigatedTopLevelRoute
-            return remember {
-                derivedStateOf {
-                    currentRoute == Navigation.Main.Diagnosis
-                }
+    private var currentJustSelectedTopLevelRoute by mutableStateOf<Navigation.Main.MainRoute?>(null)
+
+    val selectedBottomNavigationRoute:Navigation.Main.MainRoute?
+        get() = currentJustSelectedTopLevelRoute
+            ?: currentSelectedAndNavigatedTopLevelRoute.value
+            ?: topLevelRoutesStringValMap[navHostController.currentBackStackEntry?.destination?.route]
+
+    val shouldShowTopAppBar: StateFlow<Boolean> =
+        currentSelectedAndNavigatedTopLevelRoute
+            .map {
+                it == Navigation.Main.Diagnosis
             }
+            .stateIn(
+                coroutineScope,
+                SharingStarted.WhileSubscribed(5000L),
+                false
+            )
+
+    val isInTopLevel = currentSelectedAndNavigatedTopLevelRoute
+        .map {
+            it != null
         }
+        .distinctUntilChanged()
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(5000L),
+            false
+        )
 
     var isTopBarShown by mutableStateOf(false)
         private set
 
-    fun expandTopAppBar() {
-        topAppBarState.heightOffset = 0f
-    }
 
     @Composable
-    fun HandleTopAppBarInitialExpandedHeightEffect() {
-        val shouldShowTopAppBar by shouldShowTopAppBar
+    fun HandleTopAppBarInitialExpandedHeightEffect(
+        shouldShowTopAppBar:Boolean,
+        expandTopAppBar: () -> Unit = {}
+    ) {
         LaunchedEffect(shouldShowTopAppBar) {
             if (shouldShowTopAppBar) {
-                //Make sure Top App Bar Expanded Before AnimationVisibility start
+                //Wait for Navigation to Diagnosis Finished first
+                delay(TOP_APP_BAR_VISIBILITY_ANIMATION_DURATION_MILLIS.times(2).toLong())
+
                 expandTopAppBar()
                 isTopBarShown = true
             }
@@ -119,9 +122,10 @@ class MainPageState(
 
     private var navigationJob: Job? = null
     fun navigateToTopLevel(
-        nextDestination: Navigation.Main.MainRoute,
-        currentSelectedTopLevelRoute: Navigation.Main.MainRoute? = Navigation.Main.Home
+        nextDestination: Navigation.Main.MainRoute
     ) {
+        val currentSelectedTopLevelRoute = currentSelectedAndNavigatedTopLevelRoute.value
+
         if (currentSelectedTopLevelRoute == nextDestination) return
 
         if (navigationJob != null) return
@@ -132,7 +136,7 @@ class MainPageState(
             val isExitingDiagnosisRoute = currentSelectedTopLevelRoute == Navigation.Main.Diagnosis
             if (isExitingDiagnosisRoute) {
                 isTopBarShown = false
-                delay(TopAppBarVisibilityAnimationDurationMillis.toLong())
+                delay(TOP_APP_BAR_VISIBILITY_ANIMATION_DURATION_MILLIS.toLong())
             }
 
             navHostController.navigate(
@@ -172,6 +176,6 @@ class MainPageState(
     }
 
     companion object {
-        const val TopAppBarVisibilityAnimationDurationMillis = 200
+        const val TOP_APP_BAR_VISIBILITY_ANIMATION_DURATION_MILLIS = 200
     }
 }

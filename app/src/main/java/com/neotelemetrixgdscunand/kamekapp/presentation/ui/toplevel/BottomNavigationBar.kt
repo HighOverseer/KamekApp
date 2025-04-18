@@ -80,14 +80,14 @@ fun BottomNavigationBar(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Preview
 @Composable
 private fun BottomNavigationBarPreview() {
     KamekAppTheme {
         BottomNavigationBar(
             navigationBarItems = rememberMainPageState()
-                .navigationBarItems
+                .bottomNavigationBarItems
         )
     }
 }

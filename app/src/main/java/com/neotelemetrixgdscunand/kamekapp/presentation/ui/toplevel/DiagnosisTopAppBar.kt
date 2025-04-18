@@ -3,11 +3,15 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 import android.content.res.Configuration
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -26,12 +30,15 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.TakePhotoSection
+import org.tensorflow.lite.support.metadata.schema.Content
+import kotlin.math.exp
 
 private const val topAppBarSubComposeId = "topAppBar"
 
@@ -47,19 +54,28 @@ fun DiagnosisTopAppBar(
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
 
-    var expandedHeightPx by remember {
+    val initialHeightDp = remember {
         val screenHeightDp = configuration.screenHeightDp.dp
         val initialValueDp = when (configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> screenHeightDp / 2
             else -> screenHeightDp
         }
-        val initialValuePx = with(density) { initialValueDp.toPx() }
+        initialValueDp
+    }
+    var expandedHeightPx by remember {
+        val initialValuePx = with(density) { initialHeightDp.toPx() }
         mutableIntStateOf(initialValuePx.toInt())
     }
 
     val expandedHeightDp = remember(expandedHeightPx) {
         with(density) { expandedHeightPx.toDp() }
     }
+
+    val animatedDp by animateDpAsState(
+        targetValue = expandedHeightDp,
+        animationSpec = spring(
+            stiffness = Spring.StiffnessMediumLow)
+    )
 
     Crossfade(
         isVisibleProvider(),
@@ -72,57 +88,70 @@ fun DiagnosisTopAppBar(
                     containerColor = Grey90,
                     scrolledContainerColor = Grey90
                 ),
-                expandedHeight = expandedHeightDp,
+                expandedHeight = animatedDp,
                 title = {},
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    SubcomposeLayout { constraints ->
-                        val contentMeasurable = subcompose(topAppBarSubComposeId) {
-                            val screenHeightDp = configuration.screenHeightDp.dp
-
-                            val topMarginRatio = 0.039f
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
-                            ) {
-                                Spacer(Modifier.height(topMarginRatio * screenHeightDp))
-
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    textAlign = TextAlign.Center,
-                                    text = stringResource(R.string.diagnosis),
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = Black10
-                                )
-
-                                val firstCardToTitleRatio = 0.037f
-                                Spacer(Modifier.height(screenHeightDp * firstCardToTitleRatio))
-
-                                TakePhotoSection(onClick = onClick)
-
-                                Spacer(Modifier.height(16.dp))
-                            }
-                        }
-
-                        val placeables = contentMeasurable.map {
-                            it.measure(constraints)
-                        }
-
-                        val height = placeables.sumOf { it.height }
-                        expandedHeightPx = height
-
-                        layout(constraints.maxWidth, height) {
-                            placeables.forEach {
-                                it.placeRelative(0, 0)
-                            }
-                        }
-                    }
+                    ContentTopAppBar(
+                        onTopAppBarHeightMeasured = {
+                            expandedHeightPx = it
+                        },
+                        navigateToTakePhoto = onClick
+                    )
                 }
             )
         }
     }
+}
 
+@Composable
+fun ContentTopAppBar(
+    modifier: Modifier = Modifier,
+    onTopAppBarHeightMeasured: (Int) -> Unit = {},
+    navigateToTakePhoto: () -> Unit = {},
+) {
+    val configuration = LocalConfiguration.current
+    SubcomposeLayout { constraints ->
+        val contentMeasurable = subcompose(topAppBarSubComposeId) {
+            val screenHeightDp = configuration.screenHeightDp.dp
 
+            val topMarginRatio = 0.039f
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Spacer(Modifier.height(topMarginRatio * screenHeightDp))
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = stringResource(R.string.diagnosis),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Black10
+                )
+
+                val firstCardToTitleRatio = 0.037f
+                Spacer(Modifier.height(screenHeightDp * firstCardToTitleRatio))
+
+                TakePhotoSection(onClick = navigateToTakePhoto)
+
+                Spacer(Modifier.height(16.dp))
+            }
+        }
+        val placeables = contentMeasurable.map {
+            it.measure(constraints)
+        }
+
+        val height = placeables.sumOf { it.height }
+
+        onTopAppBarHeightMeasured(height)
+
+        layout(constraints.maxWidth, height) {
+            placeables.forEach {
+                it.placeRelative(0, 0)
+            }
+        }
+    }
 }

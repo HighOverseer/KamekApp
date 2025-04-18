@@ -13,11 +13,13 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResult
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -27,12 +29,19 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.random.Random
 
+
 @HiltViewModel
 class DiagnosisResultViewModel @Inject constructor(
     private val repository: Repository,
     private val imageClassifierHelper: ImageDetectorHelper,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private var hasBeenInitializeFromExtrasData:Boolean
+        get() = savedStateHandle[HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA] ?: false
+        set(value) {
+            savedStateHandle[HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA] = value
+        }
 
     private val _uiState = MutableStateFlow(DiagnosisResultUIState())
     val uiState = _uiState.asStateFlow()
@@ -42,8 +51,15 @@ class DiagnosisResultViewModel @Inject constructor(
         .receiveAsFlow()
         .onStart {
             listenToImageDetectorResult()
-            initFromExtras()
+            if(!hasBeenInitializeFromExtrasData){
+                initFromExtras()
+            }
         }
+        .onCompletion {
+            listeningToImageResultJob?.cancel()
+        }
+
+    private var listeningToImageResultJob:Job? = null
 
     private var detectImageJob: Job? = null
 
@@ -62,17 +78,20 @@ class DiagnosisResultViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        diagnosisSession = selectedDiagnosisSession,
+                        diagnosisSession = DiagnosisSessionComposeStable.getFromDomainModel(
+                            selectedDiagnosisSession
+                        ),
                         imagePreviewPath = selectedDiagnosisSession.imageUrlOrPath
                     )
                 }
+                hasBeenInitializeFromExtrasData = true
             }
 
         }
     }
 
     private fun listenToImageDetectorResult() {
-        viewModelScope.launch {
+        listeningToImageResultJob = viewModelScope.launch {
             imageClassifierHelper.result.collect { result ->
                 when (result) {
                     ImageDetectorResult.NoObjectDetected -> {
@@ -91,6 +110,9 @@ class DiagnosisResultViewModel @Inject constructor(
                                         result.exception.message.toString()
                                     )
                                 )
+                            )
+                            _event.send(
+                                DiagnosisResultUIEvent.OnInputImageInvalid
                             )
                         }
                     }
@@ -123,9 +145,12 @@ class DiagnosisResultViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                diagnosisSession = repository.getDiagnosisSession(newSessionId)
+                                diagnosisSession = DiagnosisSessionComposeStable.getFromDomainModel(
+                                    repository.getDiagnosisSession(newSessionId)
+                                )
                             )
                         }
+                        hasBeenInitializeFromExtrasData = true
                     }
                 }
             }
@@ -175,6 +200,10 @@ class DiagnosisResultViewModel @Inject constructor(
     override fun onCleared() {
         imageClassifierHelper.clearResource()
         super.onCleared()
+    }
+
+    companion object{
+        private const val HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA = "hasBeenInitializeFromExtrasData"
     }
 
 }
