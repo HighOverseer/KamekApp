@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult
 
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
 
 data class DiagnosisResultUIState(

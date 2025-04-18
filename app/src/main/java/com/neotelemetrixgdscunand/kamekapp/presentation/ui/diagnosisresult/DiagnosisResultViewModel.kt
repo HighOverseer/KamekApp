@@ -37,7 +37,7 @@ class DiagnosisResultViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var hasBeenInitializeFromExtrasData:Boolean
+    private var hasBeenInitializeFromExtrasData: Boolean
         get() = savedStateHandle[HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA] ?: false
         set(value) {
             savedStateHandle[HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA] = value
@@ -51,7 +51,7 @@ class DiagnosisResultViewModel @Inject constructor(
         .receiveAsFlow()
         .onStart {
             listenToImageDetectorResult()
-            if(!hasBeenInitializeFromExtrasData){
+            if (!hasBeenInitializeFromExtrasData) {
                 initFromExtras()
             }
         }
@@ -59,7 +59,7 @@ class DiagnosisResultViewModel @Inject constructor(
             listeningToImageResultJob?.cancel()
         }
 
-    private var listeningToImageResultJob:Job? = null
+    private var listeningToImageResultJob: Job? = null
 
     private var detectImageJob: Job? = null
 
@@ -202,7 +202,7 @@ class DiagnosisResultViewModel @Inject constructor(
         super.onCleared()
     }
 
-    companion object{
+    companion object {
         private const val HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA = "hasBeenInitializeFromExtrasData"
     }
 

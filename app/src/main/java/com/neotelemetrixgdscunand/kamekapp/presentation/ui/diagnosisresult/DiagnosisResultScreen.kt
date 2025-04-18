@@ -1,30 +1,24 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,7 +31,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,22 +38,16 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.rememberAsyncImagePainter
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseCacaos
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.cacaoimagedetail.components.OverlayCompose
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.DiagnosisDiseaseTabScreen
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DiagnosisResultHeaderSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.DiagnosisResultTabSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.NavigateUpButton
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.DiagnosisDiseaseTabScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DiagnosisResultHeaderSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.PriceAnalysisTabScreen
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.component.PriceAnalysisContent
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.component.PriceAnalysisContentLoading
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.component.PriceAnalysisInformationPreviewSection
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.component.PriceAnalysisOverview
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
@@ -137,16 +124,17 @@ fun DiagnosisResultContent(
         configuration.screenHeightDp.dp * topToArrowMarginRatio
     }
 
-    val groupedDetectedDisease:ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> = remember(uiState.diagnosisSession) {
-        val map = mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>()
-        uiState.diagnosisSession.detectedCacaos.groupBy {
-            it.disease
-        }.map {
-            val (cacaoDisease, list) = it.toPair()
-            map[cacaoDisease] = list.toImmutableList()
+    val groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
+        remember(uiState.diagnosisSession) {
+            val map = mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>()
+            uiState.diagnosisSession.detectedCacaos.groupBy {
+                it.disease
+            }.map {
+                val (cacaoDisease, list) = it.toPair()
+                map[cacaoDisease] = list.toImmutableList()
+            }
+            map.toImmutableMap()
         }
-        map.toImmutableMap()
-    }
 
     val isExpandList = remember(groupedDetectedDisease) {
         List(groupedDetectedDisease.keys.size) { index ->
@@ -194,7 +182,7 @@ fun DiagnosisResultContent(
                                 .fillMaxSize()
                                 .align(Alignment.Center)
                                 .clickable {
-                                    if(!uiState.isLoading) navigateToCacaoImageDetail(null)
+                                    if (!uiState.isLoading) navigateToCacaoImageDetail(null)
                                 },
                             painter = image,
                             contentDescription = null,
@@ -243,14 +231,15 @@ fun DiagnosisResultContent(
             val diagnosisDiseaseColumnScrollState = rememberScrollState()
             val priceAnalysisColumnScrollState = rememberScrollState()
 
-            val changeSelectedTab:(Boolean) -> Unit = remember{ {
+            val changeSelectedTab: (Boolean) -> Unit = remember {
+                {
                     val isReselectedTab = it == isDiagnosisTabSelected
                     if (!isReselectedTab) {
                         isDiagnosisTabSelected = it
                         coroutineScope.launch {
-                            if(isDiagnosisTabSelected){
+                            if (isDiagnosisTabSelected) {
                                 diagnosisDiseaseColumnScrollState.scrollTo(0)
-                            }else priceAnalysisColumnScrollState.scrollTo(0)
+                            } else priceAnalysisColumnScrollState.scrollTo(0)
                         }
                     }
                 }
@@ -264,7 +253,7 @@ fun DiagnosisResultContent(
                 Column(
                     Modifier
                         .verticalScroll(diagnosisDiseaseColumnScrollState)
-                ){
+                ) {
                     DiagnosisDiseaseTabScreen(
                         groupedDetectedDisease = groupedDetectedDisease,
                         toggleItemExpand = { index ->

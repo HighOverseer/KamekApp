@@ -29,7 +29,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 
 @Composable
-fun DiagnosisDiseaseTabScreen (
+fun DiagnosisDiseaseTabScreen(
     modifier: Modifier = Modifier,
     groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
         mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
@@ -75,7 +75,7 @@ fun DiagnosisDiseaseTabScreen (
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(16.dp),
         preventions = preventions,
-        solution = solutionStringResId?.let{ stringResource(it) } ?: "" ,
+        solution = solutionStringResId?.let { stringResource(it) } ?: "",
         isLoadingProvider = isLoadingProvider
     )
 

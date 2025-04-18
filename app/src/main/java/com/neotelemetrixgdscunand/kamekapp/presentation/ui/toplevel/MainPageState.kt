@@ -1,8 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -60,11 +57,11 @@ class MainPageState(
 
     private val currentSelectedAndNavigatedTopLevelRoute: StateFlow<Navigation.Main.MainRoute?> =
         navHostController.currentBackStackEntryFlow
-                .map {
-                    val currentRoute = it.destination.route
-                    topLevelRoutesStringValMap[currentRoute]
-                }
-                .distinctUntilChanged()
+            .map {
+                val currentRoute = it.destination.route
+                topLevelRoutesStringValMap[currentRoute]
+            }
+            .distinctUntilChanged()
             .stateIn(
                 coroutineScope,
                 SharingStarted.WhileSubscribed(5000L),
@@ -73,7 +70,7 @@ class MainPageState(
 
     private var currentJustSelectedTopLevelRoute by mutableStateOf<Navigation.Main.MainRoute?>(null)
 
-    val selectedBottomNavigationRoute:Navigation.Main.MainRoute?
+    val selectedBottomNavigationRoute: Navigation.Main.MainRoute?
         get() = currentJustSelectedTopLevelRoute
             ?: currentSelectedAndNavigatedTopLevelRoute.value
             ?: topLevelRoutesStringValMap[navHostController.currentBackStackEntry?.destination?.route]
@@ -106,7 +103,7 @@ class MainPageState(
 
     @Composable
     fun HandleTopAppBarInitialExpandedHeightEffect(
-        shouldShowTopAppBar:Boolean,
+        shouldShowTopAppBar: Boolean,
         expandTopAppBar: () -> Unit = {}
     ) {
         LaunchedEffect(shouldShowTopAppBar) {

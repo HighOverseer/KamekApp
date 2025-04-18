@@ -1,7 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,7 +51,8 @@ fun MainPage(
         state = topAppBarState,
         canScroll = { shouldShowTopAppBar }
     )
-    val expandTopAppBar = remember { {
+    val expandTopAppBar = remember {
+        {
             topAppBarState.heightOffset = 0f
         }
     }
@@ -63,7 +61,8 @@ fun MainPage(
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()
-    val showSnackbar:(String) -> Unit = remember { {
+    val showSnackbar: (String) -> Unit = remember {
+        {
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(it)
             }
@@ -98,7 +97,7 @@ fun MainPage(
         bottomBar = {
             val navigationBarItems = state.bottomNavigationBarItems
             val isInTopLevel by state.isInTopLevel.collectAsStateWithLifecycle()
-            if(isInTopLevel){
+            if (isInTopLevel) {
                 BottomNavigationBar(
                     navigationBarItems = navigationBarItems,
                     selectedNavigationProvider = { state.selectedBottomNavigationRoute },
@@ -112,15 +111,17 @@ fun MainPage(
 
         }
     ) { innerPadding ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
 
             NavHost(
                 navController = mainNavHostController,
                 startDestination = Navigation.Main.Home,
             ) {
-                composable<Navigation.Main.Home>{
+                composable<Navigation.Main.Home> {
                     HomeScreen(
                         navigateToNews = navigateToNews,
                         navigateToShop = navigateToShop,

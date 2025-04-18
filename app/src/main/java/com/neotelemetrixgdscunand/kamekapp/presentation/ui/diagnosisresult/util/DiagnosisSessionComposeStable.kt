@@ -14,9 +14,9 @@ data class DiagnosisSessionComposeStable(
     val date: String = "",
     val predictedPrice: Float = 0f,
     val detectedCacaos: ImmutableList<DetectedCacao> = persistentListOf()
-){
-    companion object{
-        fun getFromDomainModel(diagnosisSession:DiagnosisSession):DiagnosisSessionComposeStable{
+) {
+    companion object {
+        fun getFromDomainModel(diagnosisSession: DiagnosisSession): DiagnosisSessionComposeStable {
             return DiagnosisSessionComposeStable(
                 id = diagnosisSession.id,
                 title = diagnosisSession.title,

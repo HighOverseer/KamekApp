@@ -9,8 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,9 +19,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -91,7 +87,7 @@ class KamekAppState(
         } else isCameraPermissionGranted = true
     }
 
-    private val currentRouteStringVal:StateFlow<String?> =
+    private val currentRouteStringVal: StateFlow<String?> =
         rootNavHostController.currentBackStackEntryFlow
             .map { value: NavBackStackEntry ->
                 value.destination.route
@@ -113,7 +109,7 @@ class KamekAppState(
 //                null
 //            )
 
-    val shouldShowStatusBar:StateFlow<Boolean> =
+    val shouldShowStatusBar: StateFlow<Boolean> =
         currentRouteStringVal
             .map { value ->
                 value != Navigation.TakePhoto.stringVal

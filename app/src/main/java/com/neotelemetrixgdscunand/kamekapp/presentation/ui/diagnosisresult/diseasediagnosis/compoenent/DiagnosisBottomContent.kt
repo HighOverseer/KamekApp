@@ -54,12 +54,12 @@ fun DiagnosisBottomContent(
     modifier: Modifier = Modifier,
     solution: String = "-",
     preventions: ImmutableList<String> = persistentListOf(),
-    isLoadingProvider:() -> Boolean = { false }
+    isLoadingProvider: () -> Boolean = { false }
 ) {
-    if(isLoadingProvider()){
+    if (isLoadingProvider()) {
         DiagnosisBottomContentLoading(modifier = modifier)
 
-    }else Column(modifier = modifier){
+    } else Column(modifier = modifier) {
         Row(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically

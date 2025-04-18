@@ -15,13 +15,13 @@ fun DiagnosisResultHeaderSection(
     sessionName: String = "",
     isLoadingProvider: () -> Boolean = { false }
 ) {
-    if(isLoadingProvider()){
+    if (isLoadingProvider()) {
         DiagnosisResultHeaderSectionLoading(
             modifier = modifier,
             sessionName = sessionName
         )
 
-    }else Column(
+    } else Column(
         modifier = modifier
     ) {
         Text(

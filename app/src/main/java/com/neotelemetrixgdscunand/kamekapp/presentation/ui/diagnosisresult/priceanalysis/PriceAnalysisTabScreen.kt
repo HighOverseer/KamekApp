@@ -27,14 +27,14 @@ import kotlinx.collections.immutable.toImmutableMap
 @Composable
 fun PriceAnalysisTabScreen(
     modifier: Modifier = Modifier,
-    isLoadingProvider:() -> Boolean = { false },
+    isLoadingProvider: () -> Boolean = { false },
     groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
         emptyMap<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
     navigateToCacaoImageDetail: (Int) -> Unit = { }
 ) {
-    if(isLoadingProvider()) {
+    if (isLoadingProvider()) {
         PriceAnalysisContent()
-    }else{
+    } else {
         PriceAnalysisInformationPreviewSection()
 
         Spacer(Modifier.height(16.dp))

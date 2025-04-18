@@ -36,7 +36,7 @@ import kotlinx.collections.immutable.toImmutableMap
 @Composable
 fun DetectedCacaoDiseasePreviewSection(
     modifier: Modifier = Modifier,
-    groupedDetectedDisease:ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
+    groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
         mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
     navigateToCacaoImageDetail: (Int) -> Unit = { }
 ) {

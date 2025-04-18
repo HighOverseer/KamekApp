@@ -42,15 +42,15 @@ fun DiagnosisDiseaseDetails(
     modifier: Modifier = Modifier,
     groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
         mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
-    isItemExpandProvider: (index:Int) -> Boolean = { false },
-    toggleItemExpand: (index:Int) -> Unit = { },
+    isItemExpandProvider: (index: Int) -> Boolean = { false },
+    toggleItemExpand: (index: Int) -> Unit = { },
     navigateToCacaoImageDetail: (Int) -> Unit = { },
-    isLoadingProvider:() -> Boolean = { false }
+    isLoadingProvider: () -> Boolean = { false }
 ) {
     val groupedDetectedDiseaseKeys = remember {
         groupedDetectedDisease.keys
     }
-    if(isLoadingProvider()){
+    if (isLoadingProvider()) {
         DiagnosisDiseaseDetailsLoading()
 
     } else groupedDetectedDiseaseKeys.forEachIndexed { index, diseaseKey ->
