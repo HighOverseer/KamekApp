@@ -52,7 +52,7 @@ fun BottomNavigationBar(
                     unselectedTextColor = Grey65,
                     selectedTextColor = Maroon55,
                     indicatorColor = Color.White
-                    ),
+                ),
 
                 selected = isSelected,
                 icon = {

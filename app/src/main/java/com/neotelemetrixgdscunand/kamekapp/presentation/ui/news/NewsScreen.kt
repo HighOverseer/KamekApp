@@ -198,7 +198,6 @@ fun NewsScreen(
         ) { innerPadding ->
 
 
-
             Column(
                 modifier = modifier
                     .fillMaxSize()

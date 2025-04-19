@@ -11,11 +11,11 @@ import coil.compose.AsyncImage
 fun AsyncImagePainterStable(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
-    contentDescription:String? = null,
-    imageUrlOrPath:String? = "",
+    contentDescription: String? = null,
+    imageUrlOrPath: String? = "",
     colorFilter: androidx.compose.ui.graphics.ColorFilter? = null,
-    alignment:Alignment = Alignment.Center,
-    placeholderResId:Int,
+    alignment: Alignment = Alignment.Center,
+    placeholderResId: Int,
 ) {
     AsyncImage(
         modifier = modifier,
@@ -32,11 +32,11 @@ fun AsyncImagePainterStable(
 fun AsyncImagePainterStable(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
-    contentDescription:String? = null,
-    imageDrawableResId:Int? = null,
+    contentDescription: String? = null,
+    imageDrawableResId: Int? = null,
     colorFilter: androidx.compose.ui.graphics.ColorFilter? = null,
-    alignment:Alignment = Alignment.Center,
-    placeholderResId:Int,
+    alignment: Alignment = Alignment.Center,
+    placeholderResId: Int,
 ) {
     AsyncImage(
         modifier = modifier,

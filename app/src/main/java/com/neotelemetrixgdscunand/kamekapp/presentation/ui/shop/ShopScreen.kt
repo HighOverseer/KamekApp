@@ -111,9 +111,11 @@ fun ShopScreen(
         }
     ) { innerPadding ->
 
-        Column(Modifier
-            .fillMaxSize()
-                .padding(innerPadding)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             ShopScreenBody()
         }
 

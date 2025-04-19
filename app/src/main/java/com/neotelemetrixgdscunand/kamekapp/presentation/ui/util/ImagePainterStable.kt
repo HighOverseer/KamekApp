@@ -10,8 +10,8 @@ import androidx.compose.ui.res.painterResource
 fun ImagePainterStable(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
-    contentDescription:String? = null,
-    drawableResId:Int,
+    contentDescription: String? = null,
+    drawableResId: Int,
     colorFilter: androidx.compose.ui.graphics.ColorFilter? = null
 ) {
     Image(

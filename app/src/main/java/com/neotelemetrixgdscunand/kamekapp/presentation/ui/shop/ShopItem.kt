@@ -62,7 +62,8 @@ fun ShopItem(
 
     val context = LocalContext.current
 
-    val onClick = remember { {
+    val onClick = remember {
+        {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(targetUrl))
             context.startActivity(intent)
         }

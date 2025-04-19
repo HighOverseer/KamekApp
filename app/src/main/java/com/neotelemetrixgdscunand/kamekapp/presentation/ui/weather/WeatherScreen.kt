@@ -128,7 +128,8 @@ fun WeatherScreen(
     ) { innerPadding ->
 
         Column(
-            Modifier.fillMaxSize()
+            Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
         ) {
             WeatherScreenBody()
