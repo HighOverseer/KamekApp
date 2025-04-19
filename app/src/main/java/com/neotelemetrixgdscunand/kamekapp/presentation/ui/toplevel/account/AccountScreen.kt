@@ -25,13 +25,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey47
@@ -39,6 +37,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey61
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier) {
@@ -77,12 +76,12 @@ fun AccountScreen(modifier: Modifier = Modifier) {
             Box(
                 modifier = circleImageModifier
             ) {
-                AsyncImage(
+                AsyncImagePainterStable(
                     modifier = Modifier
                         .align(Alignment.Center),
                     alignment = Alignment.Center,
-                    model = R.drawable.dummy_profile,
-                    placeholder = painterResource(R.drawable.ic_camera),
+                    imageDrawableResId = R.drawable.dummy_profile,
+                    placeholderResId = R.drawable.ic_camera,
                     contentDescription = stringResource(R.string.profile_photo),
                     contentScale = ContentScale.Crop
                 )

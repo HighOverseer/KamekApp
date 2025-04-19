@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,10 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 
 @Composable
 fun ExplorationMenu(
@@ -48,9 +47,9 @@ fun ExplorationMenu(
         Box(
             modifier = imageModifier
         ) {
-            Image(
+            ImagePainterStable(
                 modifier = Modifier.align(Alignment.Center),
-                painter = painterResource(iconResId),
+                drawableResId = iconResId,
                 contentDescription = label
             )
         }

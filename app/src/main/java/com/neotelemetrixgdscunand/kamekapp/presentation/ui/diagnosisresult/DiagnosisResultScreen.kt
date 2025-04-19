@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,9 +14,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,12 +31,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import coil.compose.rememberAsyncImagePainter
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
@@ -50,6 +50,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.disea
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.PriceAnalysisTabScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 import kotlinx.collections.immutable.ImmutableList
@@ -57,6 +58,7 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 fun DiagnosisResultScreen(
@@ -117,38 +119,26 @@ fun DiagnosisResultContent(
 ) {
 
     val imageAspectRatio = 1.26f
-    val topToArrowMarginRatio = 0.04571f
-
     val configuration = LocalConfiguration.current
-    val topToArrowMargin = remember {
-        configuration.screenHeightDp.dp * topToArrowMarginRatio
-    }
 
-    val groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
-        remember(uiState.diagnosisSession) {
-            val map = mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>()
-            uiState.diagnosisSession.detectedCacaos.groupBy {
-                it.disease
-            }.map {
-                val (cacaoDisease, list) = it.toPair()
-                map[cacaoDisease] = list.toImmutableList()
-            }
-            map.toImmutableMap()
-        }
 
-    val isExpandList = remember(groupedDetectedDisease) {
-        List(groupedDetectedDisease.keys.size) { index ->
-            val isInitialStateExpand = index == 0
-            mutableStateOf(isInitialStateExpand)
-        }.toImmutableList()
-    }
-
-    var isDiagnosisTabSelected by rememberSaveable { mutableStateOf(true) }
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+        topAppBarState
+    )
 
     val topAppBarHeightDp = remember {
         configuration.screenHeightDp.dp / 3
+    }
+
+    val density = LocalDensity.current
+    val isLocalNavigateUpButtonVisible by remember{
+        derivedStateOf {
+            //To check if Top App Bar has collapsed
+            topAppBarState.heightOffset.roundToInt() <= with(density){
+                -(topAppBarHeightDp.roundToPx())
+            }
+        }
     }
 
     Scaffold(
@@ -171,20 +161,15 @@ fun DiagnosisResultContent(
                             .aspectRatio(imageAspectRatio)
                     ) {
 
-                        val image = rememberAsyncImagePainter(
-                            model = uiState.imagePreviewPath,
-                            placeholder = painterResource(R.drawable.ic_camera),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        Image(
+                        AsyncImagePainterStable(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .align(Alignment.Center)
                                 .clickable {
                                     if (!uiState.isLoading) navigateToCacaoImageDetail(null)
                                 },
-                            painter = image,
+                            placeholderResId = R.drawable.ic_camera,
+                            imageUrlOrPath = uiState.imagePreviewPath,
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                         )
@@ -203,10 +188,10 @@ fun DiagnosisResultContent(
                             boundingBoxes = adjustedBoundingBox
                         )
 
-                        NavigateUpButton(
+                        TopAppBarNavigateUpButtonWrapper(
                             modifier = Modifier.align(Alignment.TopStart),
-                            topToArrowMargin = topToArrowMargin,
-                            navigateUp = navigateUp
+                            navigateUp = navigateUp,
+                            isLocalNavigateUpButtonVisibleProvider = { isLocalNavigateUpButtonVisible }
                         )
                     }
                 }
@@ -219,72 +204,135 @@ fun DiagnosisResultContent(
                 .padding(innerPadding)
         ) {
 
-            DiagnosisResultHeaderSection(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                sessionName = uiState.diagnosisSession.title,
-                isLoadingProvider = { uiState.isLoading }
+            DiagnosisResultContentBody(
+                diagnosisSessionComposeStable = uiState.diagnosisSession,
+                isLoadingProvider = { uiState.isLoading },
+                navigateToCacaoImageDetail = navigateToCacaoImageDetail,
+                isLocalNavigateUpButtonVisibleProvider = { isLocalNavigateUpButtonVisible },
+                navigateUp = navigateUp
             )
-
-            val coroutineScope = rememberCoroutineScope()
-            val diagnosisDiseaseColumnScrollState = rememberScrollState()
-            val priceAnalysisColumnScrollState = rememberScrollState()
-
-            val changeSelectedTab: (Boolean) -> Unit = remember {
-                {
-                    val isReselectedTab = it == isDiagnosisTabSelected
-                    if (!isReselectedTab) {
-                        isDiagnosisTabSelected = it
-                        coroutineScope.launch {
-                            if (isDiagnosisTabSelected) {
-                                diagnosisDiseaseColumnScrollState.scrollTo(0)
-                            } else priceAnalysisColumnScrollState.scrollTo(0)
-                        }
-                    }
-                }
-            }
-            DiagnosisResultTabSection(
-                isDiagnosisTabSelected = isDiagnosisTabSelected,
-                changeSelectedTab = changeSelectedTab
-            )
-
-            if (isDiagnosisTabSelected) {
-                Column(
-                    Modifier
-                        .verticalScroll(diagnosisDiseaseColumnScrollState)
-                ) {
-                    DiagnosisDiseaseTabScreen(
-                        groupedDetectedDisease = groupedDetectedDisease,
-                        toggleItemExpand = { index ->
-                            isExpandList[index].value = !isExpandList[index].value
-                        },
-                        isItemExpandProvider = { index ->
-                            isExpandList[index].value
-                        },
-                        isLoadingProvider = { uiState.isLoading },
-                        navigateToCacaoImageDetail = navigateToCacaoImageDetail,
-                        diagnosisSessionComposeStable = uiState.diagnosisSession
-                    )
-                }
-
-
-            } else {
-                Column(
-                    Modifier.verticalScroll(priceAnalysisColumnScrollState)
-                ) {
-                    PriceAnalysisTabScreen(
-                        isLoadingProvider = { uiState.isLoading },
-                        navigateToCacaoImageDetail = navigateToCacaoImageDetail,
-                        groupedDetectedDisease = groupedDetectedDisease,
-                    )
-                }
-            }
 
         }
 
     }
+}
 
+@Composable
+fun TopAppBarNavigateUpButtonWrapper(
+    modifier: Modifier = Modifier,
+    isLocalNavigateUpButtonVisibleProvider: () -> Boolean = { false },
+    navigateUp: () -> Unit = { }
+) {
+    val topToArrowMarginRatio = 0.04571f
+
+    val configuration = LocalConfiguration.current
+    val topToArrowMargin = remember {
+        configuration.screenHeightDp.dp * topToArrowMarginRatio
+    }
+
+    if(!isLocalNavigateUpButtonVisibleProvider()){
+        NavigateUpButton(
+            modifier = modifier,
+            topToArrowMargin = topToArrowMargin,
+            navigateUp = navigateUp
+        )
+    }
+
+}
+
+@Composable
+fun DiagnosisResultContentBody(
+    diagnosisSessionComposeStable: DiagnosisSessionComposeStable = DiagnosisSessionComposeStable(),
+    isLoadingProvider: () -> Boolean = { false },
+    isLocalNavigateUpButtonVisibleProvider: () -> Boolean = { false },
+    navigateToCacaoImageDetail: (Int?) -> Unit,
+    navigateUp: () -> Unit = {}
+) {
+    val groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
+        remember(diagnosisSessionComposeStable) {
+            val map = mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>()
+            diagnosisSessionComposeStable.detectedCacaos.groupBy {
+                it.disease
+            }.map {
+                val (cacaoDisease, list) = it.toPair()
+                map[cacaoDisease] = list.toImmutableList()
+            }
+            map.toImmutableMap()
+        }
+
+    val isExpandList = remember(groupedDetectedDisease) {
+        List(groupedDetectedDisease.keys.size) { index ->
+            val isInitialStateExpand = index == 0
+            mutableStateOf(isInitialStateExpand)
+        }.toImmutableList()
+    }
+
+    var isDiagnosisTabSelected by rememberSaveable { mutableStateOf(true) }
+
+    DiagnosisResultHeaderSection(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+        sessionName = diagnosisSessionComposeStable.title,
+        isLoadingProvider = isLoadingProvider,
+        isLocalNavigateUpButtonVisibleProvider = isLocalNavigateUpButtonVisibleProvider,
+        navigateUp = navigateUp
+    )
+
+    val coroutineScope = rememberCoroutineScope()
+    val diagnosisDiseaseColumnScrollState = rememberScrollState()
+    val priceAnalysisColumnScrollState = rememberScrollState()
+
+    val changeSelectedTab: (Boolean) -> Unit = remember {
+        {
+            val isReselectedTab = it == isDiagnosisTabSelected
+            if (!isReselectedTab) {
+                isDiagnosisTabSelected = it
+                coroutineScope.launch {
+                    if (isDiagnosisTabSelected) {
+                        diagnosisDiseaseColumnScrollState.scrollTo(0)
+                    } else priceAnalysisColumnScrollState.scrollTo(0)
+                }
+            }
+        }
+    }
+
+    DiagnosisResultTabSection(
+        isDiagnosisTabSelected = isDiagnosisTabSelected,
+        changeSelectedTab = changeSelectedTab
+    )
+
+    if (isDiagnosisTabSelected) {
+        Column(
+            Modifier
+                .verticalScroll(diagnosisDiseaseColumnScrollState)
+        ) {
+            DiagnosisDiseaseTabScreen(
+                groupedDetectedDisease = groupedDetectedDisease,
+                toggleItemExpand = { index ->
+                    isExpandList[index].value = !isExpandList[index].value
+                },
+                isItemExpandProvider = { index ->
+                    isExpandList[index].value
+                },
+                isLoadingProvider = isLoadingProvider,
+                navigateToCacaoImageDetail = navigateToCacaoImageDetail,
+                diagnosisSessionComposeStable = diagnosisSessionComposeStable
+            )
+        }
+
+
+    } else {
+        Column(
+            Modifier.verticalScroll(priceAnalysisColumnScrollState)
+        ) {
+            PriceAnalysisTabScreen(
+                isLoadingProvider = isLoadingProvider,
+                navigateToCacaoImageDetail = navigateToCacaoImageDetail,
+                groupedDetectedDisease = groupedDetectedDisease,
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true, heightDp = 2000)

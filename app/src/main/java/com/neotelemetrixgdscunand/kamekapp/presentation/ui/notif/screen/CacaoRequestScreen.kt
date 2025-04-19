@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,13 +34,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.getSupplierCacaoDummies
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
@@ -58,6 +55,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.Cacao
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.CacaoTechnicalSpec
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.InputFulfillAmountCacaoDialog
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.SupplierItem
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 
 @Composable
 fun CacaoRequestScreen(
@@ -157,8 +156,8 @@ fun CacaoRequestScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painterResource(R.drawable.ic_cube),
+                    ImagePainterStable(
+                        drawableResId = R.drawable.ic_cube,
                         contentDescription = null
                     )
 
@@ -220,11 +219,11 @@ fun CacaoRequestScreen(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Image(
+                    ImagePainterStable(
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(44.dp),
-                        painter = painterResource(R.drawable.ic_camera),
+                        drawableResId = R.drawable.ic_camera,
                         contentScale = ContentScale.Crop,
                         contentDescription = null
                     )
@@ -294,10 +293,10 @@ fun CacaoRequestScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
                 items(cacaoPhotos) {
-                    AsyncImage(
-                        model = it,
+                    AsyncImagePainterStable(
+                        imageUrlOrPath = it,
                         alignment = Alignment.Center,
-                        placeholder = painterResource(R.drawable.ic_camera),
+                        placeholderResId = R.drawable.ic_camera,
                         contentScale = ContentScale.Crop,
                         contentDescription = null,
                         modifier = Modifier

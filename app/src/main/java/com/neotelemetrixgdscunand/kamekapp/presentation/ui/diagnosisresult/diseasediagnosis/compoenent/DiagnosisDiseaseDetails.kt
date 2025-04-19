@@ -47,7 +47,7 @@ fun DiagnosisDiseaseDetails(
     navigateToCacaoImageDetail: (Int) -> Unit = { },
     isLoadingProvider: () -> Boolean = { false }
 ) {
-    val groupedDetectedDiseaseKeys = remember {
+    val groupedDetectedDiseaseKeys = remember(groupedDetectedDisease) {
         groupedDetectedDisease.keys
     }
     if (isLoadingProvider()) {

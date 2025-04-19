@@ -25,18 +25,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey53
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 
 @Composable
 fun NewsDetailScreen(
@@ -83,12 +82,12 @@ fun NewsDetailScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(15.dp))
             ) {
-                AsyncImage(
+                AsyncImagePainterStable(
                     modifier = Modifier
                         .aspectRatio(imageAspectRatio)
                         .align(Alignment.Center),
-                    model = "https://akcdn.detik.net.id/visual/2023/10/13/tanaman-kakao_169.jpeg?w=715&q=90",
-                    placeholder = painterResource(R.drawable.ic_camera),
+                    imageUrlOrPath = "https://akcdn.detik.net.id/visual/2023/10/13/tanaman-kakao_169.jpeg?w=715&q=90",
+                    placeholderResId = R.drawable.ic_camera,
                     contentScale = ContentScale.FillBounds,
                     contentDescription = stringResource(R.string.gambar_berita)
                 )

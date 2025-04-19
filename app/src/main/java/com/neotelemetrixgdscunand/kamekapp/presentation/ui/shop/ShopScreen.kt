@@ -111,88 +111,95 @@ fun ShopScreen(
         }
     ) { innerPadding ->
 
-        Column(Modifier.padding(innerPadding)) {
-            val selectedCategory by remember {
-                mutableStateOf(
-                    NewsCategory.ALL
-                )
-            }
-
-            val searchBarInteractionSource = remember {
-                MutableInteractionSource()
-            }
-
-            var searchQuery by remember {
-                mutableStateOf("")
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            SearchBar(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                queryProvider = { searchQuery },
-                onQueryChange = {
-                    searchQuery = it
-                },
-                backgroundColor = Grey90,
-                hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
-                interactionSource = searchBarInteractionSource,
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            val listCategoryState = rememberLazyListState()
-            LazyRow(
-                state = listCategoryState,
-                contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                items(NewsCategory.entries, key = { item -> item.ordinal }) { item ->
-                    SearchCategory(
-                        unselectedColor = Grey90,
-                        isSelected = item == selectedCategory,
-                        text = stringResource(item.textResId)
-                    )
-                }
-            }
-
-            val lazyGridState = rememberLazyGridState()
-            val shopItems = remember {
-                getShopItemDataDummies()
-            }
-            LazyVerticalGrid(
-                modifier = Modifier
-                    .background(color = Grey90),
-                contentPadding = PaddingValues(
-                    top = 16.dp,
-                    bottom = 24.dp,
-                    start = 16.dp,
-                    end = 16.dp
-                ),
-                state = lazyGridState,
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-
-                items(
-                    shopItems.size,
-                    key = { index ->
-                        shopItems[index].id
-                    }
-                ) { index ->
-                    val currentShopItem = shopItems[index]
-                    ShopItem(
-                        imageUrl = currentShopItem.imageUrl,
-                        title = currentShopItem.title,
-                        price = currentShopItem.price,
-                        targetUrl = currentShopItem.targetUrl
-                    )
-                }
-            }
+        Column(Modifier
+            .fillMaxSize()
+                .padding(innerPadding)) {
+            ShopScreenBody()
         }
 
+    }
+}
+
+@Composable
+fun ShopScreenBody(modifier: Modifier = Modifier) {
+    val selectedCategory by remember {
+        mutableStateOf(
+            NewsCategory.ALL
+        )
+    }
+
+    val searchBarInteractionSource = remember {
+        MutableInteractionSource()
+    }
+
+    var searchQuery by remember {
+        mutableStateOf("")
+    }
+
+    Spacer(Modifier.height(8.dp))
+
+    SearchBar(
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
+        queryProvider = { searchQuery },
+        onQueryChange = {
+            searchQuery = it
+        },
+        backgroundColor = Grey90,
+        hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
+        interactionSource = searchBarInteractionSource,
+    )
+
+    Spacer(Modifier.height(8.dp))
+
+    val listCategoryState = rememberLazyListState()
+    LazyRow(
+        state = listCategoryState,
+        contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        items(NewsCategory.entries, key = { item -> item.ordinal }) { item ->
+            SearchCategory(
+                unselectedColor = Grey90,
+                isSelected = item == selectedCategory,
+                text = stringResource(item.textResId)
+            )
+        }
+    }
+
+    val lazyGridState = rememberLazyGridState()
+    val shopItems = remember {
+        getShopItemDataDummies()
+    }
+    LazyVerticalGrid(
+        modifier = Modifier
+            .background(color = Grey90),
+        contentPadding = PaddingValues(
+            top = 16.dp,
+            bottom = 24.dp,
+            start = 16.dp,
+            end = 16.dp
+        ),
+        state = lazyGridState,
+        columns = GridCells.Fixed(2),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
+        items(
+            shopItems.size,
+            key = { index ->
+                shopItems[index].id
+            }
+        ) { index ->
+            val currentShopItem = shopItems[index]
+            ShopItem(
+                imageUrl = currentShopItem.imageUrl,
+                title = currentShopItem.title,
+                price = currentShopItem.price,
+                targetUrl = currentShopItem.targetUrl
+            )
+        }
     }
 }
 

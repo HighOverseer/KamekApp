@@ -12,15 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 
 @Composable
 fun SupplierItem(
@@ -31,9 +30,9 @@ fun SupplierItem(
     Row(
         modifier = modifier, verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = supplierImageUrl,
-            placeholder = painterResource(R.drawable.ic_camera),
+        AsyncImagePainterStable(
+            imageUrlOrPath = supplierImageUrl,
+            placeholderResId = R.drawable.ic_camera,
             contentScale = ContentScale.Crop,
             contentDescription = null,
             modifier = Modifier

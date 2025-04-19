@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,13 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black30
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey47
@@ -38,6 +35,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.SecondaryButton
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 
 @Composable
 fun NotificationItem(
@@ -71,12 +70,12 @@ fun NotificationItem(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.Top
         ) {
-            AsyncImage(
-                model = exporterImageUrl,
+            AsyncImagePainterStable(
+                imageUrlOrPath = exporterImageUrl,
                 alignment = Alignment.Center,
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
-                placeholder = painterResource(R.drawable.ic_camera),
+                placeholderResId = R.drawable.ic_camera,
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
@@ -131,8 +130,8 @@ fun NotificationItem(
                     )
 
                     if (isAgreed) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_verified),
+                        ImagePainterStable(
+                            drawableResId = R.drawable.ic_verified,
                             contentScale = ContentScale.Fit,
                             contentDescription = null
                         )

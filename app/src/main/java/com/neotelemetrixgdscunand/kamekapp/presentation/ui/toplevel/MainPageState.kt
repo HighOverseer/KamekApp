@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.NavigationBarItem
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.NavigationBarItemData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +47,7 @@ class MainPageState(
     private val coroutineScope: CoroutineScope,
 ) {
 
-    val bottomNavigationBarItems: ImmutableList<NavigationBarItem> = getNavigationBarItems()
+    val bottomNavigationBarItemData: ImmutableList<NavigationBarItemData> = getNavigationBarItems()
 
     private val topLevelRoutesStringValMap = mapOf(
         Navigation.Main.Home.stringVal to Navigation.Main.Home,
@@ -73,7 +73,6 @@ class MainPageState(
     val selectedBottomNavigationRoute: Navigation.Main.MainRoute?
         get() = currentJustSelectedTopLevelRoute
             ?: currentSelectedAndNavigatedTopLevelRoute.value
-            ?: topLevelRoutesStringValMap[navHostController.currentBackStackEntry?.destination?.route]
 
     val shouldShowTopAppBar: StateFlow<Boolean> =
         currentSelectedAndNavigatedTopLevelRoute
@@ -152,19 +151,19 @@ class MainPageState(
     }
 
 
-    private fun getNavigationBarItems(): ImmutableList<NavigationBarItem> {
+    private fun getNavigationBarItems(): ImmutableList<NavigationBarItemData> {
         return persistentListOf(
-            NavigationBarItem(
+            NavigationBarItemData(
                 titleRestId = R.string.beranda,
                 iconResId = R.drawable.ic_home,
                 route = Navigation.Main.Home
             ),
-            NavigationBarItem(
+            NavigationBarItemData(
                 titleRestId = R.string.diagnosis,
                 iconResId = R.drawable.ic_camera,
                 route = Navigation.Main.Diagnosis
             ),
-            NavigationBarItem(
+            NavigationBarItemData(
                 titleRestId = R.string.akun,
                 iconResId = R.drawable.ic_person,
                 route = Navigation.Main.Account

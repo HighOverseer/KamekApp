@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +27,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseCacaos
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -76,11 +75,11 @@ fun DetectedCacaoImageGrid(
 
                     Spacer(Modifier.width(4.dp))
 
-                    Image(
+                    ImagePainterStable(
                         modifier = Modifier
                             .height(8.dp)
                             .align(Alignment.Top),
-                        painter = painterResource(R.drawable.ic_eye),
+                        drawableResId = R.drawable.ic_eye,
                         contentScale = ContentScale.Fit,
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(Maroon45)

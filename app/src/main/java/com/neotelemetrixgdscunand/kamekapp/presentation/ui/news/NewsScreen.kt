@@ -2,7 +2,6 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.news
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,12 +12,15 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -47,7 +49,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,6 +64,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishis
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -83,12 +85,12 @@ fun NewsScreen(
             (configuration.screenHeightDp * imageAspectRatio).dp
         }
 
-        Image(
+        ImagePainterStable(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .width(imageBackgroundSize)
                 .aspectRatio(0.655f),
-            painter = painterResource(R.drawable.news_bg),
+            drawableResId = R.drawable.news_bg,
             contentScale = ContentScale.FillBounds,
             contentDescription = null
         )
@@ -195,86 +197,17 @@ fun NewsScreen(
             }
         ) { innerPadding ->
 
-            var searchQuery by remember {
-                mutableStateOf("")
-            }
 
-            val searchBarInteractionSource = remember {
-                MutableInteractionSource()
-            }
 
-            val weeklyItemModifier = remember {
-                Modifier
-                    .padding(start = 16.dp, end = 16.dp)
-            }
-
-            val newsItems = remember {
-                getDummyWeeklyNewsItems()
-            }
-
-            var selectedNewsCategory by remember {
-                mutableStateOf(NewsCategory.ALL)
-            }
-
-            LazyColumn(
+            Column(
                 modifier = modifier
-                    .padding(innerPadding),
-                contentPadding = PaddingValues(bottom = 32.dp),
-                state = listState,
+                    .fillMaxSize()
+                    .padding(innerPadding)
             ) {
-
-                stickyHeader {
-                    val listCategoryState = rememberLazyListState()
-                    SearchBar(
-                        modifier = Modifier
-                            .background(Grey90)
-                            .padding(top = 4.dp)
-                            .padding(horizontal = 16.dp),
-                        queryProvider = { searchQuery },
-                        onQueryChange = {
-                            searchQuery = it
-                        },
-                        hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
-                        interactionSource = searchBarInteractionSource
-                    )
-
-                    Spacer(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Grey90)
-                            .height(12.dp)
-                    )
-
-                    LazyRow(
-                        state = listCategoryState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = Grey90),
-                        contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(NewsCategory.entries, key = { it.ordinal }) {
-                            SearchCategory(
-                                isSelected = it == selectedNewsCategory,
-                                text = stringResource(it.textResId)
-                            )
-                        }
-                    }
-                }
-
-                itemsIndexed(newsItems, key = { _, it -> it.id }) { index, item ->
-                    Spacer(
-                        Modifier.height(
-                            if (index == 0) 8.dp else 16.dp
-                        )
-                    )
-
-                    WeeklyNews(
-                        modifier = weeklyItemModifier
-                            .clickable(onClick = navigateToDetail),
-                        item = item
-                    )
-                }
+                NewsScreenBody(
+                    listState = listState,
+                    navigateToDetail = navigateToDetail
+                )
             }
         }
 
@@ -292,6 +225,96 @@ fun NewsScreen(
                 }
             }
         )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun NewsScreenBody(
+    modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
+    navigateToDetail: () -> Unit = { },
+) {
+    var searchQuery by remember {
+        mutableStateOf("")
+    }
+
+    val searchBarInteractionSource = remember {
+        MutableInteractionSource()
+    }
+
+    val weeklyItemModifier = remember {
+        Modifier
+            .padding(start = 16.dp, end = 16.dp)
+    }
+
+    val newsItems = remember {
+        getDummyWeeklyNewsItems()
+    }
+
+    var selectedNewsCategory by remember {
+        mutableStateOf(NewsCategory.ALL)
+    }
+
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(bottom = 32.dp),
+        state = listState,
+    ) {
+
+        stickyHeader {
+            val listCategoryState = rememberLazyListState()
+            SearchBar(
+                modifier = Modifier
+                    .background(Grey90)
+                    .padding(top = 4.dp)
+                    .padding(horizontal = 16.dp)
+                    .wrapContentSize(),
+                queryProvider = { searchQuery },
+                onQueryChange = {
+                    searchQuery = it
+                },
+                hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
+                interactionSource = searchBarInteractionSource
+            )
+
+            Spacer(
+                Modifier
+                    .fillMaxWidth()
+                    .background(Grey90)
+                    .height(12.dp)
+            )
+
+            LazyRow(
+                state = listCategoryState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Grey90),
+                contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(NewsCategory.entries, key = { it.ordinal }) {
+                    SearchCategory(
+                        isSelected = it == selectedNewsCategory,
+                        text = stringResource(it.textResId)
+                    )
+                }
+            }
+        }
+
+        itemsIndexed(newsItems, key = { _, it -> it.id }) { index, item ->
+            Spacer(
+                Modifier.height(
+                    if (index == 0) 8.dp else 16.dp
+                )
+            )
+
+            WeeklyNews(
+                modifier = weeklyItemModifier
+                    .clickable(onClick = navigateToDetail),
+                item = item
+            )
+        }
     }
 }
 

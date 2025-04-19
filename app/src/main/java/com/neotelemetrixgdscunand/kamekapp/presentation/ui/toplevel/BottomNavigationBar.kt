@@ -21,14 +21,14 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Shadow
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.NavigationBarItem
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.NavigationBarItemData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
-    navigationBarItems: ImmutableList<NavigationBarItem> = persistentListOf(),
+    navigationBarItemsData: ImmutableList<NavigationBarItemData> = persistentListOf(),
     onSelectedNavigation: (Navigation.Main.MainRoute) -> Unit = {},
     selectedNavigationProvider: @Composable () -> Navigation.Main.MainRoute? = { null }
 ) {
@@ -42,7 +42,7 @@ fun BottomNavigationBar(
         containerColor = Color.White
     ) {
         val selectedNavigation = selectedNavigationProvider()
-        navigationBarItems.forEach {
+        navigationBarItemsData.forEach {
             val isSelected = selectedNavigation == it.route
 
             NavigationBarItem(
@@ -51,8 +51,7 @@ fun BottomNavigationBar(
                     selectedIconColor = Maroon55,
                     unselectedTextColor = Grey65,
                     selectedTextColor = Maroon55,
-                    indicatorColor = Color.White,
-
+                    indicatorColor = Color.White
                     ),
 
                 selected = isSelected,
@@ -85,8 +84,8 @@ fun BottomNavigationBar(
 private fun BottomNavigationBarPreview() {
     KamekAppTheme {
         BottomNavigationBar(
-            navigationBarItems = rememberMainPageState()
-                .bottomNavigationBarItems
+            navigationBarItemsData = rememberMainPageState()
+                .bottomNavigationBarItemData
         )
     }
 }

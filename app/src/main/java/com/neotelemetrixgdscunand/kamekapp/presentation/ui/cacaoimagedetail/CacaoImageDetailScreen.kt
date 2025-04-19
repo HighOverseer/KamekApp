@@ -9,16 +9,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.cacaoimagedetail.components.OverlayCompose
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.NavigateUpButton
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 
 @Composable
@@ -61,12 +60,12 @@ fun CacaoImageDetailContent(
     }
 
     Box(Modifier.fillMaxSize()) {
-        AsyncImage(
+        AsyncImagePainterStable(
             modifier = modifier
                 .fillMaxSize()
                 .align(Alignment.Center),
-            model = imagePath,
-            placeholder = painterResource(R.drawable.ic_camera),
+            imageUrlOrPath = imagePath,
+            placeholderResId = R.drawable.ic_camera,
             contentScale = ContentScale.FillBounds,
             contentDescription = null,
             alignment = Alignment.Center

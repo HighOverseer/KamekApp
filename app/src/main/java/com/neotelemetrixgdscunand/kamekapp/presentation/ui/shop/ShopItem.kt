@@ -28,17 +28,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey47
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,16 +62,18 @@ fun ShopItem(
 
     val context = LocalContext.current
 
+    val onClick = remember { {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(targetUrl))
+            context.startActivity(intent)
+        }
+    }
     Card(
         shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         ),
         modifier = cardModifier,
-        onClick = {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(targetUrl))
-            context.startActivity(intent)
-        }
+        onClick = onClick
     ) {
 
         val imageModifier = remember {
@@ -85,10 +86,10 @@ fun ShopItem(
             modifier = imageModifier,
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
+            AsyncImagePainterStable(
                 modifier = Modifier.align(Alignment.Center),
-                model = imageUrl,
-                placeholder = painterResource(R.drawable.ic_camera),
+                imageUrlOrPath = imageUrl,
+                placeholderResId = R.drawable.ic_camera,
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )

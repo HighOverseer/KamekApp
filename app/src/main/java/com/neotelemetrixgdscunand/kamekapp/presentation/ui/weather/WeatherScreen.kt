@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,7 +33,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +45,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon53
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -55,34 +56,7 @@ fun WeatherScreen(
     navigateUp: () -> Unit = {}
 ) {
 
-    val contentItemModifier = remember {
-        Modifier
-            .padding(horizontal = 16.dp)
-    }
 
-    val cardModifier = remember {
-        Modifier
-            .fillMaxWidth()
-            .background(
-                brush = Brush.linearGradient(
-                    colorStops = arrayOf(
-                        Pair(0f, Maroon53),
-                        Pair(100f, Maroon45)
-                    )
-                ),
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(vertical = 24.dp, horizontal = 16.dp)
-    }
-
-    val weatherData: ImmutableList<WeatherPredictionItemData> = remember {
-        getDummyWeatherPredictionItemData().toPersistentList()
-    }
-
-    val weatherItemModifier = remember {
-        Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-    }
     val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -152,147 +126,187 @@ fun WeatherScreen(
             )
         }
     ) { innerPadding ->
-        val scrollState = rememberScrollState()
+
         Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
+            Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(top = 12.dp)
         ) {
-            Text(
-                modifier = contentItemModifier,
-                text = stringResource(R.string.hari_ini),
-                style = MaterialTheme.typography.headlineSmall,
-                color = Black10
-            )
-
-            Spacer(Modifier.height(16.dp))
-
-            Column(
-                modifier = contentItemModifier.then(cardModifier),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Image(
-                    painter = painterResource(R.drawable.ic_weather),
-                    contentDescription = stringResource(R.string.gambar_cuaca)
-                )
-                Text(
-                    text = stringResource(R.string._17),
-                    style = MaterialTheme.typography.displayMedium,
-                    color = Color.White
-                )
-                Spacer(modifier = Modifier.width(24.dp))
-                Text(
-                    stringResource(R.string.hujan_lebat),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.White
-                )
-                Spacer(Modifier.height(8.dp))
-
-                Row {
-                    Text(
-                        stringResource(R.string.h_24),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Pink
-                    )
-                    Spacer(Modifier.width(4.dp))
-                    Text(
-                        stringResource(R.string.l_17),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Pink
-                    )
-                }
-
-                HorizontalDivider(
-                    modifier =
-                    Modifier.padding(vertical = 16.dp)
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text(
-                            stringResource(R.string.kelembapan),
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.W300
-                            ),
-                            color = Pink
-                        )
-                        Spacer(Modifier.height(7.dp))
-                        Text(
-                            stringResource(R.string._87),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
-                        )
-                    }
-                    Column {
-                        Text(
-                            stringResource(R.string.kec_angin),
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.W300
-                            ),
-                            color = Pink
-                        )
-                        Spacer(Modifier.height(7.dp))
-                        Text(
-                            stringResource(R.string._2_km_jam),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
-                        )
-                    }
-                    Column {
-                        Text(
-                            stringResource(R.string.curah_hujan),
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.W300
-                            ),
-                            color = Pink
-                        )
-                        Spacer(Modifier.height(7.dp))
-                        Text(
-                            stringResource(R.string._100mm),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
-                        )
-                    }
-                }
-                Spacer(Modifier.height(27.dp))
-            }
-
-            Spacer(Modifier.height(16.dp))
-
-            Text(
-                modifier = contentItemModifier,
-                text = stringResource(R.string._10_hari_yang_akan_datang),
-                style = MaterialTheme.typography.headlineSmall,
-                color = Black10
-            )
-
-            Spacer(Modifier.height(16.dp))
-
-            weatherData.forEach {
-                key(it.id) {
-                    WeatherPredictionItem(
-                        modifier = weatherItemModifier,
-                        date = it.date,
-                        temperatureRange = it.temperatureRange,
-                        windVelocity = it.windVelocity,
-                        humidityPercentage = it.humidityPercentage
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(48.dp))
+            WeatherScreenBody()
         }
+    }
+}
 
-
+@Composable
+fun WeatherScreenBody(
+    modifier: Modifier = Modifier,
+) {
+    val contentItemModifier = remember {
+        Modifier
+            .padding(horizontal = 16.dp)
     }
 
+    val cardModifier = remember {
+        Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.linearGradient(
+                    colorStops = arrayOf(
+                        Pair(0f, Maroon53),
+                        Pair(100f, Maroon45)
+                    )
+                ),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(vertical = 24.dp, horizontal = 16.dp)
+    }
 
+    val weatherData: ImmutableList<WeatherPredictionItemData> = remember {
+        getDummyWeatherPredictionItemData().toPersistentList()
+    }
+
+    val weatherItemModifier = remember {
+        Modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+    }
+    val scrollState = rememberScrollState()
+
+    Spacer(Modifier.height(12.dp))
+
+    Column(
+        modifier = modifier
+            .verticalScroll(scrollState)
+
+    ) {
+        Text(
+            modifier = contentItemModifier,
+            text = stringResource(R.string.hari_ini),
+            style = MaterialTheme.typography.headlineSmall,
+            color = Black10
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        Column(
+            modifier = contentItemModifier.then(cardModifier),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            ImagePainterStable(
+                drawableResId = R.drawable.ic_weather,
+                contentDescription = stringResource(R.string.gambar_cuaca)
+            )
+
+            Text(
+                text = stringResource(R.string._17),
+                style = MaterialTheme.typography.displayMedium,
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            Text(
+                stringResource(R.string.hujan_lebat),
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
+            )
+            Spacer(Modifier.height(8.dp))
+
+            Row {
+                Text(
+                    stringResource(R.string.h_24),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Pink
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    stringResource(R.string.l_17),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Pink
+                )
+            }
+
+            HorizontalDivider(
+                modifier =
+                Modifier.padding(vertical = 16.dp)
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        stringResource(R.string.kelembapan),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.W300
+                        ),
+                        color = Pink
+                    )
+                    Spacer(Modifier.height(7.dp))
+                    Text(
+                        stringResource(R.string._87),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
+                    )
+                }
+                Column {
+                    Text(
+                        stringResource(R.string.kec_angin),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.W300
+                        ),
+                        color = Pink
+                    )
+                    Spacer(Modifier.height(7.dp))
+                    Text(
+                        stringResource(R.string._2_km_jam),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
+                    )
+                }
+                Column {
+                    Text(
+                        stringResource(R.string.curah_hujan),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.W300
+                        ),
+                        color = Pink
+                    )
+                    Spacer(Modifier.height(7.dp))
+                    Text(
+                        stringResource(R.string._100mm),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
+                    )
+                }
+            }
+            Spacer(Modifier.height(27.dp))
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            modifier = contentItemModifier,
+            text = stringResource(R.string._10_hari_yang_akan_datang),
+            style = MaterialTheme.typography.headlineSmall,
+            color = Black10
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        weatherData.forEach {
+            key(it.id) {
+                WeatherPredictionItem(
+                    modifier = weatherItemModifier,
+                    date = it.date,
+                    temperatureRange = it.temperatureRange,
+                    windVelocity = it.windVelocity,
+                    humidityPercentage = it.humidityPercentage
+                )
+            }
+        }
+
+        Spacer(Modifier.height(48.dp))
+    }
 }
 
 @Preview(showBackground = true)

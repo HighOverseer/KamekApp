@@ -95,11 +95,11 @@ fun MainPage(
             )
         },
         bottomBar = {
-            val navigationBarItems = state.bottomNavigationBarItems
+            val navigationBarItems = state.bottomNavigationBarItemData
             val isInTopLevel by state.isInTopLevel.collectAsStateWithLifecycle()
             if (isInTopLevel) {
                 BottomNavigationBar(
-                    navigationBarItems = navigationBarItems,
+                    navigationBarItemsData = navigationBarItems,
                     selectedNavigationProvider = { state.selectedBottomNavigationRoute },
                     onSelectedNavigation = { selectedNavigation ->
                         state.navigateToTopLevel(

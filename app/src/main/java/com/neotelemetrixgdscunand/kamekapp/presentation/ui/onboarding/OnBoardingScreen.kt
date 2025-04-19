@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,7 +41,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -59,6 +57,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey71
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlin.math.roundToInt
@@ -193,7 +192,7 @@ fun OnBoardingScreen(
             (configuration.screenWidthDp * 0.456f).dp
         }
 
-        Image(
+        ImagePainterStable(
             modifier = Modifier
                 .width(birdWidth)
                 .aspectRatio(birdAspectRatio)
@@ -204,12 +203,12 @@ fun OnBoardingScreen(
                     )
                 }
                 .layoutId(LayoutUtil.BIRD_ID),
-            painter = painterResource(R.drawable.bird),
+            drawableResId = R.drawable.bird,
             contentScale = ContentScale.Crop,
             contentDescription = null
         )
 
-        Image(
+        ImagePainterStable(
             modifier = Modifier
                 .fillMaxHeight(rightCloudHeightRatio)
                 .fillMaxWidth(rightCloudWidthRatio)
@@ -221,15 +220,13 @@ fun OnBoardingScreen(
                     )
 
                 },
-            painter = painterResource(
-                R.drawable.right_cloud
-            ),
+            drawableResId = R.drawable.right_cloud,
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
 
 
-        Image(
+        ImagePainterStable(
             modifier = Modifier
                 .fillMaxHeight(leftCloudHeightRatio)
                 .fillMaxWidth(leftCloudWidthRatio)
@@ -240,9 +237,7 @@ fun OnBoardingScreen(
                         y = 0
                     )
                 },
-            painter = painterResource(
-                R.drawable.left_cloud
-            ),
+            drawableResId = R.drawable.left_cloud,
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
@@ -273,11 +268,9 @@ fun OnBoardingScreen(
             targetState = onBoardingImageResId,
             label = ""
         ) { targetOnBoardingImageResId ->
-            Image(
+            ImagePainterStable(
                 modifier = Modifier,
-                painter = painterResource(
-                    targetOnBoardingImageResId
-                ),
+                drawableResId = targetOnBoardingImageResId,
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )

@@ -35,19 +35,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
 
 @Composable
 fun HomeHeaderSection(
@@ -86,9 +86,9 @@ fun HomeHeaderSection(
                 .align(Alignment.TopEnd)
         }
 
-        Image(
+        ImagePainterStable(
             modifier = backgroundIconModifier,
-            painter = painterResource(R.drawable.header_bg),
+            drawableResId = R.drawable.header_bg,
             contentScale = ContentScale.FillBounds,
             contentDescription = null
         )
@@ -116,12 +116,12 @@ fun HomeHeaderSection(
                 Box(
                     modifier = circleImageModifier
                 ) {
-                    AsyncImage(
+                    AsyncImagePainterStable(
                         modifier = Modifier
                             .align(Alignment.Center),
                         alignment = Alignment.Center,
-                        model = R.drawable.dummy_profile,
-                        placeholder = painterResource(R.drawable.ic_camera),
+                        imageDrawableResId = R.drawable.dummy_profile,
+                        placeholderResId = R.drawable.ic_camera,
                         contentDescription = stringResource(R.string.profile_photo),
                         contentScale = ContentScale.Crop
                     )
@@ -225,8 +225,8 @@ fun HomeHeaderSection(
                     }
 
                     Spacer(Modifier.weight(1f))
-                    Image(
-                        painter = painterResource(R.drawable.ic_weather),
+                    ImagePainterStable(
+                        drawableResId = R.drawable.ic_weather,
                         contentDescription = stringResource(R.string.gambar_cuaca)
                     )
                 }

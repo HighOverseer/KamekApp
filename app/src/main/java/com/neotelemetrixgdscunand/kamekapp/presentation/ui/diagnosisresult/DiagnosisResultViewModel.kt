@@ -19,8 +19,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -37,10 +35,11 @@ class DiagnosisResultViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var hasBeenInitializeFromExtrasData: Boolean
-        get() = savedStateHandle[HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA] ?: false
+    // Backup new diagnosis session id that just has been saved, in case process death happens
+    private var backupNewDiagnosisSessionIdThatJustSaved:Int?
+        get() = savedStateHandle[BACKUP_NEW_DIAGNOSIS_SESSION_ID_THAT_JUST_SAVED]
         set(value) {
-            savedStateHandle[HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA] = value
+            savedStateHandle[BACKUP_NEW_DIAGNOSIS_SESSION_ID_THAT_JUST_SAVED] = value
         }
 
     private val _uiState = MutableStateFlow(DiagnosisResultUIState())
@@ -49,23 +48,37 @@ class DiagnosisResultViewModel @Inject constructor(
     private val _event = Channel<DiagnosisResultUIEvent>()
     val event = _event
         .receiveAsFlow()
-        .onStart {
-            listenToImageDetectorResult()
-            if (!hasBeenInitializeFromExtrasData) {
-                initFromExtras()
-            }
-        }
-        .onCompletion {
-            listeningToImageResultJob?.cancel()
-        }
-
-    private var listeningToImageResultJob: Job? = null
 
     private var detectImageJob: Job? = null
 
     private val extras = savedStateHandle.toRoute<Navigation.DiagnosisResult>()
 
+    init {
+        listenToImageDetectorResult()
+        initFromExtras()
+    }
+
     private fun initFromExtras() {
+        val backupNewDiagnosisSessionIdThatJustSaved = backupNewDiagnosisSessionIdThatJustSaved
+        val isNewDiagnosisSessionSavedFromProcessDeathDueToSystemKills = backupNewDiagnosisSessionIdThatJustSaved != null
+        if(isNewDiagnosisSessionSavedFromProcessDeathDueToSystemKills){
+            backupNewDiagnosisSessionIdThatJustSaved?.let { sessionId ->
+                val theNewDiagnosisSessionThatHasJustBeenSaved = repository.getDiagnosisSession(
+                    sessionId
+                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        diagnosisSession = DiagnosisSessionComposeStable.getFromDomainModel(
+                            theNewDiagnosisSessionThatHasJustBeenSaved
+                        ),
+                        imagePreviewPath = theNewDiagnosisSessionThatHasJustBeenSaved.imageUrlOrPath
+                    )
+                }
+            }
+            return
+        }
+
         val isFromNewSession =
             extras.newSessionName != null && extras.newUnsavedSessionImagePath != null
 
@@ -84,14 +97,13 @@ class DiagnosisResultViewModel @Inject constructor(
                         imagePreviewPath = selectedDiagnosisSession.imageUrlOrPath
                     )
                 }
-                hasBeenInitializeFromExtrasData = true
             }
 
         }
     }
 
     private fun listenToImageDetectorResult() {
-        listeningToImageResultJob = viewModelScope.launch {
+        viewModelScope.launch {
             imageClassifierHelper.result.collect { result ->
                 when (result) {
                     ImageDetectorResult.NoObjectDetected -> {
@@ -142,6 +154,8 @@ class DiagnosisResultViewModel @Inject constructor(
                             detectedCacaos = detectedCacaos
                         )
 
+                        backupNewDiagnosisSessionIdThatJustSaved = newSessionId
+
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
@@ -150,7 +164,7 @@ class DiagnosisResultViewModel @Inject constructor(
                                 )
                             )
                         }
-                        hasBeenInitializeFromExtrasData = true
+
                     }
                 }
             }
@@ -203,7 +217,7 @@ class DiagnosisResultViewModel @Inject constructor(
     }
 
     companion object {
-        private const val HAS_BEEN_INITIALIZED_FROM_EXTRAS_DATA = "hasBeenInitializeFromExtrasData"
+        private const val BACKUP_NEW_DIAGNOSIS_SESSION_ID_THAT_JUST_SAVED = "backupNewDiagnosisSessionIdThatJustSaved"
     }
 
 }

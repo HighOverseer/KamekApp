@@ -24,17 +24,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 
 @Composable
 fun WeeklyNews(
@@ -69,13 +68,13 @@ fun WeeklyNews(
                     .align(Alignment.CenterVertically)
                     .fillMaxSize()
             ) {
-                AsyncImage(
+                AsyncImagePainterStable(
                     modifier = Modifier
                         .align(Alignment.Center),
-                    model = item.imageUrl,
+                    imageUrlOrPath = item.imageUrl,
                     contentScale = ContentScale.Crop,
                     contentDescription = item.title,
-                    placeholder = painterResource(R.drawable.ic_camera)
+                    placeholderResId = R.drawable.ic_camera
                 )
             }
 
