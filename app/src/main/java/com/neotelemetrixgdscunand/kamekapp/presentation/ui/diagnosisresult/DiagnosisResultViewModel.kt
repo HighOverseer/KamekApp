@@ -36,7 +36,7 @@ class DiagnosisResultViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Backup new diagnosis session id that just has been saved, in case process death happens
-    private var backupNewDiagnosisSessionIdThatJustSaved:Int?
+    private var backupNewDiagnosisSessionIdThatJustSaved: Int?
         get() = savedStateHandle[BACKUP_NEW_DIAGNOSIS_SESSION_ID_THAT_JUST_SAVED]
         set(value) {
             savedStateHandle[BACKUP_NEW_DIAGNOSIS_SESSION_ID_THAT_JUST_SAVED] = value
@@ -60,8 +60,9 @@ class DiagnosisResultViewModel @Inject constructor(
 
     private fun initFromExtras() {
         val backupNewDiagnosisSessionIdThatJustSaved = backupNewDiagnosisSessionIdThatJustSaved
-        val isNewDiagnosisSessionSavedFromProcessDeathDueToSystemKills = backupNewDiagnosisSessionIdThatJustSaved != null
-        if(isNewDiagnosisSessionSavedFromProcessDeathDueToSystemKills){
+        val isNewDiagnosisSessionSavedFromProcessDeathDueToSystemKills =
+            backupNewDiagnosisSessionIdThatJustSaved != null
+        if (isNewDiagnosisSessionSavedFromProcessDeathDueToSystemKills) {
             backupNewDiagnosisSessionIdThatJustSaved?.let { sessionId ->
                 val theNewDiagnosisSessionThatHasJustBeenSaved = repository.getDiagnosisSession(
                     sessionId
@@ -217,7 +218,8 @@ class DiagnosisResultViewModel @Inject constructor(
     }
 
     companion object {
-        private const val BACKUP_NEW_DIAGNOSIS_SESSION_ID_THAT_JUST_SAVED = "backupNewDiagnosisSessionIdThatJustSaved"
+        private const val BACKUP_NEW_DIAGNOSIS_SESSION_ID_THAT_JUST_SAVED =
+            "backupNewDiagnosisSessionIdThatJustSaved"
     }
 
 }

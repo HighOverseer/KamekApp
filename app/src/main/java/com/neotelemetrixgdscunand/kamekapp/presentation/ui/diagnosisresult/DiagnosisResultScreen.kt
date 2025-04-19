@@ -132,10 +132,10 @@ fun DiagnosisResultContent(
     }
 
     val density = LocalDensity.current
-    val isLocalNavigateUpButtonVisible by remember{
+    val isLocalNavigateUpButtonVisible by remember {
         derivedStateOf {
             //To check if Top App Bar has collapsed
-            topAppBarState.heightOffset.roundToInt() <= with(density){
+            topAppBarState.heightOffset.roundToInt() <= with(density) {
                 -(topAppBarHeightDp.roundToPx())
             }
         }
@@ -230,7 +230,7 @@ fun TopAppBarNavigateUpButtonWrapper(
         configuration.screenHeightDp.dp * topToArrowMarginRatio
     }
 
-    if(!isLocalNavigateUpButtonVisibleProvider()){
+    if (!isLocalNavigateUpButtonVisibleProvider()) {
         NavigateUpButton(
             modifier = modifier,
             topToArrowMargin = topToArrowMargin,
