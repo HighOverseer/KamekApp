@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -22,16 +23,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.neotelemetrixgdscunand.kamekapp.R
@@ -39,6 +46,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.ContentTopAppBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.DiagnosisHistory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.ScrollUpButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchBar
@@ -54,7 +62,8 @@ fun DiagnosisScreen(
     modifier: Modifier = Modifier,
     viewModel: DiagnosisViewModel = hiltViewModel(),
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
-    expandTopAppBar: () -> Unit = { },
+    navigateToTakePhoto: () -> Unit = {},
+    bottomBarHeightPxProvider:()-> Int = { 0 }
 ) {
 
     val diagnosisHistories by viewModel.diagnosisHistoryPreview.collectAsState()
@@ -63,7 +72,8 @@ fun DiagnosisScreen(
         modifier = modifier,
         diagnosisSessionPreviews = diagnosisHistories,
         navigateToDiagnosisResult = navigateToDiagnosisResult,
-        expandTopAppBar = expandTopAppBar,
+        navigateToTakePhoto = navigateToTakePhoto,
+        bottomBarHeightPxProvider = bottomBarHeightPxProvider
     )
 }
 
@@ -74,7 +84,8 @@ fun DiagnosisContent(
     modifier: Modifier = Modifier,
     diagnosisSessionPreviews: ImmutableList<DiagnosisSessionPreview> = persistentListOf(),
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
-    expandTopAppBar: () -> Unit = { },
+    navigateToTakePhoto: () -> Unit = { },
+    bottomBarHeightPxProvider: () -> Int = { 0 }
 ) {
 
     val selectedSearchHistoryCategory by remember {
@@ -84,23 +95,57 @@ fun DiagnosisContent(
     Box(
         Modifier.fillMaxSize()
     ) {
+
+        val configuration = LocalConfiguration.current
+        val density = LocalDensity.current
+
+        val parentListState = rememberLazyListState()
+
+        val initialHeightBeforeCalculating = -1
+        var remainingHeightPx:Int by remember {
+            mutableIntStateOf(initialHeightBeforeCalculating)
+        }
+        var topBarHeightPx by remember {
+            mutableIntStateOf(initialHeightBeforeCalculating)
+        }
+        val isContentPaddingHasBeenCalculated by remember {
+            derivedStateOf {
+                remainingHeightPx != initialHeightBeforeCalculating
+                        && topBarHeightPx != initialHeightBeforeCalculating
+            }
+        }
+
         val lazyColumnModifier = remember {
             modifier
                 .fillMaxWidth()
+                .wrapContentHeight()
                 .background(color = Grey90)
-        }
-        val configuration = LocalConfiguration.current
-        val contentPadding = remember(diagnosisSessionPreviews) {
-            val divider = if (diagnosisSessionPreviews.size < 5) 3 else 10
-            PaddingValues(bottom = configuration.screenHeightDp.dp / divider)
-        }
-        val parentListState = rememberLazyListState()
+                .onGloballyPositioned { coordinates ->
+                    if (isContentPaddingHasBeenCalculated) return@onGloballyPositioned
 
+                    val screenHeightPx = with(density) {
+                        configuration.screenHeightDp.dp.roundToPx()
+                    }
+                    val remainingHeightIfAny = (screenHeightPx - coordinates.size.height)
+                        .coerceAtLeast(0)
+
+                    remainingHeightPx = remainingHeightIfAny
+                }
+        }
         LazyColumn(
             modifier = lazyColumnModifier,
             state = parentListState,
-            contentPadding = contentPadding
         ) {
+            item{
+
+                ContentTopAppBar(
+                    onTopAppBarHeightMeasured = {
+                        topBarHeightPx = it
+                    },
+                    navigateToTakePhoto = navigateToTakePhoto
+                )
+            }
+
             stickyHeader {
                 Column(
                     Modifier
@@ -170,24 +215,64 @@ fun DiagnosisContent(
 
                 Spacer(Modifier.height(16.dp))
             }
+
+            item{
+                if(isContentPaddingHasBeenCalculated){
+                    Spacer(
+                        Modifier.height(
+                            calculateContentBottomPaddingOfLazyColumn(
+                                topBarHeightPx = topBarHeightPx,
+                                bottomBarHeightPx = bottomBarHeightPxProvider(),
+                                remainingContentHeight = remainingHeightPx,
+                                density = density
+                            )
+                    ))
+                }
+            }
         }
 
 
         val coroutineScope = rememberCoroutineScope()
+        val onScrollUpButtonClicked:()->Unit = remember { {
+                coroutineScope.launch {
+                    parentListState.scrollToItem(0)
+                }
+            }
+        }
         ScrollUpButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .fillMaxHeight(0.15f)
                 .fillMaxWidth(0.25f),
             lazyListStateProvider = { parentListState },
-            onClick = {
-                coroutineScope.launch {
-                    parentListState.scrollToItem(0)
-                    expandTopAppBar()
-                }
-            }
+            onClick = onScrollUpButtonClicked
         )
     }
+}
+
+private fun calculateContentBottomPaddingOfLazyColumn(
+    topBarHeightPx: Int,
+    remainingContentHeight:Int,
+    bottomBarHeightPx: Int = 0,
+    density: Density
+): Dp {
+    val isContentHasFilledToMaxHeight = remainingContentHeight - bottomBarHeightPx  <= 0
+
+    if(isContentHasFilledToMaxHeight) return 32.dp
+
+    val remainingHeightDp = with(density){
+        remainingContentHeight.toDp()
+    }
+
+    val topBarHeightDp = with(density){
+        topBarHeightPx.toDp()
+    }
+
+    val bottomBarHeightDp = with(density){
+        bottomBarHeightPx.toDp()
+    }
+
+    return remainingHeightDp - bottomBarHeightDp + topBarHeightDp
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F5F5)
@@ -203,7 +288,7 @@ private fun DiagnosisScreenPreview() {
                     date = "12-05-2024",
                     predictedPrice = 1400f
                 )
-            }.toImmutableList()
+            }.take(1).toImmutableList()
         )
     }
 

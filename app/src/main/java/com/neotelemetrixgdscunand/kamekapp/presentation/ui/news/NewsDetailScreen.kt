@@ -74,8 +74,7 @@ fun NewsDetailScreen(
                 .padding(start = 16.dp, end = 16.dp, bottom = 40.25.dp)
 
         ) {
-
-
+            
             val imageAspectRatio = 1.652f
             Box(
                 modifier = Modifier

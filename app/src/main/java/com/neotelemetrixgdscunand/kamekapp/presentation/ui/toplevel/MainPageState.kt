@@ -1,13 +1,9 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.neotelemetrixgdscunand.kamekapp.R
@@ -16,14 +12,11 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.util.Navigat
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 @Composable
 fun rememberMainPageState(
@@ -44,7 +37,7 @@ fun rememberMainPageState(
 @Stable
 class MainPageState(
     private val navHostController: NavHostController,
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
 ) {
 
     val bottomNavigationBarItemData: ImmutableList<NavigationBarItemData> = getNavigationBarItems()
@@ -55,7 +48,7 @@ class MainPageState(
         Navigation.Main.Account.stringVal to Navigation.Main.Account,
     )
 
-    private val currentSelectedAndNavigatedTopLevelRoute: StateFlow<Navigation.Main.MainRoute?> =
+    val currentSelectedTopLevelRoute: StateFlow<Navigation.Main.MainRoute?> =
         navHostController.currentBackStackEntryFlow
             .map {
                 val currentRoute = it.destination.route
@@ -68,86 +61,25 @@ class MainPageState(
                 null
             )
 
-    private var currentJustSelectedTopLevelRoute by mutableStateOf<Navigation.Main.MainRoute?>(null)
-
-    val selectedBottomNavigationRoute: Navigation.Main.MainRoute?
-        get() = currentJustSelectedTopLevelRoute
-            ?: currentSelectedAndNavigatedTopLevelRoute.value
-
-    val shouldShowTopAppBar: StateFlow<Boolean> =
-        currentSelectedAndNavigatedTopLevelRoute
-            .map {
-                it == Navigation.Main.Diagnosis
-            }
-            .stateIn(
-                coroutineScope,
-                SharingStarted.WhileSubscribed(5000L),
-                false
-            )
-
-    val isInTopLevel = currentSelectedAndNavigatedTopLevelRoute
-        .map {
-            it != null
-        }
-        .distinctUntilChanged()
-        .stateIn(
-            coroutineScope,
-            SharingStarted.WhileSubscribed(5000L),
-            false
-        )
-
-    var isTopBarShown by mutableStateOf(false)
-        private set
-
-
-    @Composable
-    fun HandleTopAppBarInitialExpandedHeightEffect(
-        shouldShowTopAppBar: Boolean,
-        expandTopAppBar: () -> Unit = {}
-    ) {
-        LaunchedEffect(shouldShowTopAppBar) {
-            if (shouldShowTopAppBar) {
-                //Wait for Navigation to Diagnosis Finished first
-                delay(TOP_APP_BAR_VISIBILITY_ANIMATION_DURATION_MILLIS.times(2).toLong())
-
-                expandTopAppBar()
-                isTopBarShown = true
-            }
-        }
-    }
-
-    private var navigationJob: Job? = null
     fun navigateToTopLevel(
         nextDestination: Navigation.Main.MainRoute
     ) {
-        val currentSelectedTopLevelRoute = currentSelectedAndNavigatedTopLevelRoute.value
+        val currentSelectedTopLevelRoute = currentSelectedTopLevelRoute.value
 
         if (currentSelectedTopLevelRoute == nextDestination) return
 
-        if (navigationJob != null) return
+        navHostController.navigate(
+            nextDestination,
+        ) {
+            // To have a fresh top level destination instance when navigating in top level
+            popUpTo(navHostController.graph.startDestinationId) {
+                //inclusive = nextDestination == Navigation.Main.Home
+                saveState = true
 
-        navigationJob = coroutineScope.launch {
-            this@MainPageState.currentJustSelectedTopLevelRoute = nextDestination
-
-            val isExitingDiagnosisRoute = currentSelectedTopLevelRoute == Navigation.Main.Diagnosis
-            if (isExitingDiagnosisRoute) {
-                isTopBarShown = false
-                delay(TOP_APP_BAR_VISIBILITY_ANIMATION_DURATION_MILLIS.toLong())
             }
-
-            navHostController.navigate(
-                nextDestination,
-            ) {
-                // To have a fresh top level destination instance when navigating in top level
-                popUpTo(navHostController.graph.startDestinationId) {
-                    //inclusive = nextDestination == Navigation.Main.Home
-                    saveState = true
-
-                }
-                launchSingleTop = true
-                restoreState = true
-            }
-        }.apply { invokeOnCompletion { navigationJob = null } }
+            launchSingleTop = true
+            restoreState = true
+        }
     }
 
 
@@ -169,9 +101,5 @@ class MainPageState(
                 route = Navigation.Main.Account
             ),
         )
-    }
-
-    companion object {
-        const val TOP_APP_BAR_VISIBILITY_ANIMATION_DURATION_MILLIS = 200
     }
 }

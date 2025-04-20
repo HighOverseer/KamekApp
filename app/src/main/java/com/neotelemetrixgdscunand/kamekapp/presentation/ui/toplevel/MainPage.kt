@@ -12,8 +12,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +33,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishis
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeScreen
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPage(
     modifier: Modifier = Modifier,
@@ -45,18 +47,6 @@ fun MainPage(
     navigateToTakePhoto: () -> Unit = {}
 ) {
 
-    val shouldShowTopAppBar by state.shouldShowTopAppBar.collectAsStateWithLifecycle()
-    val topAppBarState = rememberTopAppBarState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-        state = topAppBarState,
-        canScroll = { shouldShowTopAppBar }
-    )
-    val expandTopAppBar = remember {
-        {
-            topAppBarState.heightOffset = 0f
-        }
-    }
-
     val snackbarHostState = remember {
         SnackbarHostState()
     }
@@ -69,8 +59,12 @@ fun MainPage(
         }
     }
 
+    var bottomBarHeightPx by remember{
+        mutableIntStateOf(0)
+    }
+
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier,
         containerColor = Grey90,
         snackbarHost = {
             SnackbarHost(
@@ -80,34 +74,22 @@ fun MainPage(
                 }
             )
         },
-        topBar = {
-            state.HandleTopAppBarInitialExpandedHeightEffect(
-                shouldShowTopAppBar = shouldShowTopAppBar,
-                expandTopAppBar = expandTopAppBar
-            )
-
-            DiagnosisTopAppBar(
-                isVisibleProvider = { state.isTopBarShown },
-                scrollBehavior = scrollBehavior,
-                onClick = navigateToTakePhoto,
-                visibilityAnimationDurationMillis = MainPageState
-                    .TOP_APP_BAR_VISIBILITY_ANIMATION_DURATION_MILLIS
-            )
-        },
         bottomBar = {
             val navigationBarItems = state.bottomNavigationBarItemData
-            val isInTopLevel by state.isInTopLevel.collectAsStateWithLifecycle()
-            if (isInTopLevel) {
-                BottomNavigationBar(
-                    navigationBarItemsData = navigationBarItems,
-                    selectedNavigationProvider = { state.selectedBottomNavigationRoute },
-                    onSelectedNavigation = { selectedNavigation ->
-                        state.navigateToTopLevel(
-                            selectedNavigation
-                        )
-                    }
-                )
-            }
+            val currentSelectedTopLevelRoute by state.currentSelectedTopLevelRoute.collectAsStateWithLifecycle()
+
+            MeasuredBottomNavigationBar(
+                navigationBarItemsData = navigationBarItems,
+                selectedNavigationProvider = { currentSelectedTopLevelRoute },
+                onSelectedNavigation = { selectedNavigation ->
+                    state.navigateToTopLevel(
+                        selectedNavigation
+                    )
+                },
+                onBottomNavigationBarHeightMeasured = {
+                    bottomBarHeightPx = it
+                }
+            )
 
         }
     ) { innerPadding ->
@@ -135,7 +117,8 @@ fun MainPage(
                 composable<Navigation.Main.Diagnosis> {
                     DiagnosisScreen(
                         navigateToDiagnosisResult = navigateToDiagnosisResult,
-                        expandTopAppBar = expandTopAppBar,
+                        navigateToTakePhoto = navigateToTakePhoto,
+                        bottomBarHeightPxProvider = { bottomBarHeightPx }
                     )
                 }
 
