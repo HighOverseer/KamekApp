@@ -77,11 +77,11 @@ fun InputFulfillAmountCacaoDialog(
                     PrimaryTextField(
                         contentPadding = PaddingValues(vertical = 13.5.dp, horizontal = 16.dp),
                         hintText = stringResource(R.string.masukkan_jumlah),
-                        value = value,
+                        valueProvider = { value },
                         onValueChange = onValueChange,
                         textColor = Black10,
                         backgroundColor = Grey90,
-                        isFocused = isFocused,
+                        isFocusedProvider = { isFocused },
                         interactionSource = interactionSource,
                         isBordered = false
                     )

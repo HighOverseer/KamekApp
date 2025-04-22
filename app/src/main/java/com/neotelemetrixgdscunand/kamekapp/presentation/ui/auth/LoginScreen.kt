@@ -123,8 +123,8 @@ fun LoginContent(
                     }
                 },
                 hintText = stringResource(R.string.masukan_email_kamu_disini),
-                value = username,
-                isFocused = isUsernameTextFieldFocused
+                valueProvider = { username },
+                isFocusedProvider = { isUsernameTextFieldFocused }
             )
 
             Spacer(
@@ -139,9 +139,9 @@ fun LoginContent(
                         password = it
                     }
                 },
-                value = password,
+                valueProvider = { password },
                 hintText = stringResource(R.string.masukkan_password_kamu_disini),
-                isFocused = isPasswordTextFieldFocused,
+                isFocusedProvider = { isPasswordTextFieldFocused },
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Icon(

@@ -56,9 +56,9 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
 
     RegisterContent(
         modifier = modifier,
-        username = username,
-        password = password,
-        confirmationPassword = confirmationPassword,
+        usernameProvider = { username },
+        passwordProvider = { password },
+        confirmationPasswordProvider = { confirmationPassword },
         onUsernameChange = {
             if (it.length <= textMaxLength) {
                 username = it
@@ -94,9 +94,9 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
 @Composable
 fun RegisterContent(
     modifier: Modifier = Modifier,
-    username: String = "",
-    password: String = "",
-    confirmationPassword: String = "",
+    usernameProvider: () -> String = { "" },
+    passwordProvider: () -> String = { "" },
+    confirmationPasswordProvider: () -> String = { "" },
     onUsernameChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onConfirmationPasswordChange: (String) -> Unit = {},
@@ -155,8 +155,8 @@ fun RegisterContent(
                 title = stringResource(R.string.email),
                 interactionSource = usernameInteractionSource,
                 onValueChange = onUsernameChange,
-                value = username,
-                isFocused = isUsernameTextFieldFocused
+                valueProvider = usernameProvider,
+                isFocusedProvider = { isUsernameTextFieldFocused }
             )
 
             Spacer(
@@ -167,8 +167,8 @@ fun RegisterContent(
                 title = stringResource(R.string.password),
                 interactionSource = passwordInteractionSource,
                 onValueChange = onPasswordChange,
-                value = password,
-                isFocused = isPasswordTextFieldFocused,
+                valueProvider = passwordProvider,
+                isFocusedProvider = { isPasswordTextFieldFocused },
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Icon(
@@ -197,8 +197,8 @@ fun RegisterContent(
                 title = stringResource(R.string.masukan_ulang_password),
                 interactionSource = confirmationPasswordInteractionSource,
                 onValueChange = onConfirmationPasswordChange,
-                value = confirmationPassword,
-                isFocused = isConfirmationPasswordTextFieldFocused,
+                valueProvider = confirmationPasswordProvider,
+                isFocusedProvider = { isConfirmationPasswordTextFieldFocused },
                 visualTransformation = if (isConfirmationPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Icon(

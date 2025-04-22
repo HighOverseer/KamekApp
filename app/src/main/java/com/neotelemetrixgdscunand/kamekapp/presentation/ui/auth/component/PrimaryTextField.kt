@@ -29,8 +29,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 @Composable
 fun PrimaryTextField(
     modifier: Modifier = Modifier,
-    isFocused: Boolean = false,
-    value: String = "",
+    isFocusedProvider: () -> Boolean = { false },
+    valueProvider: () -> String = { "" },
     onValueChange: (String) -> Unit = {},
     hintText: String = "",
     textColor: Color = Black10,
@@ -43,6 +43,9 @@ fun PrimaryTextField(
     backgroundColor: Color = Color.Transparent,
     enabled: Boolean = true
 ) {
+
+    val isFocused = isFocusedProvider()
+    val value = valueProvider()
 
     val textFieldModifier = remember {
         modifier

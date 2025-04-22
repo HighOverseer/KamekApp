@@ -66,13 +66,13 @@ fun TextFieldConfirmationDialog(
 
                     PrimaryTextField(
                         contentPadding = PaddingValues(vertical = 13.5.dp, horizontal = 16.dp),
-                        value = textProvider(),
+                        valueProvider = textProvider,
                         hintText = hintText,
                         onValueChange = onValueNameChange,
                         textColor = Black10,
                         backgroundColor = Grey90,
                         enabled = state.canUserInteractWithDialog,
-                        isFocused = isFocused,
+                        isFocusedProvider = { isFocused },
                         interactionSource = interactionSource,
                         isBordered = false
                     )

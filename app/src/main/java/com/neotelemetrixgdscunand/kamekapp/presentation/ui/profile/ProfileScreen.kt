@@ -170,8 +170,8 @@ fun ProfileContent(
                     }
                 },
                 hintText = stringResource(R.string.masukan_nama_kamu_disini),
-                value = name,
-                isFocused = nameTextFieldFocused
+                valueProvider = { name },
+                isFocusedProvider = { nameTextFieldFocused }
             )
 
             Spacer(Modifier.height(16.dp))
@@ -184,8 +184,8 @@ fun ProfileContent(
                     }
                 },
                 hintText = stringResource(R.string.masukan_nama_kamu_disini),
-                value = hpNumber,
-                isFocused = hpNumberTextFieldFocused
+                valueProvider = { hpNumber },
+                isFocusedProvider = { hpNumberTextFieldFocused }
             )
 
             Spacer(

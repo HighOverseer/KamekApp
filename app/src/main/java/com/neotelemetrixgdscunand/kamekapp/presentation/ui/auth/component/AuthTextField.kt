@@ -17,8 +17,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 fun AuthTextField(
     title: String = "",
     modifier: Modifier = Modifier,
-    isFocused: Boolean = false,
-    value: String = "",
+    isFocusedProvider: () -> Boolean = { false },
+    valueProvider: () -> String = { "" },
     onValueChange: (String) -> Unit = {},
     hintText: String = "",
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
@@ -37,8 +37,8 @@ fun AuthTextField(
     Spacer(Modifier.height(8.dp))
 
     PrimaryTextField(
-        isFocused = isFocused,
-        value = value,
+        isFocusedProvider = isFocusedProvider,
+        valueProvider = valueProvider,
         onValueChange = onValueChange,
         hintText = hintText,
         interactionSource = interactionSource,

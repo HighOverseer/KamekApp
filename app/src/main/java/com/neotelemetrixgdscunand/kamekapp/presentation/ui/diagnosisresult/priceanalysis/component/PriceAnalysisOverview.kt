@@ -73,14 +73,14 @@ fun PriceAnalysisOverview(modifier: Modifier = Modifier) {
         PrimaryTextField(
             contentPadding = PaddingValues(vertical = 13.5.dp, horizontal = 16.dp),
             hintText = stringResource(R.string.masukkan_jumlah),
-            value = cacaoAverageWeightInput,
+            valueProvider = { cacaoAverageWeightInput },
             onValueChange = {
                 if (allowedCharacterPattern.matches(it)) {
                     cacaoAverageWeightInput = it
                 }
             },
             textColor = Black10,
-            isFocused = isFocused,
+            isFocusedProvider = { isFocused },
             interactionSource = interactionSource,
             isBordered = true,
         )
