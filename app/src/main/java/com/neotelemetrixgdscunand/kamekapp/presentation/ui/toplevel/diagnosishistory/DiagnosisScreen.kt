@@ -63,7 +63,7 @@ fun DiagnosisScreen(
     viewModel: DiagnosisViewModel = hiltViewModel(),
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
     navigateToTakePhoto: () -> Unit = {},
-    bottomBarHeightPxProvider:()-> Int = { 0 }
+    bottomBarHeightPxProvider: () -> Int = { 0 }
 ) {
 
     val diagnosisHistories by viewModel.diagnosisHistoryPreview.collectAsState()
@@ -102,7 +102,7 @@ fun DiagnosisContent(
         val parentListState = rememberLazyListState()
 
         val initialHeightBeforeCalculating = -1
-        var remainingHeightPx:Int by remember {
+        var remainingHeightPx: Int by remember {
             mutableIntStateOf(initialHeightBeforeCalculating)
         }
         var topBarHeightPx by remember {
@@ -136,7 +136,7 @@ fun DiagnosisContent(
             modifier = lazyColumnModifier,
             state = parentListState,
         ) {
-            item{
+            item {
 
                 ContentTopAppBar(
                     onTopAppBarHeightMeasured = {
@@ -216,8 +216,8 @@ fun DiagnosisContent(
                 Spacer(Modifier.height(16.dp))
             }
 
-            item{
-                if(isContentPaddingHasBeenCalculated){
+            item {
+                if (isContentPaddingHasBeenCalculated) {
                     Spacer(
                         Modifier.height(
                             calculateContentBottomPaddingOfLazyColumn(
@@ -226,14 +226,16 @@ fun DiagnosisContent(
                                 remainingContentHeight = remainingHeightPx,
                                 density = density
                             )
-                    ))
+                        )
+                    )
                 }
             }
         }
 
 
         val coroutineScope = rememberCoroutineScope()
-        val onScrollUpButtonClicked:()->Unit = remember { {
+        val onScrollUpButtonClicked: () -> Unit = remember {
+            {
                 coroutineScope.launch {
                     parentListState.scrollToItem(0)
                 }
@@ -252,23 +254,23 @@ fun DiagnosisContent(
 
 private fun calculateContentBottomPaddingOfLazyColumn(
     topBarHeightPx: Int,
-    remainingContentHeight:Int,
+    remainingContentHeight: Int,
     bottomBarHeightPx: Int = 0,
     density: Density
 ): Dp {
-    val isContentHasFilledToMaxHeight = remainingContentHeight - bottomBarHeightPx  <= 0
+    val isContentHasFilledToMaxHeight = remainingContentHeight - bottomBarHeightPx <= 0
 
-    if(isContentHasFilledToMaxHeight) return 32.dp
+    if (isContentHasFilledToMaxHeight) return 32.dp
 
-    val remainingHeightDp = with(density){
+    val remainingHeightDp = with(density) {
         remainingContentHeight.toDp()
     }
 
-    val topBarHeightDp = with(density){
+    val topBarHeightDp = with(density) {
         topBarHeightPx.toDp()
     }
 
-    val bottomBarHeightDp = with(density){
+    val bottomBarHeightDp = with(density) {
         bottomBarHeightPx.toDp()
     }
 
