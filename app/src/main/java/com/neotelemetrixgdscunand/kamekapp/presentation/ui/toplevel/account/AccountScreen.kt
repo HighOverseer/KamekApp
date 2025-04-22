@@ -2,6 +2,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.account
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,7 +42,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 
 @Composable
-fun AccountScreen(modifier: Modifier = Modifier) {
+fun AccountScreen(
+    modifier: Modifier = Modifier,
+    navigateToProfile: () -> Unit = {}
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -59,58 +64,63 @@ fun AccountScreen(modifier: Modifier = Modifier) {
 
         Spacer(Modifier.height(32.dp))
 
-        Row(
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .clickable(onClick = navigateToProfile)
         ) {
-
-            val circleImageModifier = remember {
-                Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-            }
-
-            Box(
-                modifier = circleImageModifier
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                AsyncImagePainterStable(
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                    alignment = Alignment.Center,
-                    imageDrawableResId = R.drawable.dummy_profile,
-                    placeholderResId = R.drawable.ic_camera,
-                    contentDescription = stringResource(R.string.profile_photo),
-                    contentScale = ContentScale.Crop
+
+                val circleImageModifier = remember {
+                    Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                }
+
+                Box(
+                    modifier = circleImageModifier
+                ) {
+                    AsyncImagePainterStable(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        alignment = Alignment.Center,
+                        imageDrawableResId = R.drawable.dummy_profile,
+                        placeholderResId = R.drawable.ic_camera,
+                        contentDescription = stringResource(R.string.profile_photo),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                Spacer(Modifier.width(16.dp))
+
+                Column {
+                    Text(
+                        stringResource(R.string.selamat_datang),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Grey60
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        stringResource(R.string.fajar_alif_riyandi),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = Black10
+                    )
+                }
+
+                Spacer(Modifier.weight(1f))
+
+                Icon(
+                    imageVector = ImageVector
+                        .vectorResource(R.drawable.ic_pencil),
+                    tint = Grey61,
+                    contentDescription = stringResource(R.string.edit_profile)
                 )
             }
-
-            Spacer(Modifier.width(16.dp))
-
-            Column {
-                Text(
-                    stringResource(R.string.selamat_datang),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Grey60
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    stringResource(R.string.fajar_alif_riyandi),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Black10
-                )
-            }
-
-            Spacer(Modifier.weight(1f))
-
-            Icon(
-                imageVector = ImageVector
-                    .vectorResource(R.drawable.ic_pencil),
-                tint = Grey61,
-                contentDescription = stringResource(R.string.edit_profile)
-            )
         }
 
         Spacer(Modifier.height(40.dp))

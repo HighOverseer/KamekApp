@@ -30,6 +30,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.CacaoRequestScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.NotificationScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding.OnBoardingScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.profile.ProfileScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.shop.ShopScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.TakePhotoScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.MainPage
@@ -173,6 +174,11 @@ fun KamekApp(
                         rootNavHostController.navigate(
                             Navigation.TakePhoto
                         )
+                    },
+                    navigateToProfile = {
+                        rootNavHostController.navigate(
+                            Navigation.Profile
+                        )
                     }
                 )
             }
@@ -268,6 +274,11 @@ fun KamekApp(
                 )
             }
 
+            composable<Navigation.Profile> {
+                ProfileScreen(
+                    navigateUp = rootNavHostController::navigateUp
+                )
+            }
         }
     }
 

@@ -39,7 +39,8 @@ fun MainPage(
     navigateToNewsDetail: () -> Unit = {},
     navigateToDiagnosisResult: (Int) -> Unit = {},
     navigateToNotification: () -> Unit = {},
-    navigateToTakePhoto: () -> Unit = {}
+    navigateToTakePhoto: () -> Unit = {},
+    navigateToProfile: () -> Unit = {},
 ) {
 
     val snackbarHostState = remember {
@@ -118,7 +119,9 @@ fun MainPage(
                 }
 
                 composable<Navigation.Main.Account> {
-                    AccountScreen()
+                    AccountScreen(
+                        navigateToProfile = navigateToProfile
+                    )
                 }
 
             }

@@ -86,5 +86,8 @@ sealed interface Navigation {
         val diagnosisSessionId: Int,
         val detectedCacaoId: Int?
     ) : Route
+
+    @Serializable
+    data object Profile : Route
 }
 

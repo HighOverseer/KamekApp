@@ -201,4 +201,10 @@
 
     <string name="input_image_is_invalid_no_cocoa_detected">Input Image is Invalid, No Cocoa Detected</string>
     <string name="invalid_session_please_try_again">Invalid Session, Please Try Again..</string>
+
+    <string name="ubah_profil">Edit Profile</string>
+    <string name="nama">Name</string>
+    <string name="masukan_nama_kamu_disini">Insert your name here</string>
+    <string name="nomor_handphone">Handphone Number</string>
+    <string name="simpan">Save</string>
 </resources>

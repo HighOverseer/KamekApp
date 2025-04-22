@@ -198,4 +198,9 @@
     <string name="kakao">Kakao %1$s</string>
     <string name="input_image_is_invalid_no_cocoa_detected">Input Gambar Invalid, Tidak Ada Kakao Yang Terdeteksi</string>
     <string name="invalid_session_please_try_again">Sesi Invalid, Tolong Coba Lagi..</string>
+    <string name="ubah_profil">Ubah Profil</string>
+    <string name="nama">Nama</string>
+    <string name="masukan_nama_kamu_disini">Masukan nama kamu disini</string>
+    <string name="nomor_handphone">Nomor Handphone</string>
+    <string name="simpan">Simpan</string>
 </resources>
