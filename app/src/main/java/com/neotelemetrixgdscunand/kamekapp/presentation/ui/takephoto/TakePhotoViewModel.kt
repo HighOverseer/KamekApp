@@ -2,7 +2,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dicoding.asclepius.domain.common.StringRes
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UIText
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CaptureImageFileHandler
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CameraState
@@ -51,7 +51,7 @@ class TakePhotoViewModel @Inject constructor(
                     }
 
                     is ImageCaptureResult.Error -> {
-                        val message = StringRes.Dynamic(result.exception.message.toString())
+                        val message = UIText.DynamicString(result.exception.message.toString())
                         _uiEvent.send(
                             TakePhotoUIEvent.OnToastMessage(message)
                         )
@@ -68,7 +68,7 @@ class TakePhotoViewModel @Inject constructor(
                     is TextFieldConfirmationDialogEvent.OnSubmitted -> {
                         if (event.submittedText.isBlank()) {
                             val message =
-                                StringRes.Static(R.string.nama_yang_dimasukkan_tidak_valid)
+                                UIText.StringResource(R.string.nama_yang_dimasukkan_tidak_valid)
                             viewModelScope.launch {
                                 _uiEvent.send(
                                     TakePhotoUIEvent.OnToastMessage(message)

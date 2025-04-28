@@ -52,7 +52,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.getValue
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList

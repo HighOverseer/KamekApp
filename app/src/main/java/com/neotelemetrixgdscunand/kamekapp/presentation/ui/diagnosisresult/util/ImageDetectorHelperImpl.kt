@@ -31,7 +31,6 @@ import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class ImageDetectorHelperImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val imageConverter: ImageConverter,

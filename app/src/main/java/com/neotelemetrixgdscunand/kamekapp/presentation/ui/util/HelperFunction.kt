@@ -5,7 +5,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.dicoding.asclepius.domain.common.StringRes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -25,15 +24,5 @@ fun <T> LifecycleOwner.collectChannelWhenStarted(
     }
 }
 
-fun StringRes.getValue(context: Context): String {
-    return when (this) {
-        is StringRes.Static -> {
-            context.getString(resId, args)
-        }
 
-        is StringRes.Dynamic -> {
-            value
-        }
-    }
-}
 

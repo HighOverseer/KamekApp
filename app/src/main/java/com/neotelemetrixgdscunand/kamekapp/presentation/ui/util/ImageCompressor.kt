@@ -12,8 +12,10 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.roundToInt
 
+@Singleton
 class ImageCompressor @Inject constructor(
     @ApplicationContext private val context: Context
 ) {

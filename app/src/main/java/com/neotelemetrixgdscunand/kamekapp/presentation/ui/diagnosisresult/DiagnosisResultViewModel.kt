@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.dicoding.asclepius.domain.common.StringRes
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UIText
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
@@ -119,7 +119,7 @@ class DiagnosisResultViewModel @Inject constructor(
                         viewModelScope.launch {
                             _event.send(
                                 DiagnosisResultUIEvent.OnToastMessage(
-                                    StringRes.Dynamic(
+                                    UIText.DynamicString(
                                         result.exception.message.toString()
                                     )
                                 )

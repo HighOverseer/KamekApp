@@ -1,8 +1,8 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult
 
-import com.dicoding.asclepius.domain.common.StringRes
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UIText
 
 sealed class DiagnosisResultUIEvent {
-    data class OnToastMessage(val message: StringRes) : DiagnosisResultUIEvent()
+    data class OnToastMessage(val message: UIText) : DiagnosisResultUIEvent()
     data object OnInputImageInvalid : DiagnosisResultUIEvent()
 }

@@ -9,23 +9,23 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.Captur
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 abstract class PresentationModule {
 
     @Binds
-    @Singleton
     abstract fun bindImageDetectorHelper(imageDetectorHelperImpl: ImageDetectorHelperImpl): ImageDetectorHelper
 
     @Binds
-    @Singleton
+    @ViewModelScoped
     abstract fun bindModelLabelExtractor(modelLabelExtractorImpl: ModelLabelExtractorImpl): ModelLabelExtractor
 
     @Binds
-    @Singleton
     abstract fun bindCapturedImageFileHandler(capturedImageFileHandlerImpl: CapturedImageFileHandlerImpl): CaptureImageFileHandler
 
 }
