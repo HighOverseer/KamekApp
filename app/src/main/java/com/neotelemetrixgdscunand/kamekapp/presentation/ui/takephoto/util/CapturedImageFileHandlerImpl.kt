@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class CapturedImageFileHandlerImpl @Inject constructor(
     @ApplicationContext private val context: Context

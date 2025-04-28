@@ -29,7 +29,6 @@ import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class ImageDetectorHelperImpl @Inject constructor(
     @ApplicationContext private val context: Context,

@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UIText
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
@@ -14,6 +13,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelp
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResult
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
