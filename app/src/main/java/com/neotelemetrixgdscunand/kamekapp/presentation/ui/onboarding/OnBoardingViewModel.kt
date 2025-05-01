@@ -14,15 +14,15 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     private val authRepository: AuthRepository
-):ViewModel() {
+) : ViewModel() {
 
     private val _onBoardingSessionFinishedEvent = Channel<Unit>()
     val onBoardingSessionFinishedEvent = _onBoardingSessionFinishedEvent.receiveAsFlow()
 
-    private var job:Job? = null
+    private var job: Job? = null
 
-    fun onBoardingSessionFinish(){
-        if(job != null) return
+    fun onBoardingSessionFinish() {
+        if (job != null) return
 
         job = viewModelScope.launch(Dispatchers.IO) {
             authRepository.setIsFirstTime(false)

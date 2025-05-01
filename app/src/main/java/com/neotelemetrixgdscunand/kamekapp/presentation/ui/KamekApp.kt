@@ -15,16 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.LoginScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.RegisterScreen
@@ -34,7 +31,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsDetailScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.CacaoRequestScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.NotificationScreen
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding.OnBoardingContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding.OnBoardingScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.profile.ProfileScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.shop.ShopScreen
@@ -237,7 +233,7 @@ fun KamekApp(
 
                         rootNavHostController.navigate(
                             Navigation.Auth
-                        ){
+                        ) {
                             popUpTo<Navigation.Main> {
                                 inclusive = true
                             }
