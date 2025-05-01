@@ -35,7 +35,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey53
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
 
 @Composable
 fun NewsDetailScreen(

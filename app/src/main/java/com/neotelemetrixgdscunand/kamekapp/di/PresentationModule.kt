@@ -8,8 +8,8 @@ import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtract
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ImageDetectorHelperImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ModelLabelExtractorImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CapturedImageFileHandlerImpl
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.PasswordValidatorImpl
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UsernameValidatorImpl
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.PasswordValidatorImpl
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.UsernameValidatorImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

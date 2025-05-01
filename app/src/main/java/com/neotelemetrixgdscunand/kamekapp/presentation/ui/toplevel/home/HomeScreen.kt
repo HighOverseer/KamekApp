@@ -19,17 +19,22 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
+import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.ExplorationSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.HomeDiagnosisHistory
@@ -39,6 +44,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.compone
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsItem
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -56,7 +62,16 @@ fun HomeScreen(
     showSnackbar: (String) -> Unit = {}
 ) {
 
-    val diagnosisSessionPreviews by viewModel.diagnosisHistory.collectAsState()
+    val lifecycle = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent){
+            showSnackbar(it.getValue(context))
+        }
+    }
+
+    val diagnosisSessionPreviews by viewModel.diagnosisHistory.collectAsStateWithLifecycle()
+    val weatherForecastOverview by viewModel.weatherForecastOverview.collectAsStateWithLifecycle()
 
     HomeContent(
         modifier = modifier,
@@ -67,7 +82,8 @@ fun HomeScreen(
         diagnosisSessionPreviews = diagnosisSessionPreviews,
         navigateToDiagnosisResult = navigateToDiagnosisResult,
         navigateToNotification = navigateToNotification,
-        showSnackbar = showSnackbar
+        showSnackbar = showSnackbar,
+        weatherForecastOverview = weatherForecastOverview
     )
 }
 
@@ -75,6 +91,7 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
+    weatherForecastOverview: WeatherForecastOverviewDui? = null,
     navigateToNews: () -> Unit = {},
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
@@ -99,7 +116,8 @@ fun HomeContent(
     ) {
         HomeHeaderSection(
             modifier = Modifier.fillMaxWidth(),
-            navigateToNotification = navigateToNotification
+            navigateToNotification = navigateToNotification,
+            weatherForecastOverview = weatherForecastOverview
         )
 
         PriceInfoSection(

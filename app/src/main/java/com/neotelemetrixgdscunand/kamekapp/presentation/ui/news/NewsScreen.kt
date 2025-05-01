@@ -64,7 +64,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishis
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)

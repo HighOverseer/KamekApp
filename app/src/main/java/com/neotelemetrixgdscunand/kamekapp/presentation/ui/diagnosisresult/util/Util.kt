@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import com.neotelemetrixgdscunand.kamekapp.R
@@ -21,8 +22,12 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey63
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey67
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-fun Modifier.shimmeringEffect() = composed {
+fun Modifier.shimmeringEffect(
+    gradientShimmeringColor: ImmutableList<Color> = persistentListOf(Grey67, Grey63, Grey67)
+) = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)
     }
@@ -39,11 +44,7 @@ fun Modifier.shimmeringEffect() = composed {
 
     background(
         brush = Brush.linearGradient(
-            colors = listOf(
-                Grey67,
-                Grey63,
-                Grey67
-            ),
+            colors = gradientShimmeringColor,
             start = Offset(startOffsetX, 0f),
             end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
         ),

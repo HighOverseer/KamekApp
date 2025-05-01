@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 
 @Composable
 fun ExplorationMenu(

@@ -27,7 +27,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.T
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CameraState
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TakePhotoUIEvent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogState
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
 
 @Composable
 fun TakePhotoScreen(

@@ -40,19 +40,22 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 
 @Composable
 fun HomeHeaderSection(
     modifier: Modifier = Modifier,
-    navigateToNotification: () -> Unit = {}
+    navigateToNotification: () -> Unit = {},
+    weatherForecastOverview: WeatherForecastOverviewDui? = null
 ) {
 
     var inflatedCardHeight by remember { mutableStateOf(0.dp) }
@@ -199,26 +202,32 @@ fun HomeHeaderSection(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = stringResource(R.string._17),
+                        text = weatherForecastOverview?.currentTemperature?.getValue() ?: "-°",
                         style = MaterialTheme.typography.displayMedium,
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.width(24.dp))
                     Column {
                         Text(
-                            stringResource(R.string.hujan_lebat),
+                            weatherForecastOverview?.name?.getValue() ?: "",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            stringResource(R.string.h_24),
+                            stringResource(
+                                R.string.h_24,
+                                weatherForecastOverview?.maxTemperature?.getValue() ?: "-"
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             color = Pink
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            stringResource(R.string.l_17),
+                            stringResource(
+                                R.string.l_17,
+                                weatherForecastOverview?.minTemperature?.getValue() ?: "-"
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             color = Pink
                         )
@@ -226,7 +235,7 @@ fun HomeHeaderSection(
 
                     Spacer(Modifier.weight(1f))
                     ImagePainterStable(
-                        drawableResId = R.drawable.ic_weather,
+                        drawableResId = weatherForecastOverview?.iconResourceId ?: R.drawable.ic_weather_cloudy,
                         contentDescription = stringResource(R.string.gambar_cuaca)
                     )
                 }
@@ -251,11 +260,12 @@ fun HomeHeaderSection(
                         )
                         Spacer(Modifier.height(7.dp))
                         Text(
-                            stringResource(R.string._87),
+                            weatherForecastOverview?.humidity?.getValue() ?: "-",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
                     }
+
                     Column {
                         Text(
                             stringResource(R.string.kec_angin),
@@ -266,11 +276,12 @@ fun HomeHeaderSection(
                         )
                         Spacer(Modifier.height(7.dp))
                         Text(
-                            stringResource(R.string._2_km_jam),
+                            weatherForecastOverview?.windVelocity?.getValue() ?: "-",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
                     }
+
                     Column {
                         Text(
                             stringResource(R.string.curah_hujan),
@@ -281,7 +292,7 @@ fun HomeHeaderSection(
                         )
                         Spacer(Modifier.height(7.dp))
                         Text(
-                            stringResource(R.string._100mm),
+                            weatherForecastOverview?.rainfall?.getValue() ?: "-",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )

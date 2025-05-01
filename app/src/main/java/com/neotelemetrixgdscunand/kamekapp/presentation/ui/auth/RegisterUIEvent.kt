@@ -1,6 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth
 
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
 
 sealed interface RegisterUIEvent {
     data class OnRegisterFailed(val messageUIText: UIText) : RegisterUIEvent

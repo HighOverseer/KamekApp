@@ -1,6 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.data
 
-import com.neotelemetrixgdscunand.kamekapp.domain.Mapper
+import com.neotelemetrixgdscunand.kamekapp.domain.DomainMapper
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
@@ -59,7 +59,7 @@ class RepositoryImpl @Inject constructor() : Repository {
     override fun getAllSavedDiagnosisSessionPreviews(): Flow<List<DiagnosisSessionPreview>> {
         return savedDiagnosisSession.map { diagnosisSessions ->
             withContext(Dispatchers.Default) {
-                diagnosisSessions.map { Mapper.mapDiagnosisSessionToPreview(it) }
+                diagnosisSessions.map { DomainMapper.mapDiagnosisSessionToPreview(it) }
             }
         }
     }

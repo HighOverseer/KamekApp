@@ -3,7 +3,7 @@ package com.neotelemetrixgdscunand.kamekapp.domain
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSession
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 
-object Mapper {
+object DomainMapper {
     fun mapDiagnosisSessionToPreview(
         diagnosisSession: DiagnosisSession
     ): DiagnosisSessionPreview {

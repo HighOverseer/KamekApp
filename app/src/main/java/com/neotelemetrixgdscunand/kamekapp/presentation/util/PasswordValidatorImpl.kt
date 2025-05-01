@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.util
 
 import com.neotelemetrixgdscunand.kamekapp.domain.common.PasswordValidator
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result

@@ -6,7 +6,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImageCompressor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

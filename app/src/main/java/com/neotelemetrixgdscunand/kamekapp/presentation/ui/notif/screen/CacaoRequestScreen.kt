@@ -55,8 +55,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.Cacao
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.CacaoTechnicalSpec
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.InputFulfillAmountCacaoDialog
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.component.SupplierItem
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 
 @Composable
 fun CacaoRequestScreen(

@@ -9,8 +9,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.ImageC
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TakePhotoUIEvent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogEvent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogState
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImageCompressor
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImageCompressor
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel

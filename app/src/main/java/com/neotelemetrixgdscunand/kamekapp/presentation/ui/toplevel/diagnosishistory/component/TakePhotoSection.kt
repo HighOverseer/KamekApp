@@ -31,7 +31,7 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.dashedBorder
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.dashedBorder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

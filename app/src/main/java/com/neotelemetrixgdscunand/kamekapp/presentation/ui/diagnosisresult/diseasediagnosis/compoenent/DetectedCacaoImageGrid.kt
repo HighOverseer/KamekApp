@@ -27,7 +27,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.getDetectedDiseaseCacaos
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

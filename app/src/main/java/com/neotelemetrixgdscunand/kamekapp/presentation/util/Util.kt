@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.util
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent

@@ -20,8 +20,8 @@
     <string name="notification">Notification</string>
     <string name="hujan_lebat">Hujan Lebat</string>
     <string name="_17">17°</string>
-    <string name="h_24">H : 24°</string>
-    <string name="l_17">L : 17°</string>
+    <string name="h_24">H : %1$s</string>
+    <string name="l_17">L : %1$s</string>
     <string name="gambar_cuaca">Gambar Cuaca</string>
     <string name="kelembapan">Kelembapan</string>
     <string name="_87">87%</string>
@@ -228,4 +228,15 @@
     <string name="password_tidak_boleh_kosong">Password tidak boleh kosong.</string>
     <string name="kamu_telah_logout">Kamu Telah Logout..</string>
     <string name="maaf_sepertinya_server_sedang_sibuk_coba_lagi_nanti">Maaf, sepertinya server sedang sibuk, coba lagi nanti..</string>
+    <string name="suhu_format">%1$s°C</string>
+    <string name="wind_velocity_format">%1$s Km/Jam</string>
+    <string name="humidity_format">%1$s%%</string>
+    <string name="rainfall_format">%1$smm</string>
+
+    <string name="cuaca_hujan_lebat">Hujan Lebat</string>
+    <string name="cuaca_berawan">Berawan</string>
+    <string name="cuaca_cerah">Cerah</string>
+    <string name="cuaca_sebagian_besar_berawan">Sebagian Besar Berawan</string>
+    <string name="cuaca_badai_petir">Badai Petir</string>
+    <string name="cuaca_hujan_gerimis">Hujan Gerimis</string>
 </resources>

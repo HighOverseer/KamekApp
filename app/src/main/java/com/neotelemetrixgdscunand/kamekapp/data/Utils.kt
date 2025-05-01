@@ -14,6 +14,7 @@ import kotlin.coroutines.cancellation.CancellationException
 val mapStatusCodeToError = hashMapOf(
     400 to RootNetworkError.BAD_REQUEST,
     401 to RootNetworkError.UNAUTHORIZED,
+    403 to RootNetworkError.FORBIDDEN,
     500 to RootNetworkError.INTERNAL_SERVER_ERROR,
     503 to RootNetworkError.SERVER_UNAVAILABLE
 )

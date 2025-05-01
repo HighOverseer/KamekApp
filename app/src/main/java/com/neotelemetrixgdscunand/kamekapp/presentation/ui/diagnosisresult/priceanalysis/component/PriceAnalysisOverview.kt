@@ -33,7 +33,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryTextField
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.SecondaryDescription
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 
 @Composable
 fun PriceAnalysisOverview(modifier: Modifier = Modifier) {

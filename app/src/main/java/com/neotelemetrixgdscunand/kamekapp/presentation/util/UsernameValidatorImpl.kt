@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.util
 
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil

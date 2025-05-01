@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.util
 
 import android.content.Context
 import android.graphics.Bitmap

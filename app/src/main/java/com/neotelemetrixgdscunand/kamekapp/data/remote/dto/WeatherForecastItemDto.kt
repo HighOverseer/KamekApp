@@ -19,8 +19,8 @@ data class WeatherForecastItemDto(
     @field:SerializedName("humidity")
     val humidity: Float? = null,
 
-    @field:SerializedName("type")
-    val type: String? = null,
+    @field:SerializedName("type_id")
+    val typeId: Int? = null,
 
     @field:SerializedName("min_temperature")
     val minTemperature: Float? = null

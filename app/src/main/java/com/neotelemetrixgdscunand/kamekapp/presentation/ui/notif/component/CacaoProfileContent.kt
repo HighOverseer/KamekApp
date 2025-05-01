@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 
 @Composable
 fun CacaoProfileContent(

@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.util
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -46,6 +46,7 @@ val mapNetworkErrorToStringResource = hashMapOf(
     RootNetworkError.NO_CONNECTIVITY_OR_SERVER_UNREACHABLE to R.string.maaf_sepertinya_ada_kesalahan_coba_periksa_koneksi_anda,
     RootNetworkError.REQUEST_TIMEOUT to R.string.terjadi_kesalahan_periska_konektivitas_anda_atau_coba_lagi_nanti,
     RootNetworkError.BAD_REQUEST to R.string.telah_terjadi_kesalahan_mohon_coba_lagi,
+    RootNetworkError.FORBIDDEN to R.string.sesi_tidak_valid_mohon_coba_lagi,
     RootNetworkError.UNAUTHORIZED to R.string.sesi_tidak_valid_mohon_coba_lagi,
     RootNetworkError.SERVER_UNAVAILABLE to R.string.maaf_sepertinya_server_sedang_sibuk_coba_lagi_nanti,
     RootNetworkError.INTERNAL_SERVER_ERROR to R.string.telah_terjadi_kesalahan_mohon_coba_lagi_nanti,

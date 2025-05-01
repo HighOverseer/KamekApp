@@ -10,6 +10,7 @@ sealed interface DataError : Error {
             NO_CONNECTIVITY_OR_SERVER_UNREACHABLE,
             BAD_REQUEST,
             UNAUTHORIZED,
+            FORBIDDEN,
             SERVER_UNAVAILABLE,
             INTERNAL_SERVER_ERROR,
             UNEXPECTED_ERROR

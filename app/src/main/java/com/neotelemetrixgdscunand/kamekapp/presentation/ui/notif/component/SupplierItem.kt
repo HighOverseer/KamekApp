@@ -19,7 +19,7 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
 
 @Composable
 fun SupplierItem(
