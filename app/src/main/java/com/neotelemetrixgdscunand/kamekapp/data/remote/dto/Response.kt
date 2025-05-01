@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kakaoxpert.data.remote.dto
+package com.neotelemetrixgdscunand.kamekapp.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 

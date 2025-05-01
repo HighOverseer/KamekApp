@@ -2,6 +2,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui
 
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
@@ -14,12 +15,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.LoginScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.RegisterScreen
@@ -29,13 +34,16 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsDetailScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.news.NewsScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.CacaoRequestScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.notif.screen.NotificationScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding.OnBoardingContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.onboarding.OnBoardingScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.profile.ProfileScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.shop.ShopScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.splash.SplashScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.TakePhotoScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.MainPage
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.rememberMainPageState
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.WeatherScreen
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,9 +56,13 @@ fun KamekApp(
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()
+    var showingSnackbarJob: Job? = remember {
+        null
+    }
     val showSnackbar: (String) -> Unit = remember {
         { message: String ->
-            coroutineScope.launch {
+            showingSnackbarJob?.cancel()
+            showingSnackbarJob = coroutineScope.launch {
                 snackbarHostState.showSnackbar(message)
             }
         }
@@ -68,7 +80,12 @@ fun KamekApp(
             SnackbarHost(
                 hostState = snackbarHostState,
                 snackbar = { data ->
-                    Text(data.visuals.message)
+                    Text(
+                        text = data.visuals.message,
+                        modifier = Modifier
+                            .fillMaxHeight(0.15f),
+                        textAlign = TextAlign.Center
+                    )
                 }
             )
         }
@@ -84,6 +101,20 @@ fun KamekApp(
                 SplashScreen(
                     navigateToAuthPage = {
                         rootNavHostController.navigate(Navigation.Auth) {
+                            popUpTo<Navigation.Splash> {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    navigateToOnBoarding = {
+                        rootNavHostController.navigate(Navigation.OnBoarding) {
+                            popUpTo<Navigation.Splash> {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    navigateToMainPage = {
+                        rootNavHostController.navigate(Navigation.Main) {
                             popUpTo<Navigation.Splash> {
                                 inclusive = true
                             }
@@ -110,8 +141,19 @@ fun KamekApp(
             ) {
                 composable<Navigation.Auth.Login> {
                     LoginScreen(
+                        showSnackbar = showSnackbar,
                         navigateToOnBoarding = {
                             rootNavHostController.navigate(Navigation.OnBoarding) {
+                                popUpTo<Navigation.Auth> {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        navigateToRegister = {
+                            rootNavHostController.navigate(Navigation.Auth.Register)
+                        },
+                        navigateToMainPage = {
+                            rootNavHostController.navigate(Navigation.Main) {
                                 popUpTo<Navigation.Auth> {
                                     inclusive = true
                                 }
@@ -120,7 +162,17 @@ fun KamekApp(
                     )
                 }
                 composable<Navigation.Auth.Register> {
-                    RegisterScreen()
+                    RegisterScreen(
+                        showSnackbar = showSnackbar,
+                        navigateToOnBoarding = {
+                            rootNavHostController.navigate(Navigation.OnBoarding) {
+                                popUpTo<Navigation.Auth> {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        navigateBackToLogin = rootNavHostController::navigateUp
+                    )
                 }
             }
 
@@ -179,6 +231,17 @@ fun KamekApp(
                         rootNavHostController.navigate(
                             Navigation.Profile
                         )
+                    },
+                    navigateToAuth = { message ->
+                        showSnackbar(message)
+
+                        rootNavHostController.navigate(
+                            Navigation.Auth
+                        ){
+                            popUpTo<Navigation.Main> {
+                                inclusive = true
+                            }
+                        }
                     }
                 )
             }

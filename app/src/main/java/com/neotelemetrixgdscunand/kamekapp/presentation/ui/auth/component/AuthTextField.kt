@@ -24,7 +24,8 @@ fun AuthTextField(
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    enabled: Boolean = true
 ) {
 
     Text(
@@ -44,7 +45,8 @@ fun AuthTextField(
         interactionSource = interactionSource,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
-        visualTransformation = visualTransformation
+        visualTransformation = visualTransformation,
+        enabled = enabled
     )
 
 }

@@ -1,11 +1,15 @@
 package com.neotelemetrixgdscunand.kamekapp.di
 
+import com.neotelemetrixgdscunand.kamekapp.domain.common.PasswordValidator
+import com.neotelemetrixgdscunand.kamekapp.domain.common.UsernameValidator
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CaptureImageFileHandler
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtractor
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ImageDetectorHelperImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ModelLabelExtractorImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CapturedImageFileHandlerImpl
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.PasswordValidatorImpl
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.UsernameValidatorImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,5 +29,11 @@ abstract class PresentationModule {
 
     @Binds
     abstract fun bindCapturedImageFileHandler(capturedImageFileHandlerImpl: CapturedImageFileHandlerImpl): CaptureImageFileHandler
+
+    @Binds
+    abstract fun bindUsernameValidator(usernameValidatorImpl: UsernameValidatorImpl): UsernameValidator
+
+    @Binds
+    abstract fun bindPasswordValidator(passwordValidatorImpl: PasswordValidatorImpl): PasswordValidator
 
 }

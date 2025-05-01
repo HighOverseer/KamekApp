@@ -137,5 +137,9 @@ dependencies {
 
     //logging
     implementation(libs.logging.interceptor)
+
+    //phone number validator
+    implementation (libs.libphonenumber)
+
 }
 

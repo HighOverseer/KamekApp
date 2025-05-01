@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -51,6 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey45
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey71
@@ -58,6 +61,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlin.math.roundToInt
@@ -66,8 +70,31 @@ import kotlin.math.roundToInt
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
+    navigateUp: () -> Unit,
+    viewModel: OnBoardingViewModel = hiltViewModel(),
+    navigateToMainPage: () -> Unit
+){
+
+    val lifecycle = LocalLifecycleOwner.current
+
+    LaunchedEffect(true) {
+        lifecycle.collectChannelWhenStarted(viewModel.onBoardingSessionFinishedEvent){
+            navigateToMainPage()
+        }
+    }
+
+    OnBoardingContent(
+        modifier = modifier,
+        navigateUp = navigateUp,
+        onBoardingSessionFinish = viewModel::onBoardingSessionFinish
+    )
+}
+
+@Composable
+fun OnBoardingContent(
+    modifier: Modifier = Modifier,
     navigateUp: () -> Unit = { },
-    navigateToMainPage: () -> Unit = {}
+    onBoardingSessionFinish: () -> Unit = {}
 ) {
     var selectedTabIndex by rememberSaveable {
         mutableIntStateOf(0)
@@ -343,6 +370,8 @@ fun OnBoardingScreen(
                 .layoutId(LayoutUtil.BUTTON_ID)
         }
 
+        var isButtonEnabled by remember { mutableStateOf(true) }
+
         PrimaryButton(
             modifier = buttonModifier,
             contentPadding = PaddingValues(horizontal = 40.dp, vertical = 12.5.dp),
@@ -363,8 +392,12 @@ fun OnBoardingScreen(
             onClick = {
                 if (selectedTabIndex < 2) {
                     selectedTabIndex++
-                } else navigateToMainPage()
-            }
+                } else {
+                    isButtonEnabled = false
+                    onBoardingSessionFinish()
+                }
+            },
+            enabled = isButtonEnabled
         )
     }
 }
@@ -479,6 +512,6 @@ private fun rememberConstraintSet(): ConstraintSet {
 @Composable
 private fun OnBoardingScreenPreview2() {
     KamekAppTheme {
-        OnBoardingScreen()
+        OnBoardingContent()
     }
 }

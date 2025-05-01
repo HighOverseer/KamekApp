@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.preferencesDataStore
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
 
-val Context.dataStore by preferencesDataStore(AuthPreference.NAME)
+
 
 fun Modifier.dashedBorder(
     brush: Brush,

@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +33,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey47
@@ -40,11 +43,36 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey61
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.util.collectChannelWhenStarted
 
 @Composable
 fun AccountScreen(
     modifier: Modifier = Modifier,
-    navigateToProfile: () -> Unit = {}
+    navigateToProfile: () -> Unit = {},
+    navigateToAuth: (String) -> Unit = {},
+    viewModel: AccountViewModel = hiltViewModel()
+) {
+
+    val lifecycle = LocalLifecycleOwner.current
+    val logoutMessage = stringResource(R.string.kamu_telah_logout)
+    LaunchedEffect(true) {
+        lifecycle.collectChannelWhenStarted(viewModel.onLogoutFinishedEvent){
+            navigateToAuth(logoutMessage)
+        }
+    }
+
+    AccountContent(
+        modifier = modifier,
+        navigateToProfile = navigateToProfile,
+        onLogout = viewModel::logout
+    )
+}
+
+@Composable
+fun AccountContent(
+    modifier: Modifier = Modifier,
+    navigateToProfile: () -> Unit = {},
+    onLogout: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -252,42 +280,47 @@ fun AccountScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        Column(
-            modifier = Modifier
-                .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                .padding(vertical = 24.dp, horizontal = 16.dp)
+        Card(
+            Modifier
+                .clickable(onClick = onLogout)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                    .padding(vertical = 24.dp, horizontal = 16.dp)
             ) {
-                Image(
-                    modifier = Modifier
-                        .size(20.dp),
-                    imageVector = ImageVector
-                        .vectorResource(R.drawable.ic_logout),
-                    contentDescription = null
-                )
-
-                Spacer(Modifier.width(16.dp))
-
-                Text(
-                    stringResource(R.string.keluar),
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.Normal
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(20.dp),
+                        imageVector = ImageVector
+                            .vectorResource(R.drawable.ic_logout),
+                        contentDescription = null
                     )
-                )
 
-                Spacer(Modifier.weight(1f))
+                    Spacer(Modifier.width(16.dp))
 
-                Icon(
-                    modifier = Modifier
-                        .width(7.7.dp)
-                        .height(11.dp),
-                    imageVector = ImageVector
-                        .vectorResource(R.drawable.ic_right_arrow),
-                    contentDescription = null,
-                    tint = Grey47
-                )
+                    Text(
+                        stringResource(R.string.keluar),
+                        style = MaterialTheme.typography.headlineSmall.copy(
+                            fontWeight = FontWeight.Normal
+                        )
+                    )
+
+                    Spacer(Modifier.weight(1f))
+
+                    Icon(
+                        modifier = Modifier
+                            .width(7.7.dp)
+                            .height(11.dp),
+                        imageVector = ImageVector
+                            .vectorResource(R.drawable.ic_right_arrow),
+                        contentDescription = null,
+                        tint = Grey47
+                    )
+                }
             }
         }
     }

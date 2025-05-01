@@ -1,8 +1,8 @@
-package com.neotelemetrixgdscunand.kakaoxpert.data.remote
+package com.neotelemetrixgdscunand.kamekapp.data.remote
 
-import com.neotelemetrixgdscunand.kakaoxpert.data.remote.dto.LoginDto
-import com.neotelemetrixgdscunand.kakaoxpert.data.remote.dto.RegisterDto
-import com.neotelemetrixgdscunand.kakaoxpert.data.remote.dto.Response
+import com.neotelemetrixgdscunand.kamekapp.data.remote.dto.LoginDto
+import com.neotelemetrixgdscunand.kamekapp.data.remote.dto.RegisterDto
+import com.neotelemetrixgdscunand.kamekapp.data.remote.dto.Response
 import com.neotelemetrixgdscunand.kamekapp.data.remote.dto.WeatherForecastItemDto
 import com.neotelemetrixgdscunand.kamekapp.data.remote.dto.WeatherForecastOverviewDto
 import retrofit2.http.Field
@@ -27,18 +27,18 @@ interface ApiService {
     suspend fun login(
         @Field("no_hp") handphoneNumberOrEmail:String,
         @Field("password") password:String
-    ):Response<LoginDto>
+    ): Response<LoginDto>
 
     @GET("weather-home")
     suspend fun getWeatherForecastOverview(
         @Query("lat") latitude:Float,
         @Query("lon") longitude:Float
-    ):Response<WeatherForecastOverviewDto>
+    ): Response<WeatherForecastOverviewDto>
 
     @GET("weather")
     suspend fun getWeatherForecastForSevenDays(
         @Query("lat") latitude:Float,
         @Query("lon") longitude:Float
-    ):Response<List<WeatherForecastItemDto>>
+    ): Response<List<WeatherForecastItemDto>>
 
 }

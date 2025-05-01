@@ -8,6 +8,12 @@ interface AuthPreference {
 
     fun getToken(): Flow<String>
 
+    suspend fun saveIsFirstTime(isFirstTime:Boolean)
+
+    fun getIsFirstTime():Flow<Boolean>
+
+    suspend fun clearToken()
+
     companion object{
         const val NAME = "auth_preference"
     }

@@ -1,6 +1,7 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -26,6 +28,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.account.AccountScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.DiagnosisScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeScreen
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
@@ -41,15 +44,20 @@ fun MainPage(
     navigateToNotification: () -> Unit = {},
     navigateToTakePhoto: () -> Unit = {},
     navigateToProfile: () -> Unit = {},
+    navigateToAuth: (String) -> Unit = {}
 ) {
 
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    var showingSnackbarJob: Job? = remember {
+        null
+    }
     val coroutineScope = rememberCoroutineScope()
     val showSnackbar: (String) -> Unit = remember {
         {
-            coroutineScope.launch {
+            showingSnackbarJob?.cancel()
+            showingSnackbarJob = coroutineScope.launch {
                 snackbarHostState.showSnackbar(it)
             }
         }
@@ -66,7 +74,12 @@ fun MainPage(
             SnackbarHost(
                 hostState = snackbarHostState,
                 snackbar = { data ->
-                    Text(data.visuals.message)
+                    Text(
+                        text = data.visuals.message,
+                        modifier = Modifier
+                            .fillMaxHeight(0.15f),
+                        textAlign = TextAlign.Center
+                    )
                 }
             )
         },
@@ -120,7 +133,8 @@ fun MainPage(
 
                 composable<Navigation.Main.Account> {
                     AccountScreen(
-                        navigateToProfile = navigateToProfile
+                        navigateToProfile = navigateToProfile,
+                        navigateToAuth = navigateToAuth,
                     )
                 }
 

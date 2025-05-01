@@ -1,10 +1,9 @@
 package com.neotelemetrixgdscunand.kakaoxpert.di
 
 import com.google.gson.Gson
-import com.neotelemetrixgdscunand.kakaoxpert.data.remote.ApiService
+import com.neotelemetrixgdscunand.kamekapp.data.remote.ApiService
 import com.neotelemetrixgdscunand.kakaoxpert.data.remote.AuthInterceptor
 import com.neotelemetrixgdscunand.kamekapp.BuildConfig
-import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +21,7 @@ class NetworkModule {
     @Provides
     fun provideApiService(
         client: OkHttpClient
-    ):ApiService{
+    ): ApiService {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
