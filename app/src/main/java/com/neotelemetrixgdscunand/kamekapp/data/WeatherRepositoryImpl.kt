@@ -17,7 +17,7 @@ import javax.inject.Singleton
 class WeatherRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val dataMapper: WeatherDtoMapper
-):WeatherRepository {
+) : WeatherRepository {
 
     override fun getWeatherForecastOverviewAutoUpdate(
         latitude: Float,
@@ -25,18 +25,20 @@ class WeatherRepositoryImpl @Inject constructor(
         delayEachRequestWhenSuccessMs: Long,
         delayEachRequestWhenErrorMs: Long
     ): Flow<Result<WeatherForecastOverview, DataError.NetworkError>> = flow {
-        while (true){
+        while (true) {
             val result = fetchFromNetwork {
                 val response = apiService.getWeatherForecastOverview(latitude, longitude)
-                val weatherForecastOverviewDto = response.data ?: return@fetchFromNetwork Result.Error(RootNetworkError.INTERNAL_SERVER_ERROR)
+                val weatherForecastOverviewDto = response.data
+                    ?: return@fetchFromNetwork Result.Error(RootNetworkError.INTERNAL_SERVER_ERROR)
 
-                val weatherForecastOverview = dataMapper.mapWeatherForecastOverviewDtoToDomain(weatherForecastOverviewDto)
+                val weatherForecastOverview =
+                    dataMapper.mapWeatherForecastOverviewDtoToDomain(weatherForecastOverviewDto)
 
                 Result.Success(weatherForecastOverview)
             }
             emit(result)
 
-            val delayMs = if(result is Result.Success) {
+            val delayMs = if (result is Result.Success) {
                 delayEachRequestWhenSuccessMs
             } else delayEachRequestWhenErrorMs
 
@@ -52,7 +54,9 @@ class WeatherRepositoryImpl @Inject constructor(
             val response = apiService.getWeatherForecastForSevenDays(
                 latitude, longitude
             )
-            val weatherForecastItemDtos = response.data ?: return@fetchFromNetwork Result.Error(RootNetworkError.INTERNAL_SERVER_ERROR)
+            val weatherForecastItemDtos = response.data ?: return@fetchFromNetwork Result.Error(
+                RootNetworkError.INTERNAL_SERVER_ERROR
+            )
 
             val weatherForecastItems = weatherForecastItemDtos.mapNotNull {
                 dataMapper.mapWeatherForecastItemDtoToDomain(it)

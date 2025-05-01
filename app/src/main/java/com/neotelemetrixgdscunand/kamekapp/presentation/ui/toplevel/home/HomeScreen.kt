@@ -20,7 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -65,7 +64,7 @@ fun HomeScreen(
     val lifecycle = LocalLifecycleOwner.current
     val context = LocalContext.current
     LaunchedEffect(true) {
-        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent){
+        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent) {
             showSnackbar(it.getValue(context))
         }
     }

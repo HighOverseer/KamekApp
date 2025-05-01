@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -35,7 +33,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon53
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DescriptionShimmeringLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
 import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 import kotlinx.collections.immutable.persistentListOf
@@ -47,11 +44,11 @@ fun CardWeatherOverview(
     weatherForecastOverview: WeatherForecastOverviewDui? = null,
     isLoadingProvider: () -> Boolean = { false }
 ) {
-    if(isLoadingProvider()){
+    if (isLoadingProvider()) {
         CardWeatherOverviewLoading(
             modifier
         )
-    }else{
+    } else {
         val columnModifier = remember {
             Modifier
                 .fillMaxWidth()
@@ -71,14 +68,15 @@ fun CardWeatherOverview(
             modifier = modifier,
             shape = RoundedCornerShape(16.dp),
             onClick = {}
-        ){
+        ) {
             Column(
                 modifier = columnModifier,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 ImagePainterStable(
-                    drawableResId = weatherForecastOverview?.iconResourceId ?: R.drawable.ic_weather_cloudy,
+                    drawableResId = weatherForecastOverview?.iconResourceId
+                        ?: R.drawable.ic_weather_cloudy,
                     contentDescription = stringResource(R.string.gambar_cuaca)
                 )
 
@@ -205,7 +203,7 @@ private fun CardWeatherOverviewLoading(modifier: Modifier = Modifier) {
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
         onClick = {}
-    ){
+    ) {
 
 
         Column(
@@ -297,7 +295,7 @@ private fun CardWeatherOverviewLoading(modifier: Modifier = Modifier) {
                 }
                 Column(
                     horizontalAlignment = Alignment.End
-                )  {
+                ) {
                     Text(
                         stringResource(R.string.curah_hujan),
                         style = MaterialTheme.typography.titleMedium.copy(

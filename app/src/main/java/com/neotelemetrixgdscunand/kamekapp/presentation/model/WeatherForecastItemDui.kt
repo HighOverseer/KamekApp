@@ -8,5 +8,5 @@ data class WeatherForecastItemDui(
     val minTemperature: UIText,
     val windVelocity: UIText,
     val humidity: UIText,
-    val iconResourceId:Int,
+    val iconResourceId: Int,
 )

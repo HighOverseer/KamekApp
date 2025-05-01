@@ -22,25 +22,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.domain.model.WeatherForecastItem
 import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastItemDui
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey45
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey50
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey80
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45Alpha70
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon53
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
-import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange80
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
 import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
@@ -58,7 +47,7 @@ fun WeatherPredictionItem(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         onClick = {}
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -144,7 +133,7 @@ fun WeatherPredictionItemLoading(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         onClick = {}
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -161,7 +150,8 @@ fun WeatherPredictionItemLoading(
             )
             Spacer(Modifier.width(40.dp))
             Box(
-                modifier = Modifier.width(32.dp)
+                modifier = Modifier
+                    .width(32.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .width(32.dp)
                     .height(14.dp)

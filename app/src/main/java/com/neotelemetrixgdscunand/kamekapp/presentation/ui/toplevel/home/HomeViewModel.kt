@@ -27,7 +27,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val repository: Repository,
     private val weatherRepository: WeatherRepository,
-    private val mapper:WeatherDuiMapper
+    private val mapper: WeatherDuiMapper
 ) : ViewModel() {
 
     private val _onMessageEvent = Channel<UIText>()
@@ -50,20 +50,21 @@ class HomeViewModel @Inject constructor(
         latitude = padangCoordinate.first,
         longitude = padangCoordinate.second
     ).map { result ->
-        when(result){
+        when (result) {
             is Result.Error -> {
                 val errorUIText = result.toErrorUIText()
                 _onMessageEvent.send(errorUIText)
                 null
             }
+
             is Result.Success -> {
                 return@map mapper.mapWeatherForecastOverviewToDui(result.data)
             }
         }
     }.flowOn(Dispatchers.IO)
         .stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        null
-    )
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            null
+        )
 }

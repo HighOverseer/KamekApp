@@ -40,7 +40,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
@@ -235,7 +234,8 @@ fun HomeHeaderSection(
 
                     Spacer(Modifier.weight(1f))
                     ImagePainterStable(
-                        drawableResId = weatherForecastOverview?.iconResourceId ?: R.drawable.ic_weather_cloudy,
+                        drawableResId = weatherForecastOverview?.iconResourceId
+                            ?: R.drawable.ic_weather_cloudy,
                         contentDescription = stringResource(R.string.gambar_cuaca)
                     )
                 }

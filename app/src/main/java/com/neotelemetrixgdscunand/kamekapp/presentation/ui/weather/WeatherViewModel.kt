@@ -35,7 +35,7 @@ import javax.inject.Inject
 class WeatherViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val mapper: WeatherDuiMapper
-):ViewModel() {
+) : ViewModel() {
 
     private val _onMessageEvent = Channel<UIText>()
     val onMessageEvent = _onMessageEvent.receiveAsFlow()
@@ -45,7 +45,7 @@ class WeatherViewModel @Inject constructor(
     val isLoading = combine(
         _isGettingWeatherForecastOverview,
         _isGettingWeatherForecastForSeveralDays
-    ){ isGettingWeatherOverview, isGettingWeatherForSeveralDays ->
+    ) { isGettingWeatherOverview, isGettingWeatherForSeveralDays ->
         isGettingWeatherOverview || isGettingWeatherForSeveralDays
     }.stateIn(
         viewModelScope,
@@ -71,8 +71,11 @@ class WeatherViewModel @Inject constructor(
             }
 
             is Result.Success -> {
-                if(isFirstTimeFetchingData){
-                    getWeatherForecastForSeveralDays(padangCoordinate.first, padangCoordinate.second)
+                if (isFirstTimeFetchingData) {
+                    getWeatherForecastForSeveralDays(
+                        padangCoordinate.first,
+                        padangCoordinate.second
+                    )
                     isFirstTimeFetchingData = false
                 }
                 _isGettingWeatherForecastOverview.update { false }
@@ -88,21 +91,22 @@ class WeatherViewModel @Inject constructor(
             null
         )
 
-    private val _weatherForecastForSeveralDays = MutableStateFlow<ImmutableList<WeatherForecastItemDui>>(
-        persistentListOf()
-    )
+    private val _weatherForecastForSeveralDays =
+        MutableStateFlow<ImmutableList<WeatherForecastItemDui>>(
+            persistentListOf()
+        )
     val weatherForecastForSeveralDays = _weatherForecastForSeveralDays.asStateFlow()
 
-    private var job:Job? = null
+    private var job: Job? = null
 
     private fun getWeatherForecastForSeveralDays(
-        latitude:Float,
-        longitude:Float
-    ){
+        latitude: Float,
+        longitude: Float
+    ) {
         suspend fun fetchWeatherForecastForSeveralDays(
             latitude: Float,
             longitude: Float
-        ):Boolean{
+        ): Boolean {
             val result = weatherRepository.getWeatherForecastForSeveralDays(latitude, longitude)
             return when (result) {
                 is Result.Error -> {
@@ -128,7 +132,7 @@ class WeatherViewModel @Inject constructor(
                 val isTimeout = fetchWeatherForecastForSeveralDays(
                     latitude, longitude
                 )
-            }while (isTimeout)
+            } while (isTimeout)
 
             _isGettingWeatherForecastForSeveralDays.update { false }
         }.also {
@@ -138,7 +142,6 @@ class WeatherViewModel @Inject constructor(
         }
 
     }
-
 
 
 }

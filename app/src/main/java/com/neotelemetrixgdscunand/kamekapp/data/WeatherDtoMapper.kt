@@ -16,19 +16,19 @@ object WeatherDtoMapper {
 
     fun mapWeatherForecastItemDtoToDomain(
         weatherForecastItemDto: WeatherForecastItemDto
-    ):WeatherForecastItem?{
+    ): WeatherForecastItem? {
         val sdf = SimpleDateFormat(DTO_DATE_PATTERN, Locale.getDefault())
 
         val time = try {
             val date = weatherForecastItemDto.date ?: throw Exception()
             sdf.parse(date)
-        }catch (e:Exception){
-            if(e is CancellationException) throw e
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
 
             null
         }
 
-        return if(time == null) null else WeatherForecastItem(
+        return if (time == null) null else WeatherForecastItem(
             time = time.time,
             maxTemperature = weatherForecastItemDto.maxTemperature?.roundOffDecimal(1) ?: 0f,
             minTemperature = weatherForecastItemDto.minTemperature?.roundOffDecimal(1) ?: 0f,
@@ -54,8 +54,8 @@ object WeatherDtoMapper {
     }
 
     //The numbers refers to the Open Weather API Documentation
-    private fun mapWeatherTypeIdToWeatherType(weatherTypeId:Int):WeatherType{
-        return when(weatherTypeId){
+    private fun mapWeatherTypeIdToWeatherType(weatherTypeId: Int): WeatherType {
+        return when (weatherTypeId) {
             in 200..232 -> WeatherType.THUNDERSTORM
             in 300..321 -> WeatherType.DRIZZLE
             500, 501 -> WeatherType.DRIZZLE

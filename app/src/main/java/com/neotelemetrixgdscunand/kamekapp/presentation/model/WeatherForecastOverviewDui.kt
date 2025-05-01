@@ -11,5 +11,5 @@ data class WeatherForecastOverviewDui(
     val humidity: UIText,
     val rainfall: UIText,
     val name: UIText,
-    val iconResourceId:Int,
+    val iconResourceId: Int,
 )

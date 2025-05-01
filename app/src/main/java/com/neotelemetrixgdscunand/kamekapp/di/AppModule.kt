@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 class AppModule {
 
     @Provides
-    fun provideWeatherDuiMapper():WeatherDuiMapper = WeatherDuiMapper
+    fun provideWeatherDuiMapper(): WeatherDuiMapper = WeatherDuiMapper
 
     @Provides
     fun provideWeatherDtoMapper(): WeatherDtoMapper = WeatherDtoMapper
