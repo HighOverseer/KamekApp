@@ -13,13 +13,13 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val authRepository: AuthRepository
-):ViewModel() {
+) : ViewModel() {
 
     private val _isReadyEvent = Channel<Pair<Boolean, Boolean>>()
     val isReadyEvent = _isReadyEvent.receiveAsFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             val isAlreadyLoggedIn = authRepository.isAlreadyLoggedIn()
             val isFirstTime = authRepository.isFirstTime()
             _isReadyEvent.send(Pair(isAlreadyLoggedIn, isFirstTime))

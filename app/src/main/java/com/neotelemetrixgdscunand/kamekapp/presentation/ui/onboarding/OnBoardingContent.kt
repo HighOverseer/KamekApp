@@ -73,12 +73,12 @@ fun OnBoardingScreen(
     navigateUp: () -> Unit,
     viewModel: OnBoardingViewModel = hiltViewModel(),
     navigateToMainPage: () -> Unit
-){
+) {
 
     val lifecycle = LocalLifecycleOwner.current
 
     LaunchedEffect(true) {
-        lifecycle.collectChannelWhenStarted(viewModel.onBoardingSessionFinishedEvent){
+        lifecycle.collectChannelWhenStarted(viewModel.onBoardingSessionFinishedEvent) {
             navigateToMainPage()
         }
     }

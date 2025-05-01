@@ -22,7 +22,7 @@ class LocalStorageModule {
     @Singleton
     fun provideDataStore(
         @ApplicationContext context: Context
-    ):DataStore<Preferences> {
+    ): DataStore<Preferences> {
         return context.dataStore
     }
 }

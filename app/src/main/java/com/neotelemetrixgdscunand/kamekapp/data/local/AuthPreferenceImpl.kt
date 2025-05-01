@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.data.local
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -8,7 +7,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,7 +14,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthPreferenceImpl @Inject constructor(
     private val dataStorePrefs: DataStore<Preferences>
-): AuthPreference {
+) : AuthPreference {
 
     override suspend fun saveToken(token: String) {
         dataStorePrefs.edit { prefs ->
@@ -48,7 +46,7 @@ class AuthPreferenceImpl @Inject constructor(
         }
     }
 
-    companion object{
+    companion object {
         private val TOKEN = stringPreferencesKey("token")
         private val IS_FIRST_TIME = booleanPreferencesKey("is_first_time")
     }

@@ -56,7 +56,7 @@ fun AccountScreen(
     val lifecycle = LocalLifecycleOwner.current
     val logoutMessage = stringResource(R.string.kamu_telah_logout)
     LaunchedEffect(true) {
-        lifecycle.collectChannelWhenStarted(viewModel.onLogoutFinishedEvent){
+        lifecycle.collectChannelWhenStarted(viewModel.onLogoutFinishedEvent) {
             navigateToAuth(logoutMessage)
         }
     }

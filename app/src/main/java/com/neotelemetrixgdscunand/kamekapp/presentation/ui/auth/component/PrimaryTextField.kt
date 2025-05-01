@@ -47,7 +47,7 @@ fun PrimaryTextField(
     val isFocused = isFocusedProvider()
     val value = valueProvider()
 
-    val textFieldModifier= remember(isFocused) {
+    val textFieldModifier = remember(isFocused) {
         modifier
             .fillMaxWidth()
             .then(

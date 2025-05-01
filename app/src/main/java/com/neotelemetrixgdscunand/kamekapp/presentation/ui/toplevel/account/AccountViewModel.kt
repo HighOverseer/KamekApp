@@ -13,15 +13,15 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val authRepository: AuthRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _onLogoutFinishedEvent = Channel<Unit>()
     val onLogoutFinishedEvent = _onLogoutFinishedEvent.receiveAsFlow()
 
     private var job: Job? = null
 
-    fun logout(){
-        if(job?.isCompleted == false) return
+    fun logout() {
+        if (job?.isCompleted == false) return
 
         job = viewModelScope.launch {
             authRepository.clearToken()

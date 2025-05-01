@@ -29,40 +29,44 @@ suspend fun <D> fetchFromNetwork(
     getErrorFromStatusCode: (Int) -> DataError.NetworkError? = { null },
     getErrorFromIOException: (Exception) -> DataError.NetworkError? = { null },
     nonCancellableBlockWhenException: suspend () -> Unit = { }
-):Result<D, DataError.NetworkError>{
+): Result<D, DataError.NetworkError> {
     return try {
         fetching()
     } catch (e: HttpException) {
         val statusCode = e.code()
-        val error = getErrorFromStatusCode(statusCode) ?: mapStatusCodeToError[statusCode] ?:RootNetworkError.UNEXPECTED_ERROR
+        val error = getErrorFromStatusCode(statusCode) ?: mapStatusCodeToError[statusCode]
+        ?: RootNetworkError.UNEXPECTED_ERROR
         return Result.Error(error)
 
     } catch (e: Exception) {
-        withContext(NonCancellable){
+        withContext(NonCancellable) {
             nonCancellableBlockWhenException()
         }
 
         if (e is CancellationException) throw e
 
-        val error = getErrorFromIOException(e) ?: mapIOExceptionToError[e::class] ?: RootNetworkError.UNEXPECTED_ERROR
+        val error = getErrorFromIOException(e) ?: mapIOExceptionToError[e::class]
+        ?: RootNetworkError.UNEXPECTED_ERROR
         return Result.Error(error)
     }
 }
 
 suspend fun <D> fetchFromNetwork(
     fetching: suspend () -> Result<D, DataError.NetworkError>,
-):Result<D, DataError.NetworkError>{
+): Result<D, DataError.NetworkError> {
     return try {
         fetching()
     } catch (e: HttpException) {
         val statusCode = e.code()
-        val error = mapStatusCodeToError[statusCode] ?: DataError.NetworkError.ApiError.UNEXPECTED_ERROR
+        val error =
+            mapStatusCodeToError[statusCode] ?: DataError.NetworkError.ApiError.UNEXPECTED_ERROR
         return Result.Error(error)
 
     } catch (e: Exception) {
         if (e is CancellationException) throw e
 
-        val error = mapIOExceptionToError[e::class] ?: DataError.NetworkError.ApiError.UNEXPECTED_ERROR
+        val error =
+            mapIOExceptionToError[e::class] ?: DataError.NetworkError.ApiError.UNEXPECTED_ERROR
         return Result.Error(error)
     }
 }

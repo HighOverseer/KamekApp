@@ -11,7 +11,7 @@ import dagger.hilt.android.components.ViewModelComponent
 class AuthModule {
 
     @Provides
-    fun providePhoneNumberUtils():PhoneNumberUtil{
+    fun providePhoneNumberUtils(): PhoneNumberUtil {
         return PhoneNumberUtil.getInstance()
     }
 

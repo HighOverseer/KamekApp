@@ -4,14 +4,9 @@ import com.neotelemetrixgdscunand.kamekapp.data.remote.ApiService
 import com.neotelemetrixgdscunand.kamekapp.domain.common.AuthError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.DataError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
-import com.neotelemetrixgdscunand.kamekapp.domain.common.RootNetworkError
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthRepository
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -23,9 +18,12 @@ import javax.inject.Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val authPreference: AuthPreference,
-):AuthRepository {
+) : AuthRepository {
 
-    override suspend fun login(handphoneNumberOrEmail: String, password: String): Result<Pair<String, Boolean>, DataError.NetworkError> {
+    override suspend fun login(
+        handphoneNumberOrEmail: String,
+        password: String
+    ): Result<Pair<String, Boolean>, DataError.NetworkError> {
         return fetchFromNetwork(
             fetching = {
                 val response = apiService.login(
@@ -38,7 +36,7 @@ class AuthRepositoryImpl @Inject constructor(
 
                 val isTokenValid = token != null && userId != null && userName != null
 
-                if(!isTokenValid){
+                if (!isTokenValid) {
                     return@fetchFromNetwork Result.Error(AuthError.INVALID_TOKEN)
                 }
 
@@ -49,7 +47,7 @@ class AuthRepositoryImpl @Inject constructor(
                 return@fetchFromNetwork Result.Success(data)
             },
             getErrorFromStatusCode = { statusCode ->
-                return@fetchFromNetwork when(statusCode){
+                return@fetchFromNetwork when (statusCode) {
                     404 -> AuthError.INCORRECT_USERNAME_OR_PASSWORD
                     else -> null
                 }
@@ -62,7 +60,7 @@ class AuthRepositoryImpl @Inject constructor(
         password: String,
         passwordConfirmation: String,
         name: String
-    ): Result<String, DataError.NetworkError> = withContext(Dispatchers.IO){
+    ): Result<String, DataError.NetworkError> = withContext(Dispatchers.IO) {
         val oldSavedValueIsFirstTime = authPreference.getIsFirstTime().first()
 
         fetchFromNetwork(
@@ -74,9 +72,10 @@ class AuthRepositoryImpl @Inject constructor(
                 val userName = response.data?.userName
                 val token = response.data?.token
 
-                val isRegisterValid = response.data?.userId != null && token != null && userName != null
+                val isRegisterValid =
+                    response.data?.userId != null && token != null && userName != null
 
-                if(!isRegisterValid){
+                if (!isRegisterValid) {
                     return@fetchFromNetwork Result.Error(AuthError.INVALID_REGISTER_SESSION)
                 }
 
@@ -88,7 +87,7 @@ class AuthRepositoryImpl @Inject constructor(
                 return@fetchFromNetwork Result.Success(userName as String)
             },
             getErrorFromStatusCode = { statusCode ->
-                return@fetchFromNetwork when(statusCode){
+                return@fetchFromNetwork when (statusCode) {
                     400 -> AuthError.USERNAME_IS_ALREADY_REGISTERED
                     else -> null
                 }
@@ -100,7 +99,7 @@ class AuthRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun clearToken(){
+    override suspend fun clearToken() {
         authPreference.clearToken()
     }
 

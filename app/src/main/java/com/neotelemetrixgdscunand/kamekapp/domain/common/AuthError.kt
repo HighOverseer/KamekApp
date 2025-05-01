@@ -1,6 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.domain.common
 
-enum class AuthError : DataError.NetworkError{
+enum class AuthError : DataError.NetworkError {
     INVALID_TOKEN,
     INVALID_REGISTER_SESSION,
     USERNAME_IS_ALREADY_REGISTERED,

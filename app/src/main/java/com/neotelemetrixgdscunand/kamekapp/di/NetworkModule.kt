@@ -1,9 +1,9 @@
 package com.neotelemetrixgdscunand.kakaoxpert.di
 
 import com.google.gson.Gson
-import com.neotelemetrixgdscunand.kamekapp.data.remote.ApiService
 import com.neotelemetrixgdscunand.kakaoxpert.data.remote.AuthInterceptor
 import com.neotelemetrixgdscunand.kamekapp.BuildConfig
+import com.neotelemetrixgdscunand.kamekapp.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,7 +34,7 @@ class NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor
-    ):OkHttpClient{
+    ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -46,5 +46,5 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideGson():Gson = Gson()
+    fun provideGson(): Gson = Gson()
 }

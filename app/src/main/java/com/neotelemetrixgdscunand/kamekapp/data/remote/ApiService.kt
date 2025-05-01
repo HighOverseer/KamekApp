@@ -16,29 +16,29 @@ interface ApiService {
     @POST("register")
     @FormUrlEncoded
     suspend fun register(
-        @Field("no_hp") handphoneNumberOrEmail:String,
-        @Field("password") password:String,
-        @Field("confirm_password") passwordConfirmation:String,
-        @Field("name") name:String
+        @Field("no_hp") handphoneNumberOrEmail: String,
+        @Field("password") password: String,
+        @Field("confirm_password") passwordConfirmation: String,
+        @Field("name") name: String
     ): Response<RegisterDto>
 
     @POST("login")
     @FormUrlEncoded
     suspend fun login(
-        @Field("no_hp") handphoneNumberOrEmail:String,
-        @Field("password") password:String
+        @Field("no_hp") handphoneNumberOrEmail: String,
+        @Field("password") password: String
     ): Response<LoginDto>
 
     @GET("weather-home")
     suspend fun getWeatherForecastOverview(
-        @Query("lat") latitude:Float,
-        @Query("lon") longitude:Float
+        @Query("lat") latitude: Float,
+        @Query("lon") longitude: Float
     ): Response<WeatherForecastOverviewDto>
 
     @GET("weather")
     suspend fun getWeatherForecastForSevenDays(
-        @Query("lat") latitude:Float,
-        @Query("lon") longitude:Float
+        @Query("lat") latitude: Float,
+        @Query("lon") longitude: Float
     ): Response<List<WeatherForecastItemDto>>
 
 }

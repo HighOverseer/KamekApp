@@ -62,11 +62,12 @@ val mapErrorToMapErrorToStringResource = hashMapOf(
     UsernameValidator.UsernameError::class to mapAuthFieldValidationErrorToStringResource
 )
 
-fun Result.Error<*, RootError>.toErrorUIText():UIText{
+fun Result.Error<*, RootError>.toErrorUIText(): UIText {
     val mapErrorToStringResource = mapErrorToMapErrorToStringResource[this.error::class]
         ?: return UIText.StringResource(R.string.telah_terjadi_kesalahan_mohon_coba_lagi_nanti)
 
-    val stringResource = mapErrorToStringResource[error] ?: R.string.telah_terjadi_kesalahan_mohon_coba_lagi_nanti
+    val stringResource =
+        mapErrorToStringResource[error] ?: R.string.telah_terjadi_kesalahan_mohon_coba_lagi_nanti
     return UIText.StringResource(stringResource)
 }
 

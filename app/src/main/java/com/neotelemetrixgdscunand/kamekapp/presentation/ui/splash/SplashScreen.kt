@@ -21,7 +21,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
@@ -43,14 +42,14 @@ fun SplashScreen(
     LaunchedEffect(true) {
         delay(2000L)
 
-        lifecycle.collectChannelWhenStarted(viewModel.isReadyEvent){
+        lifecycle.collectChannelWhenStarted(viewModel.isReadyEvent) {
             val (isAlreadyLoggedIn, isFirstTime) = it
-            if(!isAlreadyLoggedIn){
+            if (!isAlreadyLoggedIn) {
                 navigateToAuthPage()
-            }else{
-                if(isFirstTime){
+            } else {
+                if (isFirstTime) {
                     navigateToOnBoarding()
-                }else navigateToMainPage()
+                } else navigateToMainPage()
             }
         }
     }

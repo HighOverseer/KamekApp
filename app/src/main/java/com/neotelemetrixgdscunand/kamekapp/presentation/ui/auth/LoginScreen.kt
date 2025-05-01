@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,16 +66,17 @@ fun LoginScreen(
     val context = LocalContext.current
 
     LaunchedEffect(true) {
-        lifecycle.collectChannelWhenStarted(viewModel.uiEvent){ event ->
-            when(event){
+        lifecycle.collectChannelWhenStarted(viewModel.uiEvent) { event ->
+            when (event) {
                 is LoginUIEvent.OnLoginFailed -> {
                     val message = event.messageUIText.getValue(context)
                     showSnackbar(message)
                 }
+
                 is LoginUIEvent.OnLoginSuccess -> {
                     showSnackbar(context.getString(R.string.login_berhasil_halo, event.userName))
 
-                    if(event.isFirstTime) navigateToOnBoarding() else navigateToMainPage()
+                    if (event.isFirstTime) navigateToOnBoarding() else navigateToMainPage()
                 }
             }
         }
@@ -96,9 +96,9 @@ fun LoginScreen(
 @Composable
 fun LoginContent(
     modifier: Modifier = Modifier,
-    onLogin: (String, String) -> Unit = {_, _ -> },
+    onLogin: (String, String) -> Unit = { _, _ -> },
     navigateToRegister: () -> Unit = {},
-    canInteract:Boolean = true
+    canInteract: Boolean = true
 ) {
 
     val scrollState = rememberScrollState()

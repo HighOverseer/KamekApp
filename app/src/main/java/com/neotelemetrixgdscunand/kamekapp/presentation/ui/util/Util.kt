@@ -1,6 +1,5 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.util
 
-import android.content.Context
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
@@ -13,9 +12,6 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.preferencesDataStore
-import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
-
 
 
 fun Modifier.dashedBorder(
