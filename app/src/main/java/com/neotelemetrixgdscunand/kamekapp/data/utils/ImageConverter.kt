@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util
+package com.neotelemetrixgdscunand.kamekapp.data.utils
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -6,7 +6,6 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImageCompressor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

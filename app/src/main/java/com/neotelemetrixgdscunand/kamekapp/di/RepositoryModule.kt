@@ -4,6 +4,7 @@ import com.neotelemetrixgdscunand.kamekapp.data.AuthRepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.RepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.WeatherRepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.local.AuthPreferenceImpl
+import com.neotelemetrixgdscunand.kamekapp.data.utils.LocationManagerImpl
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
@@ -20,18 +21,18 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun provideRepository(repository: RepositoryImpl): Repository
+    abstract fun bindRepository(repository: RepositoryImpl): Repository
 
     @Binds
     @Singleton
-    abstract fun provideAuthRepository(authRepository: AuthRepositoryImpl): AuthRepository
+    abstract fun bindAuthRepository(authRepository: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
-    abstract fun provideWeatherRepository(weatherRepository: WeatherRepositoryImpl): WeatherRepository
+    abstract fun bindWeatherRepository(weatherRepository: WeatherRepositoryImpl): WeatherRepository
 
 
     @Binds
-    abstract fun provideAuthPreference(authPreferenceImpl: AuthPreferenceImpl): AuthPreference
+    abstract fun bindAuthPreference(authPreferenceImpl: AuthPreferenceImpl): AuthPreference
 
 }

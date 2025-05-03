@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
     fun getWeatherForecastOverviewAutoUpdate(
-        latitude: Float,
-        longitude: Float,
+        latitude: Double,
+        longitude: Double,
         delayEachRequestWhenSuccessMs: Long = DELAY_EACH_SUCCESS_REQUEST_MS,
         delayEachRequestWhenErrorMs: Long = DELAY_EACH_ERROR_REQUEST_MS
     ): Flow<Result<WeatherForecastOverview, DataError.NetworkError>>
 
     suspend fun getWeatherForecastForSeveralDays(
-        latitude: Float,
-        longitude: Float
+        latitude: Double,
+        longitude: Double
     ): Result<List<WeatherForecastItem>, DataError.NetworkError>
 
     companion object {

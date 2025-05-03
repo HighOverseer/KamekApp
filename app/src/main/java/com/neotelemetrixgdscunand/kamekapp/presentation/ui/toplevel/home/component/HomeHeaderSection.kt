@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
@@ -54,7 +55,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
 fun HomeHeaderSection(
     modifier: Modifier = Modifier,
     navigateToNotification: () -> Unit = {},
-    weatherForecastOverview: WeatherForecastOverviewDui? = null
+    weatherForecastOverview: WeatherForecastOverviewDui? = null,
+    currentLocationProvider: () -> String? = { null }
 ) {
 
     var inflatedCardHeight by remember { mutableStateOf(0.dp) }
@@ -130,7 +132,10 @@ fun HomeHeaderSection(
                 }
 
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
@@ -138,17 +143,14 @@ fun HomeHeaderSection(
                             .vectorResource(R.drawable.ic_needle_location),
                         contentDescription = null
                     )
+
+                    Spacer(Modifier.width(8.dp))
+
                     Text(
-                        text = stringResource(R.string.padang),
+                        text = currentLocationProvider() ?: stringResource(R.string.tidak_diketahui),
                         style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
                         color = Color.White
-                    )
-                    Image(
-                        imageVector = ImageVector
-                            .vectorResource(
-                                R.drawable.ic_down_arrow
-                            ),
-                        contentDescription = null,
                     )
                 }
 
@@ -161,16 +163,21 @@ fun HomeHeaderSection(
                         )
                         .padding(9.dp)
                 }
-                Box(
-                    modifier = iconBellModifier
-                        .clickable(onClick = navigateToNotification)
-                ) {
-                    Image(
-                        imageVector = ImageVector
-                            .vectorResource(R.drawable.ic_bell),
-                        contentDescription = stringResource(R.string.notification)
-                    )
+
+                Box(Modifier.size(60.dp)) {
+                    Box(
+                        modifier = iconBellModifier
+                            .align(Alignment.Center)
+                            .clickable(onClick = navigateToNotification)
+                    ) {
+                        Image(
+                            imageVector = ImageVector
+                                .vectorResource(R.drawable.ic_bell),
+                            contentDescription = stringResource(R.string.notification)
+                        )
+                    }
                 }
+
 
             }
 

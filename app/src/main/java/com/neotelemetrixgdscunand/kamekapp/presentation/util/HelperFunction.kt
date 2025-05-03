@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.common.AuthError
+import com.neotelemetrixgdscunand.kamekapp.domain.common.LocationError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.PasswordValidator
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.common.RootError
@@ -55,6 +56,7 @@ val mapNetworkErrorToStringResource = hashMapOf(
     AuthError.INVALID_TOKEN to R.string.sesi_tidak_valid_mohon_coba_lagi,
     AuthError.INVALID_REGISTER_SESSION to R.string.sesi_tidak_valid_mohon_coba_lagi
 )
+
 
 val mapErrorToMapErrorToStringResource = hashMapOf(
     RootNetworkError::class to mapNetworkErrorToStringResource,

@@ -31,14 +31,14 @@ interface ApiService {
 
     @GET("weather-home")
     suspend fun getWeatherForecastOverview(
-        @Query("lat") latitude: Float,
-        @Query("lon") longitude: Float
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double
     ): Response<WeatherForecastOverviewDto>
 
     @GET("weather")
     suspend fun getWeatherForecastForSevenDays(
-        @Query("lat") latitude: Float,
-        @Query("lon") longitude: Float
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double
     ): Response<List<WeatherForecastItemDto>>
 
 }

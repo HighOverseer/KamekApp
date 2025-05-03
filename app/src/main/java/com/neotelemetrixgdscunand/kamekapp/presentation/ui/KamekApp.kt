@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -48,6 +49,8 @@ fun KamekApp(
     rootNavHostController: NavHostController = rememberNavController(),
     appState: KamekAppState,
 ) {
+
+    val context = LocalContext.current
     val snackbarHostState = remember {
         SnackbarHostState()
     }
@@ -63,6 +66,13 @@ fun KamekApp(
             }
         }
     }
+
+    val locationPermissionRequest = appState.rememberLocationPermissionRequest()
+    val locationSettingResolutionLauncher = appState.rememberLocationSettingResolutionLauncher(
+        context = context,
+        showSnackbar = showSnackbar,
+        locationPermissionRequest = locationPermissionRequest
+    )
 
     val shouldShowStatusBar by appState.shouldShowStatusBar.collectAsStateWithLifecycle()
     appState.HandleStatusBarVisibilityEffect(shouldShowStatusBar)
@@ -184,6 +194,10 @@ fun KamekApp(
                 MainPage(
                     state = state,
                     mainNavHostController = mainNavController,
+                    isLocationPermissionGrantedProvider = appState.isLocationPermissionGrantedProvider,
+                    checkLocationPermission = appState::checkLocationPermission,
+                    rememberLocationPermissionRequest = { locationPermissionRequest },
+                    rememberLocationSettingResolutionLauncher = { locationSettingResolutionLauncher },
                     navigateToNews = {
                         rootNavHostController.navigate(
                             Navigation.News
@@ -299,7 +313,11 @@ fun KamekApp(
 
             composable<Navigation.Weather> {
                 WeatherScreen(
-                    navigateUp = rootNavHostController::navigateUp
+                    navigateUp = rootNavHostController::navigateUp,
+                    isLocationPermissionGrantedProvider = appState.isLocationPermissionGrantedProvider,
+                    checkLocationPermission = appState::checkLocationPermission,
+                    rememberLocationPermissionRequest = { locationPermissionRequest },
+                    rememberLocationSettingResolutionLauncher = { locationSettingResolutionLauncher },
                 )
             }
 

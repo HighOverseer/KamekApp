@@ -37,8 +37,8 @@ fun TakePhotoScreen(
     showSnackBar: (String) -> Unit = {},
     navigateUp: () -> Unit = {},
     navigateToResult: (String, String) -> Unit = { _, _ -> },
-    checkCameraPermission: (Context, ManagedActivityResultLauncher<String, Boolean>) -> Unit = { _, _ -> },
-    rememberCameraPermissionRequest: @Composable () -> ManagedActivityResultLauncher<String, Boolean>
+    checkCameraPermission: (Context, ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>) -> Unit = { _, _ -> },
+    rememberCameraPermissionRequest: @Composable () -> ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>
 ) {
     val context = LocalContext.current
     val cameraPermissionRequest = rememberCameraPermissionRequest()
@@ -171,10 +171,8 @@ private fun TakePhotoScreenPreview() {
         TakePhotoScreen(
             rememberCameraPermissionRequest = {
                 rememberLauncherForActivityResult(
-                    ActivityResultContracts.RequestPermission()
-                ) {
-
-                }
+                    ActivityResultContracts.RequestMultiplePermissions()
+                ) {}
             }
         )
     }

@@ -5,8 +5,10 @@ import com.neotelemetrixgdscunand.kamekapp.domain.common.UsernameValidator
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CaptureImageFileHandler
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtractor
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ImageDetectorHelperImpl
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.ModelLabelExtractorImpl
+import com.neotelemetrixgdscunand.kamekapp.data.utils.ImageDetectorHelperImpl
+import com.neotelemetrixgdscunand.kamekapp.data.utils.LocationManagerImpl
+import com.neotelemetrixgdscunand.kamekapp.data.utils.ModelLabelExtractorImpl
+import com.neotelemetrixgdscunand.kamekapp.domain.data.LocationManager
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CapturedImageFileHandlerImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.util.PasswordValidatorImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.util.UsernameValidatorImpl
@@ -35,5 +37,8 @@ abstract class PresentationModule {
 
     @Binds
     abstract fun bindPasswordValidator(passwordValidatorImpl: PasswordValidatorImpl): PasswordValidator
+
+    @Binds
+    abstract fun bindLocationManager(locationManagerImpl: LocationManagerImpl): LocationManager
 
 }

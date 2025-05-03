@@ -141,5 +141,8 @@ dependencies {
     //phone number validator
     implementation (libs.libphonenumber)
 
+    //fused location
+    implementation(libs.play.services.location)
+
 }
 

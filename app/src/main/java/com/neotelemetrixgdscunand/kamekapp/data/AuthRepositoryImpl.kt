@@ -1,6 +1,7 @@
 package com.neotelemetrixgdscunand.kamekapp.data
 
 import com.neotelemetrixgdscunand.kamekapp.data.remote.ApiService
+import com.neotelemetrixgdscunand.kamekapp.data.utils.fetchFromNetwork
 import com.neotelemetrixgdscunand.kamekapp.domain.common.AuthError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.DataError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result

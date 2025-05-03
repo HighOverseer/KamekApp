@@ -1,6 +1,7 @@
 package com.neotelemetrixgdscunand.kamekapp.data
 
 import com.neotelemetrixgdscunand.kamekapp.data.remote.ApiService
+import com.neotelemetrixgdscunand.kamekapp.data.utils.fetchFromNetwork
 import com.neotelemetrixgdscunand.kamekapp.domain.common.DataError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.common.RootNetworkError
@@ -20,8 +21,8 @@ class WeatherRepositoryImpl @Inject constructor(
 ) : WeatherRepository {
 
     override fun getWeatherForecastOverviewAutoUpdate(
-        latitude: Float,
-        longitude: Float,
+        latitude: Double,
+        longitude: Double,
         delayEachRequestWhenSuccessMs: Long,
         delayEachRequestWhenErrorMs: Long
     ): Flow<Result<WeatherForecastOverview, DataError.NetworkError>> = flow {
@@ -47,8 +48,8 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getWeatherForecastForSeveralDays(
-        latitude: Float,
-        longitude: Float
+        latitude: Double,
+        longitude: Double
     ): Result<List<WeatherForecastItem>, DataError.NetworkError> {
         return fetchFromNetwork {
             val response = apiService.getWeatherForecastForSevenDays(

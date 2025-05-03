@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.data
+package com.neotelemetrixgdscunand.kamekapp.data.utils
 
 import com.neotelemetrixgdscunand.kamekapp.domain.common.DataError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result

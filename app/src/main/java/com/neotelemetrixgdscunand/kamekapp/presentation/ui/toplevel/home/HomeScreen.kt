@@ -1,6 +1,12 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home
 
+import android.content.Context
 import android.content.res.Configuration
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.common.api.ResolvableApiException
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
@@ -52,6 +59,14 @@ import kotlinx.collections.immutable.toImmutableList
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
+    isLocationPermissionGrantedProvider: () -> Boolean? = { false },
+    checkLocationPermission: (Context, ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>) -> Unit = { _, _ -> },
+    rememberLocationPermissionRequest: @Composable () -> ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> = { rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()) { }
+    },
+    rememberLocationSettingResolutionLauncher: @Composable () -> ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult> = { rememberLauncherForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) {} },
     navigateToNews: () -> Unit = {},
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
@@ -63,14 +78,54 @@ fun HomeScreen(
 
     val lifecycle = LocalLifecycleOwner.current
     val context = LocalContext.current
-    LaunchedEffect(true) {
-        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent) {
-            showSnackbar(it.getValue(context))
+
+    val locationPermissionRequest = rememberLocationPermissionRequest()
+    val isLocationPermissionGranted = isLocationPermissionGrantedProvider()
+    val locationPermissionDeniedMessage = stringResource(R.string.fitur_prediksi_cuaca_tidak_bisa)
+
+    LaunchedEffect(isLocationPermissionGranted) {
+        if(isLocationPermissionGranted == null){
+            checkLocationPermission(
+                context,
+                locationPermissionRequest
+            )
+        }else if(isLocationPermissionGranted == true){
+            viewModel.startLocationUpdates()
+        }else{
+            showSnackbar(locationPermissionDeniedMessage)
+            viewModel.stopLocationUpdates()
         }
     }
 
+    val locationSettingResolutionLauncher = rememberLocationSettingResolutionLauncher()
+    val locationSettingResolvableErrorMessage = stringResource(R.string.maaf_sepertinya_anda_perlu_mengaktifkan_beberapa_pengaturan_lokasi)
+    LaunchedEffect(true) {
+        lifecycle.collectChannelWhenStarted(viewModel.uiEvent) {
+            when(it){
+                is HomeUIEvent.OnFailedFetchWeatherForecast -> {
+                    showSnackbar(it.errorUIText.getValue(context))
+                }
+                is HomeUIEvent.OnLocationResolvableError -> {
+                    showSnackbar(locationSettingResolvableErrorMessage)
+
+                    if(it.exception is ResolvableApiException){
+                        locationSettingResolutionLauncher.launch(
+                            IntentSenderRequest.Builder(it.exception.resolution).build()
+                        )
+                    }
+                }
+                is HomeUIEvent.OnLocationUnknownError -> {
+                    showSnackbar(it.errorUIText.getValue(context))
+                }
+            }
+
+        }
+    }
+
+
     val diagnosisSessionPreviews by viewModel.diagnosisHistory.collectAsStateWithLifecycle()
     val weatherForecastOverview by viewModel.weatherForecastOverview.collectAsStateWithLifecycle()
+    val currentLocation by viewModel.currentLocation.collectAsStateWithLifecycle()
 
     HomeContent(
         modifier = modifier,
@@ -82,7 +137,8 @@ fun HomeScreen(
         navigateToDiagnosisResult = navigateToDiagnosisResult,
         navigateToNotification = navigateToNotification,
         showSnackbar = showSnackbar,
-        weatherForecastOverview = weatherForecastOverview
+        weatherForecastOverview = weatherForecastOverview,
+        currentLocationNameProvider = { currentLocation?.name }
     )
 }
 
@@ -91,6 +147,7 @@ fun HomeScreen(
 fun HomeContent(
     modifier: Modifier = Modifier,
     weatherForecastOverview: WeatherForecastOverviewDui? = null,
+    currentLocationNameProvider: () -> String? = { null },
     navigateToNews: () -> Unit = {},
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
@@ -116,7 +173,8 @@ fun HomeContent(
         HomeHeaderSection(
             modifier = Modifier.fillMaxWidth(),
             navigateToNotification = navigateToNotification,
-            weatherForecastOverview = weatherForecastOverview
+            weatherForecastOverview = weatherForecastOverview,
+            currentLocationProvider = currentLocationNameProvider
         )
 
         PriceInfoSection(
