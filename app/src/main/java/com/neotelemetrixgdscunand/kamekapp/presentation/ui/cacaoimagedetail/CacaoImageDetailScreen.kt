@@ -17,8 +17,8 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.cacaoimagedetail.components.OverlayCompose
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.NavigateUpButton
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 
 @Composable
 fun CacaoImageDetailScreen(

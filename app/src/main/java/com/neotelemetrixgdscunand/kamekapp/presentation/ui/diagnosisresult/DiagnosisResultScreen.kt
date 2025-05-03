@@ -50,8 +50,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.disea
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.PriceAnalysisTabScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.getBoundingBoxWithItsNameAsTheLabel
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList

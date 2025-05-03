@@ -1,6 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.model
 
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 
 data class WeatherForecastItemDui(
     val date: UIText,

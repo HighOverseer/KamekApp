@@ -10,9 +10,8 @@ import com.neotelemetrixgdscunand.kamekapp.domain.data.WeatherRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.Location
 import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.WeatherDuiMapper
 import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastItemDui
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeUIEvent
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.toErrorUIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.toErrorUIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -21,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -80,16 +78,18 @@ class WeatherViewModel @Inject constructor(
                 .getLocationUpdated()
                 .flowOn(Dispatchers.IO)
                 .collectLatest { result ->
-                    when(result){
+                    when (result) {
                         is Result.Error -> {
-                            when(result.error){
+                            when (result.error) {
                                 is LocationError.ResolvableSettingsError -> {
                                     _uiEvent.send(WeatherUIEvent.OnLocationResolvableError(result.error.exception))
                                 }
+
                                 is LocationError.UnknownError -> {
                                     val errorUIText = result.toErrorUIText()
                                     _uiEvent.send(WeatherUIEvent.OnLocationUnknownError(errorUIText))
                                 }
+
                                 is LocationError.UnexpectedErrorWithMessage -> {
                                     val errorUIText = UIText.DynamicString(result.error.message)
                                     _uiEvent.send(WeatherUIEvent.OnLocationUnknownError(errorUIText))
@@ -97,6 +97,7 @@ class WeatherViewModel @Inject constructor(
                             }
                             _currentLocation.update { null }
                         }
+
                         is Result.Success -> {
                             val location = result.data
                             _currentLocation.update { location }

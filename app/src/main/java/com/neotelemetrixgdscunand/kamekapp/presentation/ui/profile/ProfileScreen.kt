@@ -42,7 +42,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.AuthTextField
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
 
 @Composable
 fun ProfileScreen(

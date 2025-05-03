@@ -60,8 +60,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey71
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlin.math.roundToInt

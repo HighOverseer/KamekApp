@@ -74,7 +74,7 @@ class KamekAppState(
     }
 
     @Composable
-    fun rememberCameraPermissionRequest():ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>{
+    fun rememberCameraPermissionRequest(): ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> {
         return rememberPermissionRequest(
             onResult = { isGranted ->
                 isCameraPermissionGranted = isGranted
@@ -83,7 +83,7 @@ class KamekAppState(
     }
 
     @Composable
-    fun rememberLocationPermissionRequest():ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>{
+    fun rememberLocationPermissionRequest(): ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> {
         return rememberPermissionRequest(
             onResult = { isGranted ->
                 isLocationPermissionGranted = isGranted
@@ -96,17 +96,18 @@ class KamekAppState(
         context: Context,
         showSnackbar: (String) -> Unit,
         locationPermissionRequest: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>
-    ):ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>{
+    ): ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult> {
         return rememberLauncherForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()
         ) { result ->
-            when(result.resultCode){
+            when (result.resultCode) {
                 RESULT_OK -> {
                     checkLocationPermission(
                         context = context,
                         locationPermissionRequest
                     )
                 }
+
                 RESULT_CANCELED -> {
                     showSnackbar(context.getString(R.string.maaf_pengaturan_lokasi_perlu_anda_aktifkan))
                 }
@@ -116,11 +117,11 @@ class KamekAppState(
 
     @Composable
     private fun rememberPermissionRequest(
-        onResult :(Boolean) -> Unit
-    ):ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>{
+        onResult: (Boolean) -> Unit
+    ): ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> {
         return rememberLauncherForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
-        ){ mapResult ->
+        ) { mapResult ->
             val isGranted = mapResult.values.all { it }
             onResult(isGranted)
         }
@@ -143,7 +144,7 @@ class KamekAppState(
     fun checkLocationPermission(
         context: Context,
         locationPermissionRequest: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>
-    ){
+    ) {
         checkPermission(
             context = context,
             permissionRequest = locationPermissionRequest,
@@ -154,7 +155,7 @@ class KamekAppState(
         )
     }
 
-    private fun isPermissionGranted(context: Context, permission:String):Boolean{
+    private fun isPermissionGranted(context: Context, permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
             context,
             permission
@@ -166,13 +167,13 @@ class KamekAppState(
         permissions: ImmutableList<String>,
         permissionRequest: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>,
         onAlreadyGranted: () -> Unit
-    ){
+    ) {
         val permissionsResults = permissions.map { isPermissionGranted(context, it) }
         val isAlreadyGranted = permissionsResults.all { it }
 
-        if(!isAlreadyGranted){
+        if (!isAlreadyGranted) {
             permissionRequest.launch(permissions.toTypedArray())
-        }else onAlreadyGranted()
+        } else onAlreadyGranted()
     }
 
     private val currentRouteStringVal: StateFlow<String?> =
@@ -197,7 +198,6 @@ class KamekAppState(
                 SharingStarted.WhileSubscribed(5000L),
                 true
             )
-
 
 
     @Composable

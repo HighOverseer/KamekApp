@@ -6,7 +6,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.WeatherForecastOverview
 import com.neotelemetrixgdscunand.kamekapp.domain.model.WeatherType
 import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastItemDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 import kotlinx.coroutines.CancellationException
 import java.text.SimpleDateFormat
 import java.util.Calendar

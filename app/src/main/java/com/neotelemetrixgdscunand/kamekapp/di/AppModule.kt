@@ -23,5 +23,5 @@ class AppModule {
     @Provides
     fun provideGeoCoder(
         @ApplicationContext context: Context
-    ):Geocoder = Geocoder(context)
+    ): Geocoder = Geocoder(context)
 }

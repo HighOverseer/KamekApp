@@ -4,7 +4,6 @@ import com.neotelemetrixgdscunand.kamekapp.data.AuthRepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.RepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.WeatherRepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.local.AuthPreferenceImpl
-import com.neotelemetrixgdscunand.kamekapp.data.utils.LocationManagerImpl
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository

@@ -48,8 +48,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
 
 @Composable
 fun HomeHeaderSection(
@@ -147,7 +147,8 @@ fun HomeHeaderSection(
                     Spacer(Modifier.width(8.dp))
 
                     Text(
-                        text = currentLocationProvider() ?: stringResource(R.string.tidak_diketahui),
+                        text = currentLocationProvider()
+                            ?: stringResource(R.string.tidak_diketahui),
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                         color = Color.White

@@ -31,15 +31,15 @@ import kotlin.coroutines.resume
 class LocationManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val geoCoder: Geocoder
-):LocationManager {
+) : LocationManager {
 
     @SuppressLint("MissingPermission") // Make Sure Permission is Already Handled
     override fun getLocationUpdated(): Flow<Result<Location, LocationError>> {
-        return callbackFlow{
+        return callbackFlow {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             val locationRequest = getLocationRequest()
 
-            val locationCallback = object : LocationCallback(){
+            val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
                     val location = result.lastLocation
                     launch(Dispatchers.IO) {
@@ -77,7 +77,7 @@ class LocationManagerImpl @Inject constructor(
                     )
                 }
                 .addOnFailureListener { exception ->
-                    when(exception){
+                    when (exception) {
                         is ResolvableApiException -> {
                             trySend(
                                 Result.Error(
@@ -87,9 +87,10 @@ class LocationManagerImpl @Inject constructor(
                                 )
                             )
                         }
+
                         else -> {
                             val message = exception.localizedMessage
-                            if(message != null){
+                            if (message != null) {
                                 trySend(
                                     Result.Error(
                                         LocationError.UnexpectedErrorWithMessage(
@@ -97,7 +98,7 @@ class LocationManagerImpl @Inject constructor(
                                         )
                                     )
                                 )
-                            }else trySend(Result.Error(LocationError.UnknownError))
+                            } else trySend(Result.Error(LocationError.UnknownError))
                         }
                     }
                 }
@@ -108,7 +109,7 @@ class LocationManagerImpl @Inject constructor(
         }
     }
 
-    private fun getLocationRequest():LocationRequest{
+    private fun getLocationRequest(): LocationRequest {
         val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY
         val interval = TimeUnit.MINUTES.toMillis(10)
         val maxWaitTime = TimeUnit.MINUTES.toMillis(30)
@@ -125,23 +126,23 @@ class LocationManagerImpl @Inject constructor(
 
     @Suppress("DEPRECATION")
     private suspend fun getCityNameOfLocation(
-        latitude:Double,
-        longitude:Double
-    ):String?{
-        return if(Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU){
+        latitude: Double,
+        longitude: Double
+    ): String? {
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
             suspendCancellableCoroutine { continuation ->
                 geoCoder.getFromLocation(
                     latitude,
                     longitude,
                     1
                 ) { addresses ->
-                    if(continuation.isActive){
+                    if (continuation.isActive) {
                         continuation.resume(addresses.firstOrNull()?.locality)
                     }
                 }
             }
 
-        }else{
+        } else {
             val addresses = geoCoder.getFromLocation(
                 latitude,
                 longitude,
@@ -150,10 +151,10 @@ class LocationManagerImpl @Inject constructor(
 
             coroutineContext.ensureActive()
 
-            if(addresses?.isNotEmpty() == true){
+            if (addresses?.isNotEmpty() == true) {
                 val cityName = addresses[0].locality
                 cityName
-            }else null
+            } else null
         }
     }
 }

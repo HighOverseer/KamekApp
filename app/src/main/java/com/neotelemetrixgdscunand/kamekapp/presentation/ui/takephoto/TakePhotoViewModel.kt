@@ -3,14 +3,13 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.data.utils.ImageCompressor
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CaptureImageFileHandler
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.CameraState
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.ImageCaptureResult
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TakePhotoUIEvent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogEvent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util.TextFieldConfirmationDialogState
-import com.neotelemetrixgdscunand.kamekapp.data.utils.ImageCompressor
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel

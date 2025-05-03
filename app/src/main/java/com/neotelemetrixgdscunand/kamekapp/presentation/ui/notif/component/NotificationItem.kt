@@ -35,8 +35,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.SecondaryButton
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
 
 @Composable
 fun NotificationItem(

@@ -33,7 +33,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.formatSellPriceEstimationForHistory
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
 
 @Composable
 fun DiagnosisHistory(

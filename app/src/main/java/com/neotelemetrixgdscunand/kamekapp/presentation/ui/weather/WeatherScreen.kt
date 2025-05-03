@@ -8,7 +8,6 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -52,8 +51,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOve
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeUIEvent
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.component.CardWeatherOverview
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.component.WeatherPredictionItem
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.component.WeatherPredictionItemLoading
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -65,12 +66,16 @@ fun WeatherScreen(
     viewModel: WeatherViewModel = hiltViewModel(),
     isLocationPermissionGrantedProvider: () -> Boolean? = { false },
     checkLocationPermission: (Context, ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>) -> Unit = { _, _ -> },
-    rememberLocationPermissionRequest: @Composable () -> ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> = { rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()) { }
+    rememberLocationPermissionRequest: @Composable () -> ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> = {
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { }
     },
-    rememberLocationSettingResolutionLauncher: @Composable () -> ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult> = { rememberLauncherForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult()
-    ) {} },
+    rememberLocationSettingResolutionLauncher: @Composable () -> ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult> = {
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) {}
+    },
 ) {
     val lifecycle = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -80,36 +85,39 @@ fun WeatherScreen(
     val locationPermissionDeniedMessage = stringResource(R.string.fitur_prediksi_cuaca_tidak_bisa)
 
     LaunchedEffect(isLocationPermissionGranted) {
-        if(isLocationPermissionGranted == null){
+        if (isLocationPermissionGranted == null) {
             checkLocationPermission(
                 context,
                 locationPermissionRequest
             )
-        }else if(isLocationPermissionGranted == true){
+        } else if (isLocationPermissionGranted == true) {
             viewModel.startLocationUpdates()
-        }else{
+        } else {
             showSnackbar(locationPermissionDeniedMessage)
             viewModel.stopLocationUpdates()
         }
     }
 
     val locationSettingResolutionLauncher = rememberLocationSettingResolutionLauncher()
-    val locationSettingResolvableErrorMessage = stringResource(R.string.maaf_sepertinya_anda_perlu_mengaktifkan_beberapa_pengaturan_lokasi)
+    val locationSettingResolvableErrorMessage =
+        stringResource(R.string.maaf_sepertinya_anda_perlu_mengaktifkan_beberapa_pengaturan_lokasi)
     LaunchedEffect(true) {
         lifecycle.collectChannelWhenStarted(viewModel.uiEvent) {
-            when(it){
+            when (it) {
                 is WeatherUIEvent.OnFailedFetchWeatherForecast -> {
                     showSnackbar(it.errorUIText.getValue(context))
                 }
+
                 is WeatherUIEvent.OnLocationResolvableError -> {
                     showSnackbar(locationSettingResolvableErrorMessage)
 
-                    if(it.exception is ResolvableApiException){
+                    if (it.exception is ResolvableApiException) {
                         locationSettingResolutionLauncher.launch(
                             IntentSenderRequest.Builder(it.exception.resolution).build()
                         )
                     }
                 }
+
                 is WeatherUIEvent.OnLocationUnknownError -> {
                     showSnackbar(it.errorUIText.getValue(context))
                 }
@@ -200,7 +208,8 @@ fun WeatherContent(
                             Spacer(Modifier.width(8.dp))
 
                             Text(
-                                currentLocationNameProvider() ?: stringResource(R.string.tidak_diketahui),
+                                currentLocationNameProvider()
+                                    ?: stringResource(R.string.tidak_diketahui),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }

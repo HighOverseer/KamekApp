@@ -50,7 +50,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.compone
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsItem
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -61,12 +61,16 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     isLocationPermissionGrantedProvider: () -> Boolean? = { false },
     checkLocationPermission: (Context, ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>) -> Unit = { _, _ -> },
-    rememberLocationPermissionRequest: @Composable () -> ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> = { rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()) { }
+    rememberLocationPermissionRequest: @Composable () -> ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> = {
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { }
     },
-    rememberLocationSettingResolutionLauncher: @Composable () -> ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult> = { rememberLauncherForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult()
-    ) {} },
+    rememberLocationSettingResolutionLauncher: @Composable () -> ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult> = {
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) {}
+    },
     navigateToNews: () -> Unit = {},
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
@@ -84,36 +88,39 @@ fun HomeScreen(
     val locationPermissionDeniedMessage = stringResource(R.string.fitur_prediksi_cuaca_tidak_bisa)
 
     LaunchedEffect(isLocationPermissionGranted) {
-        if(isLocationPermissionGranted == null){
+        if (isLocationPermissionGranted == null) {
             checkLocationPermission(
                 context,
                 locationPermissionRequest
             )
-        }else if(isLocationPermissionGranted == true){
+        } else if (isLocationPermissionGranted == true) {
             viewModel.startLocationUpdates()
-        }else{
+        } else {
             showSnackbar(locationPermissionDeniedMessage)
             viewModel.stopLocationUpdates()
         }
     }
 
     val locationSettingResolutionLauncher = rememberLocationSettingResolutionLauncher()
-    val locationSettingResolvableErrorMessage = stringResource(R.string.maaf_sepertinya_anda_perlu_mengaktifkan_beberapa_pengaturan_lokasi)
+    val locationSettingResolvableErrorMessage =
+        stringResource(R.string.maaf_sepertinya_anda_perlu_mengaktifkan_beberapa_pengaturan_lokasi)
     LaunchedEffect(true) {
         lifecycle.collectChannelWhenStarted(viewModel.uiEvent) {
-            when(it){
+            when (it) {
                 is HomeUIEvent.OnFailedFetchWeatherForecast -> {
                     showSnackbar(it.errorUIText.getValue(context))
                 }
+
                 is HomeUIEvent.OnLocationResolvableError -> {
                     showSnackbar(locationSettingResolvableErrorMessage)
 
-                    if(it.exception is ResolvableApiException){
+                    if (it.exception is ResolvableApiException) {
                         locationSettingResolutionLauncher.launch(
                             IntentSenderRequest.Builder(it.exception.resolution).build()
                         )
                     }
                 }
+
                 is HomeUIEvent.OnLocationUnknownError -> {
                     showSnackbar(it.errorUIText.getValue(context))
                 }

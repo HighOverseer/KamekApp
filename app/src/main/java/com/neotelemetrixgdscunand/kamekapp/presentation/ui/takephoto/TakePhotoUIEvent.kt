@@ -1,6 +1,6 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto
 
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 
 interface TakePhotoUIEvent {
     data class OnToastMessage(val message: UIText) : TakePhotoUIEvent

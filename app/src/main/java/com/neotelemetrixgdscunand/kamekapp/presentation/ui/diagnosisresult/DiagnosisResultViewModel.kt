@@ -13,7 +13,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelp
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResult
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel

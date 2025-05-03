@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather
+package com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,8 +32,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon53
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange90
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.ImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 

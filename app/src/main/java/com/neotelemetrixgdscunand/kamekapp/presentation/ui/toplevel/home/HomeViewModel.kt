@@ -10,8 +10,8 @@ import com.neotelemetrixgdscunand.kamekapp.domain.data.WeatherRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.domain.model.Location
 import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.WeatherDuiMapper
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.UIText
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.toErrorUIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.toErrorUIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -69,16 +69,18 @@ class HomeViewModel @Inject constructor(
                 .getLocationUpdated()
                 .flowOn(Dispatchers.IO)
                 .collectLatest { result ->
-                    when(result){
+                    when (result) {
                         is Result.Error -> {
-                            when(result.error){
+                            when (result.error) {
                                 is LocationError.ResolvableSettingsError -> {
                                     _uiEvent.send(HomeUIEvent.OnLocationResolvableError(result.error.exception))
                                 }
+
                                 is LocationError.UnknownError -> {
                                     val errorUIText = result.toErrorUIText()
                                     _uiEvent.send(HomeUIEvent.OnLocationUnknownError(errorUIText))
                                 }
+
                                 is LocationError.UnexpectedErrorWithMessage -> {
                                     val errorUIText = UIText.DynamicString(result.error.message)
                                     _uiEvent.send(HomeUIEvent.OnLocationUnknownError(errorUIText))
@@ -86,6 +88,7 @@ class HomeViewModel @Inject constructor(
                             }
                             _currentLocation.update { null }
                         }
+
                         is Result.Success -> {
                             val location = result.data
                             _currentLocation.update { location }

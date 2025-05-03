@@ -37,7 +37,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey47
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

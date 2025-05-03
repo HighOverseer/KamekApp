@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.util
+package com.neotelemetrixgdscunand.kamekapp.presentation.utils
 
 import android.content.Context
 import androidx.annotation.StringRes

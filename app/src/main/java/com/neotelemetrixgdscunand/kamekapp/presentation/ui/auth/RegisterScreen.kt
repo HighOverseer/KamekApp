@@ -40,7 +40,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.AuthTe
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.PrimaryButton
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.auth.component.SmallLogoHeadline
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.component.SecondaryButton
-import com.neotelemetrixgdscunand.kamekapp.presentation.util.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 
 
 @Composable
