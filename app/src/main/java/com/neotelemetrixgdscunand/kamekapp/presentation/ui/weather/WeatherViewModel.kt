@@ -8,8 +8,8 @@ import com.neotelemetrixgdscunand.kamekapp.domain.common.RootNetworkError
 import com.neotelemetrixgdscunand.kamekapp.domain.data.LocationManager
 import com.neotelemetrixgdscunand.kamekapp.domain.data.WeatherRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.Location
-import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.WeatherDuiMapper
 import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastItemDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.WeatherDuiMapper
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.toErrorUIText
 import dagger.hilt.android.lifecycle.HiltViewModel

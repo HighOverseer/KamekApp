@@ -11,17 +11,18 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 object DataMapper {
-    private const val DATA_NEWS_DATE_PATTERN =  "dd/MM/yyyy"
+    private const val DATA_NEWS_DATE_PATTERN = "dd/MM/yyyy"
     private const val DATA_NEWS_LOCALE_LANGUAGE_TAG = "ID"
-    fun mapNewsItemToDomain(newsItemDto: NewsItemDto):NewsItem?{
+    fun mapNewsItemToDomain(newsItemDto: NewsItemDto): NewsItem? {
         val sdf = SimpleDateFormat(
             DATA_NEWS_DATE_PATTERN,
             Locale.forLanguageTag(
-            DATA_NEWS_LOCALE_LANGUAGE_TAG)
+                DATA_NEWS_LOCALE_LANGUAGE_TAG
+            )
         )
         val date = try {
             sdf.parse(newsItemDto.date ?: return null)
-        }catch (e:ParseException){
+        } catch (e: ParseException) {
             return null
         }
 
@@ -34,15 +35,16 @@ object DataMapper {
         )
     }
 
-    fun mapNewsDetailsToDomain(newsDetailsDto: NewsDetailsDto):NewsDetails?{
+    fun mapNewsDetailsToDomain(newsDetailsDto: NewsDetailsDto): NewsDetails? {
         val sdf = SimpleDateFormat(
             DATA_NEWS_DATE_PATTERN,
             Locale.forLanguageTag(
-                DATA_NEWS_LOCALE_LANGUAGE_TAG)
+                DATA_NEWS_LOCALE_LANGUAGE_TAG
+            )
         )
         val date = try {
             sdf.parse(newsDetailsDto.date ?: return null)
-        }catch (e:ParseException){
+        } catch (e: ParseException) {
             return null
         }
 
@@ -60,14 +62,14 @@ object DataMapper {
         )
     }
 
-    private fun extractCleanContent(text:String):String{
+    private fun extractCleanContent(text: String): String {
         val cleanedStart = text.replaceFirst(Regex("^[\\n\\r\\t\\s]+"), "")
         return cleanedStart.replace(Regex("[\\n\\r\\t]+"), "")
     }
 
     fun mapShopItemDtoToDomain(
         shopItemDto: ShopItemDto
-    ):ShopItem?{
+    ): ShopItem? {
         return ShopItem(
             id = shopItemDto.id ?: return null,
             imageUrl = shopItemDto.imageUrl ?: return null,

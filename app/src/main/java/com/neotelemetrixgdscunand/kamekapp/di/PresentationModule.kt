@@ -1,5 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.di
 
+import com.neotelemetrixgdscunand.kamekapp.data.utils.CapturedImageFileHandlerImpl
 import com.neotelemetrixgdscunand.kamekapp.data.utils.ImageDetectorHelperImpl
 import com.neotelemetrixgdscunand.kamekapp.data.utils.LocationManagerImpl
 import com.neotelemetrixgdscunand.kamekapp.data.utils.ModelLabelExtractorImpl
@@ -9,7 +10,6 @@ import com.neotelemetrixgdscunand.kamekapp.domain.data.LocationManager
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CaptureImageFileHandler
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtractor
-import com.neotelemetrixgdscunand.kamekapp.data.utils.CapturedImageFileHandlerImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.PasswordValidatorImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UsernameValidatorImpl
 import dagger.Binds

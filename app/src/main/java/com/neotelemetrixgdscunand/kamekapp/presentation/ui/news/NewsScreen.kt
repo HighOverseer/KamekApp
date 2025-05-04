@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +38,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -48,7 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalConfiguration
@@ -87,14 +84,14 @@ import kotlinx.coroutines.launch
 fun NewsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
-    navigateToDetail: (Int, NewsType) -> Unit = {_, _ ->},
+    navigateToDetail: (Int, NewsType) -> Unit = { _, _ -> },
     showSnackbar: (String) -> Unit = {},
     viewModel: NewsViewModel = hiltViewModel()
 ) {
     val lifecycle = LocalLifecycleOwner.current
     val context = LocalContext.current
     LaunchedEffect(true) {
-        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent){ messageUIText ->
+        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent) { messageUIText ->
             val message = messageUIText.getValue(context)
             showSnackbar(message)
         }
@@ -129,12 +126,12 @@ fun NewsScreen(
 fun NewsContent(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
-    navigateToDetail: (Int, NewsType) -> Unit = {_, _ -> },
+    navigateToDetail: (Int, NewsType) -> Unit = { _, _ -> },
     isLoadingProvider: () -> Boolean = { false },
     newsItemsProvider: () -> ImmutableList<NewsItemDui> = { persistentListOf() },
     searchQueryProvider: () -> String = { "" },
     onQueryChange: (String) -> Unit = {},
-    isSearchingByQueryProvider:() -> Boolean = { false },
+    isSearchingByQueryProvider: () -> Boolean = { false },
     selectedNewsTypeProvider: () -> NewsType = { NewsType.COCOA },
     onNewsTypeChange: (NewsType) -> Unit = { }
 ) {
@@ -308,7 +305,7 @@ fun NewsContentBody(
     newsItemsProvider: () -> ImmutableList<NewsItemDui> = { persistentListOf() },
     searchQueryProvider: () -> String = { "" },
     onQueryChange: (String) -> Unit = {},
-    isSearchingByQueryProvider:() -> Boolean = { false },
+    isSearchingByQueryProvider: () -> Boolean = { false },
     selectedNewsTypeProvider: () -> NewsType = { NewsType.COCOA },
     onNewsTypeChange: (NewsType) -> Unit = { }
 ) {
@@ -365,7 +362,7 @@ fun NewsContentBody(
                             .clickable(onClick = {
                                 onNewsTypeChange(it)
                                 focusManager.clearFocus()
-                             }),
+                            }),
                         isSelected = it == selectedNewsTypeProvider(),
                         text = it.toUIText().getValue()
                     )
@@ -374,10 +371,10 @@ fun NewsContentBody(
         }
 
         val newsItems = newsItemsProvider()
-        if(!isLoadingProvider()){
-            if(newsItems.isEmpty()){
+        if (!isLoadingProvider()) {
+            if (newsItems.isEmpty()) {
                 item {
-                    val text = if(isSearchingByQueryProvider()) {
+                    val text = if (isSearchingByQueryProvider()) {
                         stringResource(R.string.tidak_ditemukan_berita_yang_cocok)
                     } else stringResource(
                         R.string.tidak_ada_berita_yang_tersedia
@@ -391,7 +388,7 @@ fun NewsContentBody(
                         textAlign = TextAlign.Center
                     )
                 }
-            }else{
+            } else {
                 itemsIndexed(newsItems, key = { _, it -> it.id }) { index, item ->
                     Spacer(
                         Modifier.height(
@@ -408,8 +405,8 @@ fun NewsContentBody(
                     )
                 }
             }
-        }else{
-            items(5){ index ->
+        } else {
+            items(5) { index ->
                 Spacer(
                     Modifier.height(
                         if (index == 0) 8.dp else 16.dp

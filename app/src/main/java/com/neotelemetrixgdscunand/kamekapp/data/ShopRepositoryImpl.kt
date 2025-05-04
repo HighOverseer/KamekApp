@@ -14,11 +14,13 @@ import javax.inject.Singleton
 class ShopRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val dataMapper: DataMapper
-):ShopRepository {
+) : ShopRepository {
     override suspend fun getShopItems(query: String): Result<List<ShopItem>, DataError.NetworkError> {
         return fetchFromNetwork {
             val response = apiService.getShopItems(query)
-            val shopItemsDto = response.data ?: return@fetchFromNetwork Result.Error(RootNetworkError.UNEXPECTED_ERROR)
+            val shopItemsDto = response.data ?: return@fetchFromNetwork Result.Error(
+                RootNetworkError.UNEXPECTED_ERROR
+            )
             val shopItems = shopItemsDto.mapNotNull {
                 dataMapper.mapShopItemDtoToDomain(it)
             }

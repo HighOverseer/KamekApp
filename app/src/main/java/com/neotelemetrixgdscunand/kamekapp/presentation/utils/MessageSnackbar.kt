@@ -32,7 +32,7 @@ fun MessageSnackbar(
                 .background(color = Color.White, RoundedCornerShape(50))
                 .border(width = 1.dp, color = Maroon55, shape = RoundedCornerShape(50))
                 .padding(vertical = 4.dp, horizontal = 8.dp)
-        ){
+        ) {
 
             ImagePainterStable(
                 modifier = Modifier

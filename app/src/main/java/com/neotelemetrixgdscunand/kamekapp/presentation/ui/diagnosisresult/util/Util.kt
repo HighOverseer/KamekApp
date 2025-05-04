@@ -23,8 +23,6 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey63
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey67
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 fun Modifier.shimmeringEffect(
     gradientShimmeringColor: ImmutableList<Color>

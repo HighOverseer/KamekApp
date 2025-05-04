@@ -37,7 +37,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
 
 @Composable
 fun WeeklyNews(
@@ -161,7 +160,7 @@ fun WeeklyNewsLoading(modifier: Modifier = Modifier) {
                 modifier = imageModifier
                     .align(Alignment.CenterVertically)
                     .fillMaxHeight()
-            ){
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()

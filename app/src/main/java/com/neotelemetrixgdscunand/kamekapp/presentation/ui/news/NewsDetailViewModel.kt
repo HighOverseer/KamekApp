@@ -6,11 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.data.NewsRepository
-import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsDetailsDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.DuiMapper
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
-import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
-import com.neotelemetrixgdscunand.kamekapp.presentation.utils.toErrorUIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -28,9 +25,9 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsDetailViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
-    private val duiMapper:DuiMapper,
+    private val duiMapper: DuiMapper,
     savedStateHandle: SavedStateHandle
-):ViewModel() {
+) : ViewModel() {
 
     private val newsId = savedStateHandle.toRoute<Navigation.NewsDetail>().newsId
     private val newsType = savedStateHandle.toRoute<Navigation.NewsDetail>().newsType
@@ -39,15 +36,17 @@ class NewsDetailViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
 
     private val _onFailedGettingSelectedNewsDetailsEvent = Channel<Unit>()
-    val onFailedGettingSelectedNewsDetailsEvent = _onFailedGettingSelectedNewsDetailsEvent.receiveAsFlow()
+    val onFailedGettingSelectedNewsDetailsEvent =
+        _onFailedGettingSelectedNewsDetailsEvent.receiveAsFlow()
 
-    val newsDetails = flow{
+    val newsDetails = flow {
         _isLoading.update { true }
 
-        when(val result = newsRepository.getNewsById(newsId, newsType = newsType)){
+        when (val result = newsRepository.getNewsById(newsId, newsType = newsType)) {
             is Result.Error -> {
                 _onFailedGettingSelectedNewsDetailsEvent.send(Unit)
             }
+
             is Result.Success -> {
                 val newsDetailsDui = duiMapper.mapNewsDetailsToNewsDetailsDui(result.data)
                 emit(newsDetailsDui)
@@ -56,8 +55,8 @@ class NewsDetailViewModel @Inject constructor(
     }.onCompletion { _isLoading.update { false } }
         .flowOn(Dispatchers.IO)
         .stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000L),
-        null
-    )
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            null
+        )
 }

@@ -68,7 +68,7 @@ sealed interface Navigation {
 
     @Serializable
     data class NewsDetail(
-        val newsId:Int,
+        val newsId: Int,
         val newsType: NewsType,
     ) : Route
 

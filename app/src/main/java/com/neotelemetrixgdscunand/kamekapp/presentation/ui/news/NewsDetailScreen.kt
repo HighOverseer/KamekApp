@@ -27,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -59,7 +58,7 @@ fun NewsDetailsScreen(
     LaunchedEffect(true) {
         lifecycle.collectChannelWhenStarted(
             viewModel.onFailedGettingSelectedNewsDetailsEvent
-        ){
+        ) {
             showSnackbar(onFailedGettingDetails)
             navigateUp()
         }
@@ -81,14 +80,14 @@ fun NewsDetailsContent(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
     newsDetails: NewsDetailsDui? = null,
-    isLoading:Boolean = false
+    isLoading: Boolean = false
 ) {
 
-    if(isLoading){
+    if (isLoading) {
         NewsDetailsContentLoading(
             navigateUp = navigateUp
         )
-    }else{
+    } else {
         val scrollState = rememberScrollState()
         Column(
             modifier = modifier
@@ -232,7 +231,7 @@ private fun NewsDetailsContentLoading(
                         .aspectRatio(imageAspectRatio)
                         .align(Alignment.Center)
                         .shimmeringEffect(),
-                   )
+                )
             }
 
             Spacer(Modifier.height(24.dp))

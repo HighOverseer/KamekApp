@@ -34,7 +34,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,7 +51,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.domain.model.getShopItemDataDummies
 import com.neotelemetrixgdscunand.kamekapp.presentation.dui.ShopItemDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
@@ -74,7 +72,7 @@ fun ShopScreen(
     val lifecycle = LocalLifecycleOwner.current
     val context = LocalContext.current
     LaunchedEffect(true) {
-        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent){ messageUIText ->
+        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent) { messageUIText ->
             val message = messageUIText.getValue(context)
             showSnackbar(message)
         }
@@ -109,8 +107,8 @@ fun ShopContent(
     isLoadingProvider: () -> Boolean = { false },
     searchQueryProvider: () -> String = { "" },
     onQueryChange: (String) -> Unit = {},
-    isSearchingByQueryProvider:() -> Boolean = { false },
-    ) {
+    isSearchingByQueryProvider: () -> Boolean = { false },
+) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -120,7 +118,7 @@ fun ShopContent(
             .fillMaxSize()
             .background(Color.White)
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .pointerInput(Unit){
+            .pointerInput(Unit) {
                 detectTapGestures {
                     focusManager.clearFocus()
                 }
@@ -196,7 +194,7 @@ fun ShopContentBody(
     modifier: Modifier = Modifier,
     isLoadingProvider: () -> Boolean = { false },
     shopItemsProvider: () -> ImmutableList<ShopItemDui> = { persistentListOf() },
-    isSearchingByQueryProvider:() -> Boolean = { false },
+    isSearchingByQueryProvider: () -> Boolean = { false },
     searchQueryProvider: () -> String = { "" },
     onQueryChange: (String) -> Unit = {},
 ) {
@@ -256,16 +254,16 @@ fun ShopContentBody(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if(isLoadingProvider()){
-            items(6){
+        if (isLoadingProvider()) {
+            items(6) {
                 ShopItemLoading()
             }
-        }else{
+        } else {
             val shopItems = shopItemsProvider()
 
-            if(shopItems.isEmpty()){
-                item(span = { GridItemSpan(2) }){
-                    val text = if(isSearchingByQueryProvider()) {
+            if (shopItems.isEmpty()) {
+                item(span = { GridItemSpan(2) }) {
+                    val text = if (isSearchingByQueryProvider()) {
                         stringResource(R.string.barang_yang_anda_cari_tidak_ditemukan)
                     } else {
                         stringResource(R.string.belum_ada_barang_yang_tersedia)
@@ -280,7 +278,7 @@ fun ShopContentBody(
                         textAlign = TextAlign.Center
                     )
                 }
-            }else {
+            } else {
                 items(
                     shopItems.size,
                     key = { index ->

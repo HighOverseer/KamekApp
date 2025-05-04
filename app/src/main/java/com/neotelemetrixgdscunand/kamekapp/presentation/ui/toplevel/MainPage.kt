@@ -43,7 +43,7 @@ fun MainPage(
     mainNavHostController: NavHostController = rememberNavController(),
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
-    navigateToNewsDetail: (Int) -> Unit = {_ ->},
+    navigateToNewsDetail: (Int) -> Unit = { _ -> },
     navigateToDiagnosisResult: (Int) -> Unit = {},
     navigateToNotification: () -> Unit = {},
     navigateToTakePhoto: () -> Unit = {},

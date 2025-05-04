@@ -8,10 +8,16 @@ import com.neotelemetrixgdscunand.kamekapp.domain.model.NewsType
 
 interface NewsRepository {
 
-    suspend fun getNewsItems(query:String = "", newsType:NewsType):Result<List<NewsItem>, DataError.NetworkError>
+    suspend fun getNewsItems(
+        query: String = "",
+        newsType: NewsType
+    ): Result<List<NewsItem>, DataError.NetworkError>
 
-    suspend fun getNewsItemsPreviews(newsType: NewsType):Result<List<NewsItem>, DataError.NetworkError>
+    suspend fun getNewsItemsPreviews(newsType: NewsType): Result<List<NewsItem>, DataError.NetworkError>
 
-    suspend fun getNewsById(newsId:Int, newsType: NewsType):Result<NewsDetails, DataError.NetworkError>
+    suspend fun getNewsById(
+        newsId: Int,
+        newsType: NewsType
+    ): Result<NewsDetails, DataError.NetworkError>
 
 }

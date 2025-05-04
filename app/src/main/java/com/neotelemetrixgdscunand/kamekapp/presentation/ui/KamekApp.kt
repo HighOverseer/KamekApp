@@ -38,8 +38,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.splash.SplashScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.takephoto.TakePhotoScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.MainPage
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.rememberMainPageState
-import com.neotelemetrixgdscunand.kamekapp.presentation.utils.MessageSnackbar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.weather.WeatherScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.MessageSnackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

@@ -79,7 +79,7 @@ fun ShopItem(
         onClick = onClick
     ) {
 
-        Column(columnModifier){
+        Column(columnModifier) {
             val imageModifier = remember {
                 Modifier
                     .clip(RoundedCornerShape(8.dp))
@@ -180,7 +180,8 @@ fun ShopItemLoading(
             Spacer(Modifier.height(16.dp))
 
             Box(
-                modifier.fillMaxWidth()
+                modifier
+                    .fillMaxWidth()
                     .height(17.dp)
                     .shimmeringEffect()
             )
@@ -189,7 +190,8 @@ fun ShopItemLoading(
 
             Row(Modifier.fillMaxWidth()) {
                 Box(
-                    modifier.fillMaxWidth()
+                    modifier
+                        .fillMaxWidth()
                         .height(17.dp)
                         .shimmeringEffect()
                 )

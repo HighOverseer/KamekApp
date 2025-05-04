@@ -38,7 +38,7 @@ private val mapNewsTypeToResourceId = hashMapOf(
     NewsType.PLANT_DISEASE to R.string.penyakit_tanaman
 )
 
-fun NewsType.toUIText():UIText{
+fun NewsType.toUIText(): UIText {
     val stringResourceId = mapNewsTypeToResourceId[this] ?: R.string.semua
     return UIText.StringResource(stringResourceId)
 }

@@ -47,19 +47,19 @@ interface ApiService {
 
     @GET("news")
     suspend fun getNewsItems(
-        @Query("q") query:String = "",
-        @Query("type") newsTypeId:Int,
-    ):Response<List<NewsItemDto>>
+        @Query("q") query: String = "",
+        @Query("type") newsTypeId: Int,
+    ): Response<List<NewsItemDto>>
 
     @GET("news/{id}")
     suspend fun getNewsById(
-        @Path("id") newsId:Int,
-        @Query("type") newsTypeId:Int,
-    ):Response<NewsDetailsDto>
+        @Path("id") newsId: Int,
+        @Query("type") newsTypeId: Int,
+    ): Response<NewsDetailsDto>
 
     @GET("shop-item")
     suspend fun getShopItems(
         @Query("q") query: String = ""
-    ):Response<List<ShopItemDto>>
+    ): Response<List<ShopItemDto>>
 
 }

@@ -49,7 +49,6 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Pink
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
-import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
 
 @Composable
 fun HomeHeaderSection(

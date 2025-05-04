@@ -17,13 +17,13 @@ fun WeeklyNewsPreviewSection(
     isLoadingNewsItemsPreviewProvider: () -> Boolean,
     onItemClicked: (Int) -> Unit = {}
 ) {
-    if(isLoadingNewsItemsPreviewProvider()){
-        repeat(1){
+    if (isLoadingNewsItemsPreviewProvider()) {
+        repeat(1) {
             key(it) {
                 WeeklyNewsLoading(modifier)
             }
         }
-    }else{
+    } else {
         newsItems.forEach { item ->
             WeeklyNews(
                 modifier = modifier,

@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
     private val locationManager: LocationManager,
     private val weatherMapper: WeatherDuiMapper,
     private val newsRepository: NewsRepository,
-    private val duiMapper:DuiMapper
+    private val duiMapper: DuiMapper
 ) : ViewModel() {
 
     private val _uiEvent = Channel<HomeUIEvent>()
@@ -64,7 +64,7 @@ class HomeViewModel @Inject constructor(
             )
 
     private val _newsItems = MutableStateFlow(
-        List(5){
+        List(5) {
             NewsItemDui(
                 id = it,
                 date = "-",
@@ -154,17 +154,18 @@ class HomeViewModel @Inject constructor(
             null
         )
 
-    private fun getNewsItemsPreview(){
+    private fun getNewsItemsPreview() {
         viewModelScope.launch(Dispatchers.Default) {
             _isLoadingNewsItemsPreview.update { true }
-            val typeOfNewsPreview =  NewsType.COCOA
-            when(val result = newsRepository.getNewsItemsPreviews(typeOfNewsPreview)){
+            val typeOfNewsPreview = NewsType.COCOA
+            when (val result = newsRepository.getNewsItemsPreviews(typeOfNewsPreview)) {
                 is Result.Error -> {
                     val errorUIText = result.toErrorUIText()
                     _uiEvent.send(
                         HomeUIEvent.OnFailedFetchNewsItems(errorUIText)
                     )
                 }
+
                 is Result.Success -> {
                     val newsItemsDui = result.data.map {
                         duiMapper.mapNewsItemToNewsItemDui(it)

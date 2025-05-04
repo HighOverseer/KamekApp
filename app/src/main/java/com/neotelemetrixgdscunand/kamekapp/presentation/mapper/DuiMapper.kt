@@ -15,7 +15,7 @@ object DuiMapper {
 
     fun mapNewsItemToNewsItemDui(
         newsItem: NewsItem
-    ):NewsItemDui{
+    ): NewsItemDui {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = newsItem.time
 
@@ -33,7 +33,7 @@ object DuiMapper {
 
     fun mapNewsDetailsToNewsDetailsDui(
         newsDetails: NewsDetails
-    ):NewsDetailsDui{
+    ): NewsDetailsDui {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = newsDetails.time
 
@@ -50,7 +50,7 @@ object DuiMapper {
 
     fun mapShopItemToShopItemDui(
         shopItem: ShopItem
-    ):ShopItemDui{
+    ): ShopItemDui {
         return ShopItemDui(
             id = shopItem.id,
             imageUrl = shopItem.imageUrl,

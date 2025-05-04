@@ -1,7 +1,6 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -15,10 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -27,10 +24,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,15 +44,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.compone
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.HomeHeaderSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.PriceInfoSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.SectionHeadline
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsItem
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsPreviewSection
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun HomeScreen(
@@ -174,8 +164,8 @@ fun HomeContent(
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
     navigateToNotification: () -> Unit = {},
     showSnackbar: (String) -> Unit = {},
-    newsItems:ImmutableList<NewsItemDui> = persistentListOf(),
-    isLoadingNewsItemsPreviewProvider : () -> Boolean = { false }
+    newsItems: ImmutableList<NewsItemDui> = persistentListOf(),
+    isLoadingNewsItemsPreviewProvider: () -> Boolean = { false }
 ) {
 
 
