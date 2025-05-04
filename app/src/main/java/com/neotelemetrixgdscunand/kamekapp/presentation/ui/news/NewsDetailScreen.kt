@@ -19,31 +19,177 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsDetailsDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey53
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 
 @Composable
-fun NewsDetailScreen(
+fun NewsDetailsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
+    showSnackbar: (String) -> Unit = {},
+    viewModel: NewsDetailViewModel = hiltViewModel()
+) {
 
-    ) {
+    val lifecycle = LocalLifecycleOwner.current
+    val onFailedGettingDetails = stringResource(R.string.maaf_detail_berita_tidak_ditemukan)
+    LaunchedEffect(true) {
+        lifecycle.collectChannelWhenStarted(
+            viewModel.onFailedGettingSelectedNewsDetailsEvent
+        ){
+            showSnackbar(onFailedGettingDetails)
+            navigateUp()
+        }
+    }
 
+    val newsDetails by viewModel.newsDetails.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+
+    NewsDetailsContent(
+        modifier = modifier,
+        navigateUp = navigateUp,
+        newsDetails = newsDetails,
+        isLoading = isLoading
+    )
+}
+
+@Composable
+fun NewsDetailsContent(
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit = {},
+    newsDetails: NewsDetailsDui? = null,
+    isLoading:Boolean = false
+) {
+
+    if(isLoading){
+        NewsDetailsContentLoading(
+            navigateUp = navigateUp
+        )
+    }else{
+        val scrollState = rememberScrollState()
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+        ) {
+
+            Spacer(Modifier.height(32.dp))
+
+            IconButton(
+                onClick = navigateUp
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .width(21.dp)
+                        .height(20.dp),
+                    imageVector = ImageVector
+                        .vectorResource(R.drawable.ic_arrow_left),
+                    contentDescription = null,
+                    tint = Black10
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 40.25.dp)
+
+            ) {
+
+                val imageAspectRatio = 1.652f
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(15.dp))
+                ) {
+                    AsyncImagePainterStable(
+                        modifier = Modifier
+                            .aspectRatio(imageAspectRatio)
+                            .align(Alignment.Center),
+                        imageUrlOrPath = newsDetails?.imageUrl,
+                        placeholderResId = R.drawable.ic_camera,
+                        contentScale = ContentScale.FillBounds,
+                        contentDescription = stringResource(R.string.gambar_berita)
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
+
+                Row(
+                    verticalAlignment = Alignment.Top
+                ) {
+
+                    Icon(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically),
+                        imageVector = ImageVector
+                            .vectorResource(R.drawable.ic_clock_2),
+                        tint = Color(0xff908E8E),
+                        contentDescription = null
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    Text(
+                        modifier = Modifier
+                            .offset(y = (-1).dp),
+                        text = newsDetails?.date ?: "-",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Grey53
+                    )
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                Text(
+                    newsDetails?.headline ?: "",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Black10,
+                )
+
+                Spacer(Modifier.height(24.dp))
+
+                Text(
+                    textAlign = TextAlign.Justify,
+                    text = newsDetails?.description ?: "",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Black50
+                )
+            }
+
+        }
+    }
+}
+
+@Composable
+private fun NewsDetailsContentLoading(
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit = {},
+) {
     val scrollState = rememberScrollState()
     Column(
         modifier = modifier
@@ -81,15 +227,12 @@ fun NewsDetailScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(15.dp))
             ) {
-                AsyncImagePainterStable(
+                Box(
                     modifier = Modifier
                         .aspectRatio(imageAspectRatio)
-                        .align(Alignment.Center),
-                    imageUrlOrPath = "https://akcdn.detik.net.id/visual/2023/10/13/tanaman-kakao_169.jpeg?w=715&q=90",
-                    placeholderResId = R.drawable.ic_camera,
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = stringResource(R.string.gambar_berita)
-                )
+                        .align(Alignment.Center)
+                        .shimmeringEffect(),
+                   )
             }
 
             Spacer(Modifier.height(24.dp))
@@ -109,31 +252,67 @@ fun NewsDetailScreen(
 
                 Spacer(Modifier.width(8.dp))
 
-                Text(
+                Box(
                     modifier = Modifier
-                        .offset(y = (-1).dp),
-                    text = stringResource(R.string._21_september_2024),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Grey53
+                        .fillMaxWidth(0.25f)
+                        .height(17.dp)
+                        .shimmeringEffect()
                 )
             }
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                stringResource(R.string.dummy_news_title),
-                style = MaterialTheme.typography.titleLarge,
-                color = Black10,
-
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(17.dp)
+                    .shimmeringEffect()
+            )
 
             Spacer(Modifier.height(24.dp))
 
-            Text(
-                textAlign = TextAlign.Justify,
-                text = stringResource(R.string.dummy_news_detail),
-                style = MaterialTheme.typography.bodyLarge,
-                color = Black50
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .shimmeringEffect()
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .shimmeringEffect()
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .shimmeringEffect()
+            )
+
+
+            Spacer(Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .shimmeringEffect()
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .height(24.dp)
+                    .shimmeringEffect()
             )
         }
 
@@ -144,6 +323,14 @@ fun NewsDetailScreen(
 @Composable
 private fun NewsDetailScreenPreview() {
     KamekAppTheme {
-        NewsDetailScreen()
+        NewsDetailsContent()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NewsDetailScreenLoadingPreview() {
+    KamekAppTheme {
+        NewsDetailsContentLoading()
     }
 }

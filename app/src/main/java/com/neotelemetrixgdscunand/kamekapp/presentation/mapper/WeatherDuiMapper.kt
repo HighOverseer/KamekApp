@@ -4,8 +4,8 @@ import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.WeatherForecastItem
 import com.neotelemetrixgdscunand.kamekapp.domain.model.WeatherForecastOverview
 import com.neotelemetrixgdscunand.kamekapp.domain.model.WeatherType
-import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastItemDui
-import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastItemDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 import kotlinx.coroutines.CancellationException
 import java.text.SimpleDateFormat

@@ -22,7 +22,7 @@ fun SearchCategory(
     isSelected: Boolean,
     text: String,
     selectedColor: Color = Maroon55,
-    unselectedColor: Color = Color.White
+    unselectedColor: Color = Color.White,
 ) {
     Box(
         modifier = modifier

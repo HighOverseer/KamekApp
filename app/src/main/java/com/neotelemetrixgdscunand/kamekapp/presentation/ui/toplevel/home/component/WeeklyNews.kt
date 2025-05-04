@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,15 +31,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsItemDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey65
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
 
 @Composable
 fun WeeklyNews(
     modifier: Modifier = Modifier,
-    item: WeeklyNewsItem
+    item: NewsItemDui,
+    onClick: () -> Unit = {}
 ) {
     val cardModifier = remember {
         modifier
@@ -58,7 +63,8 @@ fun WeeklyNews(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
             contentColor = Color.White
-        )
+        ),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -73,7 +79,7 @@ fun WeeklyNews(
                         .align(Alignment.Center),
                     imageUrlOrPath = item.imageUrl,
                     contentScale = ContentScale.Crop,
-                    contentDescription = item.title,
+                    contentDescription = item.headline,
                     placeholderResId = R.drawable.ic_camera
                 )
             }
@@ -82,7 +88,7 @@ fun WeeklyNews(
 
             Column {
                 Text(
-                    item.title,
+                    item.headline,
                     style = MaterialTheme.typography.titleMedium.copy(
                         lineHeight = 16.sp,
                         letterSpacing = 0.01.sp
@@ -120,12 +126,102 @@ fun WeeklyNews(
     }
 }
 
+@Composable
+fun WeeklyNewsLoading(modifier: Modifier = Modifier) {
+    val cardModifier = remember {
+        modifier
+            .height(110.dp)
+            .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+            .padding(12.dp)
+    }
+
+    val imageModifier = remember {
+        Modifier
+            .width(104.dp)
+            .clip(RoundedCornerShape(8.dp))
+    }
+
+    val shimmeringBoxModifier = remember {
+        modifier
+            .height(17.dp)
+            .shimmeringEffect()
+    }
+
+    Card(
+        modifier = cardModifier,
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+            contentColor = Color.White
+        )
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Box(
+                modifier = imageModifier
+                    .align(Alignment.CenterVertically)
+                    .fillMaxHeight()
+            ){
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .shimmeringEffect()
+                )
+            }
+
+            Spacer(Modifier.width(16.dp))
+
+            Column {
+                Box(
+                    modifier = shimmeringBoxModifier
+                        .fillMaxWidth()
+                )
+
+                Spacer(
+                    Modifier.height(16.dp)
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Image(
+                        imageVector = ImageVector
+                            .vectorResource(R.drawable.ic_clock_2),
+                        contentDescription = null
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    Box(modifier = shimmeringBoxModifier.fillMaxWidth())
+
+                }
+            }
+
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun WeeklyNewsPreview() {
     KamekAppTheme {
-        WeeklyNews(item = getDummyWeeklyNewsItems().first())
+        WeeklyNews(
+            item = NewsItemDui(
+                id = 0,
+                headline = "Chocolate Faces Shortages, Cocoa Prices Soar by 98% in 3 Months",
+                date = "22 Mar 2025",
+                imageUrl = "",
+            )
+        )
     }
 
+}
+
+@Preview
+@Composable
+private fun WeeklyNewsLoadingPreview() {
+    KamekAppTheme {
+        WeeklyNewsLoading()
+    }
 }
 

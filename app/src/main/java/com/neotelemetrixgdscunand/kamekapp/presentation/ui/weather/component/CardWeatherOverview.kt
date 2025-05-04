@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon45
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon53

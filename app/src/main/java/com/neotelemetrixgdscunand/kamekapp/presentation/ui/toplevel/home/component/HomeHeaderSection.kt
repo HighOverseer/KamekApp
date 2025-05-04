@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon50
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
@@ -90,9 +90,9 @@ fun HomeHeaderSection(
                 .align(Alignment.TopEnd)
         }
 
-        ImagePainterStable(
+        AsyncImagePainterStable(
             modifier = backgroundIconModifier,
-            drawableResId = R.drawable.header_bg,
+            imageDrawableResId = R.drawable.header_bg,
             contentScale = ContentScale.FillBounds,
             contentDescription = null
         )
@@ -241,9 +241,10 @@ fun HomeHeaderSection(
                     }
 
                     Spacer(Modifier.weight(1f))
-                    ImagePainterStable(
-                        drawableResId = weatherForecastOverview?.iconResourceId
+                    AsyncImagePainterStable(
+                        imageDrawableResId = weatherForecastOverview?.iconResourceId
                             ?: R.drawable.ic_weather_cloudy,
+                        contentScale = ContentScale.Fit,
                         contentDescription = stringResource(R.string.gambar_cuaca)
                     )
                 }

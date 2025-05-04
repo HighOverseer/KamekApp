@@ -245,4 +245,14 @@
     <string name="cuaca_sebagian_besar_berawan">Mostly Cloudy</string>
     <string name="cuaca_badai_petir">Thunderstorm</string>
     <string name="cuaca_hujan_gerimis">Drizzle</string>
+
+    <string name="fitur_prediksi_cuaca_tidak_bisa">The Weather Prediction feature cannot be used without access to your location.</string>
+    <string name="maaf_sepertinya_anda_perlu_mengaktifkan_beberapa_pengaturan_lokasi">Sorry, it seems you need to enable some location settings.</string>
+    <string name="maaf_pengaturan_lokasi_perlu_anda_aktifkan">Sorry, you need to enable location settings.</string>
+    <string name="tidak_diketahui">Unknown</string>
+    <string name="maaf_detail_berita_tidak_ditemukan">Sorry, it seems the news content could not be found.</string>
+    <string name="tidak_ditemukan_berita_yang_cocok">No matching news found</string>
+    <string name="tidak_ada_berita_yang_tersedia">No news available</string>
+    <string name="agrikultur">Agriculture</string>
+    <string name="penyakit_tanaman">Plant Disease</string>
 </resources>

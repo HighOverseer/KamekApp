@@ -24,9 +24,10 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey63
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey67
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 fun Modifier.shimmeringEffect(
-    gradientShimmeringColor: ImmutableList<Color> = persistentListOf(Grey67, Grey63, Grey67)
+    gradientShimmeringColor: ImmutableList<Color>
 ) = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)
@@ -45,6 +46,34 @@ fun Modifier.shimmeringEffect(
     background(
         brush = Brush.linearGradient(
             colors = gradientShimmeringColor,
+            start = Offset(startOffsetX, 0f),
+            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+        ),
+    )
+
+        .onGloballyPositioned {
+            size = it.size
+        }
+}
+
+fun Modifier.shimmeringEffect() = composed {
+    var size by remember {
+        mutableStateOf(IntSize.Zero)
+    }
+
+    val transition = rememberInfiniteTransition(label = "shimmering_transition")
+    val startOffsetX by transition.animateFloat(
+        initialValue = -2 * size.width.toFloat(),
+        targetValue = 2 * size.width.toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000)
+        ),
+        label = "shimmering_transition"
+    )
+
+    background(
+        brush = Brush.linearGradient(
+            colors = listOf(Grey67, Grey63, Grey67),
             start = Offset(startOffsetX, 0f),
             end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
         ),

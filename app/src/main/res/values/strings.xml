@@ -243,4 +243,11 @@
     <string name="maaf_sepertinya_anda_perlu_mengaktifkan_beberapa_pengaturan_lokasi">Maaf, sepertinya anda perlu mengaktifkan beberapa pengaturan lokasi..</string>
     <string name="maaf_pengaturan_lokasi_perlu_anda_aktifkan">Maaf, pengaturan lokasi perlu anda aktifkan..</string>
     <string name="tidak_diketahui">Tidak Diketahui</string>
+    <string name="maaf_detail_berita_tidak_ditemukan">Maaf, sepertinya konten berita tidak ditemukan..</string>
+    <string name="tidak_ditemukan_berita_yang_cocok">Tidak ditemukan berita yang cocok</string>
+    <string name="tidak_ada_berita_yang_tersedia">Tidak ada berita yang tersedia</string>
+    <string name="agrikultur">Agrikultur</string>
+    <string name="penyakit_tanaman">Penyakit Tanaman</string>
+    <string name="belum_ada_barang_yang_tersedia">Belum ada barang yang tersedia</string>
+    <string name="barang_yang_anda_cari_tidak_ditemukan">Barang yang anda cari tidak ditemukan..</string>
 </resources>

@@ -11,6 +11,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.common.RootError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.RootNetworkError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.UsernameValidator
+import com.neotelemetrixgdscunand.kamekapp.domain.model.NewsType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -30,7 +31,19 @@ fun <T> LifecycleOwner.collectChannelWhenStarted(
     }
 }
 
-val mapAuthFieldValidationErrorToStringResource = hashMapOf(
+private val mapNewsTypeToResourceId = hashMapOf(
+    NewsType.COCOA to R.string.semua,
+    NewsType.AGRICULTURE to R.string.agrikultur,
+    NewsType.AGRICULTURE_TECHNOLOGY to R.string.teknologi,
+    NewsType.PLANT_DISEASE to R.string.penyakit_tanaman
+)
+
+fun NewsType.toUIText():UIText{
+    val stringResourceId = mapNewsTypeToResourceId[this] ?: R.string.semua
+    return UIText.StringResource(stringResourceId)
+}
+
+private val mapAuthFieldValidationErrorToStringResource = hashMapOf(
     UsernameValidator.UsernameError.EMPTY to R.string.email_no_hp_tidak_boleh_kosong,
     UsernameValidator.UsernameError.TOO_SHORT to R.string.username_harus_lebih_dari_6_karakter,
     UsernameValidator.UsernameError.NOT_IN_VALID_FORMAT to R.string.username_harus_diisi_dengan_email_atau_nomor_handphone_yang_valid,
@@ -40,7 +53,7 @@ val mapAuthFieldValidationErrorToStringResource = hashMapOf(
     PasswordValidator.PasswordError.NO_DIGIT to R.string.password_harus_mengandung_setidaknya_satu_angka
 )
 
-val mapNetworkErrorToStringResource = hashMapOf(
+private val mapNetworkErrorToStringResource = hashMapOf(
     RootNetworkError.UNEXPECTED_ERROR to R.string.telah_terjadi_kesalahan_mohon_coba_lagi,
     RootNetworkError.CONNECTIVITY_UNAVAILABLE to R.string.terdapat_kesalahan_coba_periksa_konektivitas_anda,
     RootNetworkError.NO_CONNECTIVITY_OR_SERVER_UNREACHABLE to R.string.maaf_sepertinya_ada_kesalahan_coba_periksa_koneksi_anda,
@@ -57,7 +70,7 @@ val mapNetworkErrorToStringResource = hashMapOf(
 )
 
 
-val mapErrorToMapErrorToStringResource = hashMapOf(
+private val mapErrorToMapErrorToStringResource = hashMapOf(
     RootNetworkError::class to mapNetworkErrorToStringResource,
     AuthError::class to mapNetworkErrorToStringResource,
     PasswordValidator.PasswordError::class to mapAuthFieldValidationErrorToStringResource,

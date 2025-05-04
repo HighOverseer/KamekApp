@@ -1,4 +1,4 @@
-package com.neotelemetrixgdscunand.kamekapp.presentation.model
+package com.neotelemetrixgdscunand.kamekapp.presentation.dui
 
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 

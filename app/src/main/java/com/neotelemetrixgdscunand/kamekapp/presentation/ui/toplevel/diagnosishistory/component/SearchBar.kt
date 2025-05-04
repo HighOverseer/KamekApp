@@ -40,7 +40,8 @@ fun SearchBar(
     onQueryChange: (String) -> Unit = {},
     hint: String = "",
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    backgroundColor: Color = Color.White
+    backgroundColor: Color = Color.White,
+    enabled: Boolean = true
 ) {
 
     val isSearchBarFocused by interactionSource.collectIsFocusedAsState()
@@ -61,6 +62,7 @@ fun SearchBar(
         modifier = localModifier,
         value = queryProvider(),
         onValueChange = onQueryChange,
+        enabled = enabled,
         interactionSource = interactionSource,
         decorationBox = @Composable { innerTextField: @Composable () -> Unit ->
             Row(

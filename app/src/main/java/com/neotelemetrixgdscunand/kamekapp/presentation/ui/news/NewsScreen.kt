@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,15 +48,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neotelemetrixgdscunand.kamekapp.R
+import com.neotelemetrixgdscunand.kamekapp.domain.model.NewsType
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsItemDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey60
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
@@ -63,16 +75,68 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishis
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchBar
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.component.SearchCategory
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsLoading
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.ImagePainterStable
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.toUIText
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun NewsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
-    navigateToDetail: () -> Unit = {}
+    navigateToDetail: (Int, NewsType) -> Unit = {_, _ ->},
+    showSnackbar: (String) -> Unit = {},
+    viewModel: NewsViewModel = hiltViewModel()
+) {
+    val lifecycle = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        lifecycle.collectChannelWhenStarted(viewModel.onMessageEvent){ messageUIText ->
+            val message = messageUIText.getValue(context)
+            showSnackbar(message)
+        }
+    }
+
+    val newsItems by viewModel.newsItems.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val isSearchingByQuery by remember {
+        derivedStateOf {
+            searchQuery.isNotEmpty()
+        }
+    }
+    val selectedNewsType by viewModel.newsType.collectAsStateWithLifecycle()
+
+    NewsContent(
+        modifier = modifier,
+        navigateUp = navigateUp,
+        navigateToDetail = navigateToDetail,
+        newsItemsProvider = { newsItems },
+        isLoadingProvider = { isLoading },
+        searchQueryProvider = { searchQuery },
+        onQueryChange = viewModel::onQueryChange,
+        isSearchingByQueryProvider = { isSearchingByQuery },
+        selectedNewsTypeProvider = { selectedNewsType },
+        onNewsTypeChange = viewModel::onNewsTypeChange
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NewsContent(
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit = {},
+    navigateToDetail: (Int, NewsType) -> Unit = {_, _ -> },
+    isLoadingProvider: () -> Boolean = { false },
+    newsItemsProvider: () -> ImmutableList<NewsItemDui> = { persistentListOf() },
+    searchQueryProvider: () -> String = { "" },
+    onQueryChange: (String) -> Unit = {},
+    isSearchingByQueryProvider:() -> Boolean = { false },
+    selectedNewsTypeProvider: () -> NewsType = { NewsType.COCOA },
+    onNewsTypeChange: (NewsType) -> Unit = { }
 ) {
     val configuration = LocalConfiguration.current
 
@@ -203,9 +267,16 @@ fun NewsScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                NewsScreenBody(
+                NewsContentBody(
                     listState = listState,
-                    navigateToDetail = navigateToDetail
+                    navigateToDetail = navigateToDetail,
+                    newsItemsProvider = newsItemsProvider,
+                    isLoadingProvider = isLoadingProvider,
+                    searchQueryProvider = searchQueryProvider,
+                    onQueryChange = onQueryChange,
+                    isSearchingByQueryProvider = isSearchingByQueryProvider,
+                    selectedNewsTypeProvider = selectedNewsTypeProvider,
+                    onNewsTypeChange = onNewsTypeChange
                 )
             }
         }
@@ -229,14 +300,18 @@ fun NewsScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NewsScreenBody(
+fun NewsContentBody(
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
-    navigateToDetail: () -> Unit = { },
+    isLoadingProvider: () -> Boolean = { false },
+    navigateToDetail: (Int, NewsType) -> Unit = { _, _ -> },
+    newsItemsProvider: () -> ImmutableList<NewsItemDui> = { persistentListOf() },
+    searchQueryProvider: () -> String = { "" },
+    onQueryChange: (String) -> Unit = {},
+    isSearchingByQueryProvider:() -> Boolean = { false },
+    selectedNewsTypeProvider: () -> NewsType = { NewsType.COCOA },
+    onNewsTypeChange: (NewsType) -> Unit = { }
 ) {
-    var searchQuery by remember {
-        mutableStateOf("")
-    }
 
     val searchBarInteractionSource = remember {
         MutableInteractionSource()
@@ -247,14 +322,8 @@ fun NewsScreenBody(
             .padding(start = 16.dp, end = 16.dp)
     }
 
-    val newsItems = remember {
-        getDummyWeeklyNewsItems()
-    }
 
-    var selectedNewsCategory by remember {
-        mutableStateOf(NewsCategory.ALL)
-    }
-
+    val focusManager = LocalFocusManager.current
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(bottom = 32.dp),
@@ -269,10 +338,8 @@ fun NewsScreenBody(
                     .padding(top = 4.dp)
                     .padding(horizontal = 16.dp)
                     .wrapContentSize(),
-                queryProvider = { searchQuery },
-                onQueryChange = {
-                    searchQuery = it
-                },
+                queryProvider = searchQueryProvider,
+                onQueryChange = onQueryChange,
                 hint = stringResource(R.string.cari_segala_hal_terkait_dunia_perkebunan),
                 interactionSource = searchBarInteractionSource
             )
@@ -292,28 +359,69 @@ fun NewsScreenBody(
                 contentPadding = PaddingValues(start = 16.dp, bottom = 8.dp, end = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(NewsCategory.entries, key = { it.ordinal }) {
+                items(NewsType.entries, key = { it.ordinal }) {
                     SearchCategory(
-                        isSelected = it == selectedNewsCategory,
-                        text = stringResource(it.textResId)
+                        modifier = Modifier
+                            .clickable(onClick = {
+                                onNewsTypeChange(it)
+                                focusManager.clearFocus()
+                             }),
+                        isSelected = it == selectedNewsTypeProvider(),
+                        text = it.toUIText().getValue()
                     )
                 }
             }
         }
 
-        itemsIndexed(newsItems, key = { _, it -> it.id }) { index, item ->
-            Spacer(
-                Modifier.height(
-                    if (index == 0) 8.dp else 16.dp
-                )
-            )
+        val newsItems = newsItemsProvider()
+        if(!isLoadingProvider()){
+            if(newsItems.isEmpty()){
+                item {
+                    val text = if(isSearchingByQueryProvider()) {
+                        stringResource(R.string.tidak_ditemukan_berita_yang_cocok)
+                    } else stringResource(
+                        R.string.tidak_ada_berita_yang_tersedia
+                    )
 
-            WeeklyNews(
-                modifier = weeklyItemModifier
-                    .clickable(onClick = navigateToDetail),
-                item = item
-            )
+                    Spacer(Modifier.height(32.dp))
+
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = text,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }else{
+                itemsIndexed(newsItems, key = { _, it -> it.id }) { index, item ->
+                    Spacer(
+                        Modifier.height(
+                            if (index == 0) 8.dp else 16.dp
+                        )
+                    )
+
+                    WeeklyNews(
+                        modifier = weeklyItemModifier,
+                        item = item,
+                        onClick = {
+                            navigateToDetail(item.id, selectedNewsTypeProvider())
+                        }
+                    )
+                }
+            }
+        }else{
+            items(5){ index ->
+                Spacer(
+                    Modifier.height(
+                        if (index == 0) 8.dp else 16.dp
+                    )
+                )
+
+                WeeklyNewsLoading(
+                    modifier = weeklyItemModifier
+                )
+            }
         }
+
     }
 }
 
@@ -321,6 +429,6 @@ fun NewsScreenBody(
 @Composable
 private fun NewsScreenPreview() {
     KamekAppTheme {
-        NewsScreen()
+        NewsContent()
     }
 }

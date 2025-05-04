@@ -36,13 +36,13 @@ fun AsyncImagePainterStable(
     imageDrawableResId: Int? = null,
     colorFilter: androidx.compose.ui.graphics.ColorFilter? = null,
     alignment: Alignment = Alignment.Center,
-    placeholderResId: Int,
+    placeholderResId: Int? = null,
 ) {
     AsyncImage(
         modifier = modifier,
         model = imageDrawableResId,
         alignment = alignment,
-        placeholder = painterResource(placeholderResId),
+        placeholder = placeholderResId?.let { painterResource(it) },
         contentScale = contentScale,
         contentDescription = contentDescription,
         colorFilter = colorFilter

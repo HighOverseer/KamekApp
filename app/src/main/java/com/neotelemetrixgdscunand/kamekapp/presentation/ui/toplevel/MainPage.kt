@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -21,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -34,6 +32,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.Navigation
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.account.AccountScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.diagnosishistory.DiagnosisScreen
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.HomeScreen
+import com.neotelemetrixgdscunand.kamekapp.presentation.utils.MessageSnackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -44,7 +43,7 @@ fun MainPage(
     mainNavHostController: NavHostController = rememberNavController(),
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
-    navigateToNewsDetail: () -> Unit = {},
+    navigateToNewsDetail: (Int) -> Unit = {_ ->},
     navigateToDiagnosisResult: (Int) -> Unit = {},
     navigateToNotification: () -> Unit = {},
     navigateToTakePhoto: () -> Unit = {},
@@ -93,11 +92,10 @@ fun MainPage(
             SnackbarHost(
                 hostState = snackbarHostState,
                 snackbar = { data ->
-                    Text(
-                        text = data.visuals.message,
+                    MessageSnackbar(
+                        message = data.visuals.message,
                         modifier = Modifier
-                            .fillMaxHeight(0.15f),
-                        textAlign = TextAlign.Center
+                            .fillMaxHeight(0.08f),
                     )
                 }
             )

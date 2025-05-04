@@ -27,6 +27,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -40,7 +41,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.common.api.ResolvableApiException
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
-import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsItemDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.ExplorationSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.HomeDiagnosisHistory
@@ -49,6 +51,8 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.compone
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.SectionHeadline
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNews
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsItem
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsLoading
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.WeeklyNewsPreviewSection
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.toplevel.home.component.getDummyWeeklyNewsItems
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.collectChannelWhenStarted
 import kotlinx.collections.immutable.ImmutableList
@@ -74,7 +78,7 @@ fun HomeScreen(
     navigateToNews: () -> Unit = {},
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
-    navigateToNewsDetail: () -> Unit = {},
+    navigateToNewsDetail: (Int) -> Unit = {},
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
     navigateToNotification: () -> Unit = {},
     showSnackbar: (String) -> Unit = {}
@@ -124,8 +128,11 @@ fun HomeScreen(
                 is HomeUIEvent.OnLocationUnknownError -> {
                     showSnackbar(it.errorUIText.getValue(context))
                 }
-            }
 
+                is HomeUIEvent.OnFailedFetchNewsItems -> {
+                    showSnackbar(it.errorUIText.getValue(context))
+                }
+            }
         }
     }
 
@@ -133,6 +140,8 @@ fun HomeScreen(
     val diagnosisSessionPreviews by viewModel.diagnosisHistory.collectAsStateWithLifecycle()
     val weatherForecastOverview by viewModel.weatherForecastOverview.collectAsStateWithLifecycle()
     val currentLocation by viewModel.currentLocation.collectAsStateWithLifecycle()
+    val newsItems by viewModel.newsItems.collectAsStateWithLifecycle()
+    val isLoadingNewsItemsPreview by viewModel.isLoadingNewsItemsPreview.collectAsStateWithLifecycle()
 
     HomeContent(
         modifier = modifier,
@@ -145,7 +154,9 @@ fun HomeScreen(
         navigateToNotification = navigateToNotification,
         showSnackbar = showSnackbar,
         weatherForecastOverview = weatherForecastOverview,
-        currentLocationNameProvider = { currentLocation?.name }
+        currentLocationNameProvider = { currentLocation?.name },
+        newsItems = newsItems,
+        isLoadingNewsItemsPreviewProvider = { isLoadingNewsItemsPreview }
     )
 }
 
@@ -158,17 +169,15 @@ fun HomeContent(
     navigateToNews: () -> Unit = {},
     navigateToShop: () -> Unit = {},
     navigateToWeather: () -> Unit = {},
-    navigateToNewsDetail: () -> Unit = {},
+    navigateToNewsDetail: (Int) -> Unit = {},
     diagnosisSessionPreviews: ImmutableList<DiagnosisSessionPreview> = persistentListOf(),
     navigateToDiagnosisResult: (Int) -> Unit = { _ -> },
     navigateToNotification: () -> Unit = {},
-    showSnackbar: (String) -> Unit = {}
+    showSnackbar: (String) -> Unit = {},
+    newsItems:ImmutableList<NewsItemDui> = persistentListOf(),
+    isLoadingNewsItemsPreviewProvider : () -> Boolean = { false }
 ) {
 
-
-    val weeklyNewsItems: ImmutableList<WeeklyNewsItem> = remember {
-        getDummyWeeklyNewsItems().toImmutableList()
-    }
 
     val scrollState = rememberScrollState()
 
@@ -244,55 +253,27 @@ fun HomeContent(
             leadingIconResId = R.drawable.ic_news_gradient
         )
 
-        val configuration = LocalConfiguration.current
-        val lazyColumnMaxHeight = remember {
-            val screenHeightDp = configuration.screenHeightDp.dp
-            val multiplier = when (configuration.orientation) {
-                Configuration.ORIENTATION_PORTRAIT -> 2
-                else -> 5
-            }
-            screenHeightDp * multiplier
-        }
-
         val weeklyItemModifier = remember {
             Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                .clickable(onClick = navigateToNewsDetail)
         }
 
-        val lazyListState = rememberLazyListState()
-        LazyColumn(
-            state = lazyListState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = lazyColumnMaxHeight),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            items(weeklyNewsItems, { it.id }) { item ->
-                WeeklyNews(
-                    modifier = weeklyItemModifier,
-                    item = item
-                )
-            }
-        }
-
-//        weeklyNewsItems.forEach {
-//            key(it.id) {
-//                WeeklyNews(
-//                    modifier = weeklyItemModifier,
-//                    item = it
-//                )
-//            }
-//        }
+        WeeklyNewsPreviewSection(
+            modifier = weeklyItemModifier,
+            newsItems = newsItems,
+            isLoadingNewsItemsPreviewProvider = isLoadingNewsItemsPreviewProvider,
+            onItemClicked = navigateToNewsDetail
+        )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {
     KamekAppTheme {
-        HomeContent()
+        HomeContent(
+            isLoadingNewsItemsPreviewProvider = { true }
+        )
     }
 }

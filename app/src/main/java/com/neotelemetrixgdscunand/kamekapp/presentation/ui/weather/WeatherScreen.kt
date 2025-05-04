@@ -46,8 +46,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.common.api.ResolvableApiException
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastItemDui
-import com.neotelemetrixgdscunand.kamekapp.presentation.model.WeatherForecastOverviewDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastItemDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.WeatherForecastOverviewDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme

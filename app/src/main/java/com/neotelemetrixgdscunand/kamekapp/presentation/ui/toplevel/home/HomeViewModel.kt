@@ -5,10 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.neotelemetrixgdscunand.kamekapp.domain.common.LocationError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.data.LocationManager
+import com.neotelemetrixgdscunand.kamekapp.domain.data.NewsRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.WeatherRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.domain.model.Location
+import com.neotelemetrixgdscunand.kamekapp.domain.model.NewsType
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsItemDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.DuiMapper
 import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.WeatherDuiMapper
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UIText
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.toErrorUIText
@@ -39,7 +43,9 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository,
     private val weatherRepository: WeatherRepository,
     private val locationManager: LocationManager,
-    private val mapper: WeatherDuiMapper
+    private val weatherMapper: WeatherDuiMapper,
+    private val newsRepository: NewsRepository,
+    private val duiMapper:DuiMapper
 ) : ViewModel() {
 
     private val _uiEvent = Channel<HomeUIEvent>()
@@ -56,6 +62,25 @@ class HomeViewModel @Inject constructor(
                 SharingStarted.WhileSubscribed(5000),
                 persistentListOf()
             )
+
+    private val _newsItems = MutableStateFlow(
+        List(5){
+            NewsItemDui(
+                id = it,
+                date = "-",
+                imageUrl = "",
+                headline = ""
+            )
+        }.toImmutableList()
+    )
+    val newsItems = _newsItems.asStateFlow()
+
+    private val _isLoadingNewsItemsPreview = MutableStateFlow(false)
+    val isLoadingNewsItemsPreview = _isLoadingNewsItemsPreview.asStateFlow()
+
+    init {
+        getNewsItemsPreview()
+    }
 
     private var locationUpdateJob: Job? = null
 
@@ -118,7 +143,7 @@ class HomeViewModel @Inject constructor(
                 }
 
                 is Result.Success -> {
-                    return@map mapper.mapWeatherForecastOverviewToDui(result.data)
+                    return@map weatherMapper.mapWeatherForecastOverviewToDui(result.data)
                 }
             }
         }
@@ -129,5 +154,30 @@ class HomeViewModel @Inject constructor(
             null
         )
 
+    private fun getNewsItemsPreview(){
+        viewModelScope.launch(Dispatchers.Default) {
+            _isLoadingNewsItemsPreview.update { true }
+            val typeOfNewsPreview =  NewsType.COCOA
+            when(val result = newsRepository.getNewsItemsPreviews(typeOfNewsPreview)){
+                is Result.Error -> {
+                    val errorUIText = result.toErrorUIText()
+                    _uiEvent.send(
+                        HomeUIEvent.OnFailedFetchNewsItems(errorUIText)
+                    )
+                }
+                is Result.Success -> {
+                    val newsItemsDui = result.data.map {
+                        duiMapper.mapNewsItemToNewsItemDui(it)
+                    }.toImmutableList()
+
+                    _newsItems.update { newsItemsDui }
+                }
+            }
+        }.also {
+            it.invokeOnCompletion {
+                _isLoadingNewsItemsPreview.update { false }
+            }
+        }
+    }
 
 }

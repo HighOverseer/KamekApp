@@ -4,9 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,6 +39,7 @@ import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey47
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.shimmeringEffect
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.AsyncImagePainterStable
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +53,7 @@ fun ShopItem(
 ) {
 
     val configuration = LocalConfiguration.current
-    val cardModifier = remember {
+    val columnModifier = remember {
         val imageToParentAspectRatio = 0.44f
         val screenWidth = configuration.screenWidthDp
         val sizeMin = (screenWidth * imageToParentAspectRatio).dp
@@ -69,67 +72,142 @@ fun ShopItem(
         }
     }
     Card(
-        shape = RoundedCornerShape(0.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         ),
-        modifier = cardModifier,
         onClick = onClick
     ) {
 
-        val imageModifier = remember {
-            Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .fillMaxWidth()
-                .aspectRatio(1.11f)
-        }
-        Box(
-            modifier = imageModifier,
-            contentAlignment = Alignment.Center
-        ) {
-            AsyncImagePainterStable(
-                modifier = Modifier.align(Alignment.Center),
-                imageUrlOrPath = imageUrl,
-                placeholderResId = R.drawable.ic_camera,
-                contentScale = ContentScale.Crop,
-                contentDescription = null
-            )
-        }
+        Column(columnModifier){
+            val imageModifier = remember {
+                Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth()
+                    .aspectRatio(1.11f)
+            }
+            Box(
+                modifier = imageModifier,
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImagePainterStable(
+                    modifier = Modifier.align(Alignment.Center),
+                    imageUrlOrPath = imageUrl,
+                    placeholderResId = R.drawable.ic_camera,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null
+                )
+            }
 
-        Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-        Text(
-            title,
-            style = MaterialTheme.typography.titleMedium,
-            color = Black10,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        Spacer(Modifier.height(16.dp))
-
-        Row(Modifier.fillMaxWidth()) {
             Text(
-                text = price,
-                style = MaterialTheme.typography.labelMedium,
-                color = Maroon55
+                title,
+                style = MaterialTheme.typography.titleMedium,
+                color = Black10,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
             )
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(Modifier.height(16.dp))
 
-            Icon(
-                imageVector = ImageVector.vectorResource(
-                    R.drawable.ic_right_arrow
-                ),
-                tint = Grey47,
-                contentDescription = null
-            )
+            Row(Modifier.fillMaxWidth()) {
+                Text(
+                    text = price,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Maroon55
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        R.drawable.ic_right_arrow
+                    ),
+                    tint = Grey47,
+                    contentDescription = null
+                )
+            }
         }
 
     }
 
 }
 
+
+@Composable
+fun ShopItemLoading(
+    modifier: Modifier = Modifier
+) {
+
+    val configuration = LocalConfiguration.current
+    val columnModifier = remember {
+        val imageToParentAspectRatio = 0.44f
+        val screenWidth = configuration.screenWidthDp
+        val sizeMin = (screenWidth * imageToParentAspectRatio).dp
+        modifier
+            .background(Color.White, shape = RoundedCornerShape(12.dp))
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
+            .width(sizeMin)
+    }
+
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
+    ) {
+
+        Column(columnModifier) {
+            val imageModifier = remember {
+                Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth()
+                    .aspectRatio(1.11f)
+            }
+            Box(
+                modifier = imageModifier,
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center)
+                        .shimmeringEffect(),
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Box(
+                modifier.fillMaxWidth()
+                    .height(17.dp)
+                    .shimmeringEffect()
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            Row(Modifier.fillMaxWidth()) {
+                Box(
+                    modifier.fillMaxWidth()
+                        .height(17.dp)
+                        .shimmeringEffect()
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        R.drawable.ic_right_arrow
+                    ),
+                    tint = Grey47,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+
+}
 
 @Preview
 @Composable
@@ -138,5 +216,13 @@ private fun ShopItemPreview() {
         ShopItem(
             imageUrl = "https://s3-alpha-sig.figma.com/img/37c1/c191/518ba1e52a545e70e67c846bb71fad76?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FXbsgEn4bIqA7qdVEN7fM5B0P7M5Cw39Kl4z86CBFrxnNUQnCGs~1ErZnqFJArACM9GxtNG~GkmBzCFTp2O9fzSDcR2qT0Av2zIYoSa7Zd9inOW51ZOsVjO1FdxLqeWEPJNSOqWEYGgfkr~hcmF07o5IZCX36ta1rLb58CB3BuLV54L~2UXq3n2HDrwwepsAQ-8erapfhCqIfagNTmsWbqyXZErCqJ8jjsEgeGGjAga8DZhAHle4LXwAi25Blmcofv-83fkacg0WEzEM4aNKCH6V0upOfrPPpoRliQuxJOJsvHkoGjh6x07qlPLCfq1~ZIB4IXEm937RyaW-I7Rnqg__"
         )
+    }
+}
+
+@Preview
+@Composable
+private fun ShopItemLoadingPreview() {
+    KamekAppTheme {
+        ShopItemLoading()
     }
 }

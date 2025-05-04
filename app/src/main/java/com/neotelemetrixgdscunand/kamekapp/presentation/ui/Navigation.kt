@@ -2,6 +2,7 @@ package com.neotelemetrixgdscunand.kamekapp.presentation.ui
 
 
 import androidx.compose.runtime.Immutable
+import com.neotelemetrixgdscunand.kamekapp.domain.model.NewsType
 import kotlinx.serialization.Serializable
 
 @Immutable
@@ -66,7 +67,10 @@ sealed interface Navigation {
     data object News : Route
 
     @Serializable
-    data object NewsDetail : Route
+    data class NewsDetail(
+        val newsId:Int,
+        val newsType: NewsType,
+    ) : Route
 
     @Serializable
     data object Shop : Route
