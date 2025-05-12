@@ -2,16 +2,16 @@ package com.neotelemetrixgdscunand.kamekapp.domain.interactor
 
 
 import com.neotelemetrixgdscunand.kamekapp.domain.common.CocoaAnalysisError
+import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.data.CocoaAnalysisRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.AnalysisSession
+import com.neotelemetrixgdscunand.kamekapp.domain.model.CocoaDisease
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CocoaImageDetectorHelper
+import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResult
 import com.neotelemetrixgdscunand.kamekapp.domain.usecase.AnalysisCocoaUseCase
 import kotlinx.coroutines.ensureActive
 import kotlin.coroutines.coroutineContext
-import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
-import com.neotelemetrixgdscunand.kamekapp.domain.model.CocoaDisease
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorResult
 
 class AnalysisCocoaInteractor(
     private val cacaoImageDetectorHelper: CocoaImageDetectorHelper,

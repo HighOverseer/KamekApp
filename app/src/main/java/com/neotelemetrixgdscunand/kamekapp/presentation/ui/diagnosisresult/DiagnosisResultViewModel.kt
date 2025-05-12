@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.neotelemetrixgdscunand.kamekapp.domain.common.CocoaAnalysisError
+import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.usecase.AnalysisCocoaUseCase
 import com.neotelemetrixgdscunand.kamekapp.domain.usecase.GetCocoaAnalysisSessionUseCase
 import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.DuiMapper
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 
 
 @HiltViewModel

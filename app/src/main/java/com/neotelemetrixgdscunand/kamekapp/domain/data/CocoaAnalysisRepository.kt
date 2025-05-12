@@ -1,7 +1,7 @@
 package com.neotelemetrixgdscunand.kamekapp.domain.data
 
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
 import com.neotelemetrixgdscunand.kamekapp.domain.model.AnalysisSession
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import kotlinx.coroutines.flow.Flow
 
