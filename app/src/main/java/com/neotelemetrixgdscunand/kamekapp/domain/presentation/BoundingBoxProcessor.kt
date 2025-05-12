@@ -1,8 +1,8 @@
 package com.neotelemetrixgdscunand.kamekapp.domain.presentation
 
 import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.CONFIDENCE_THRESHOLD
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper.Companion.IOU_THRESHOLD
+import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CocoaImageDetectorHelper.Companion.CONFIDENCE_THRESHOLD
+import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CocoaImageDetectorHelper.Companion.IOU_THRESHOLD
 
 object BoundingBoxProcessor {
 

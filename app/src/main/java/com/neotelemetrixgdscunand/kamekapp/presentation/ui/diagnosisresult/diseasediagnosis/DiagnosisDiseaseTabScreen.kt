@@ -16,25 +16,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DetectedCacaoDiseasePreviewSection
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DiagnosisBottomContent
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DiagnosisDiseaseDetails
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.util.DiagnosisSessionComposeStable
+import com.neotelemetrixgdscunand.kamekapp.domain.model.CocoaDisease
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.DiagnosisSessionDui
+import com.neotelemetrixgdscunand.kamekapp.presentation.mapper.CocoaDiseaseMapper
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.component.DetectedCacaoDiseasePreviewSection
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.component.DiagnosisBottomContent
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.component.DiagnosisDiseaseDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 
 @Composable
 fun DiagnosisDiseaseTabScreen(
     modifier: Modifier = Modifier,
-    groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
-        mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
+    groupedDetectedDisease: ImmutableMap<CocoaDisease, ImmutableList<DetectedCocoa>> =
+        mutableMapOf<CocoaDisease, ImmutableList<DetectedCocoa>>().toImmutableMap(),
     navigateToCacaoImageDetail: (Int) -> Unit = { },
-    diagnosisSessionComposeStable: DiagnosisSessionComposeStable = DiagnosisSessionComposeStable(),
+    diagnosisSessionDui: DiagnosisSessionDui = DiagnosisSessionDui(),
     isLoadingProvider: () -> Boolean = { false },
     isItemExpandProvider: (Int) -> Boolean = { false },
     toggleItemExpand: (Int) -> Unit = { },
@@ -55,17 +55,16 @@ fun DiagnosisDiseaseTabScreen(
     Spacer(Modifier.height(16.dp))
 
     val context = LocalContext.current
-    val preventions = remember(diagnosisSessionComposeStable) {
-        diagnosisSessionComposeStable.detectedCacaos.firstOrNull()?.disease?.controlStringResId?.map {
-            context.getString(it)
-        }?.toImmutableList() ?: persistentListOf()
+    val solutionResId = remember(diagnosisSessionDui) {
+        CocoaDiseaseMapper.getDefaultSolutionResIdOfInfectedDiseases(
+            diagnosisSessionDui.detectedCocoas
+        )
     }
-    val solutionStringResId = remember(diagnosisSessionComposeStable) {
-        diagnosisSessionComposeStable
-            .detectedCacaos
-            .firstOrNull()
-            ?.disease
-            ?.solutionStringResId
+
+    val preventions = remember(diagnosisSessionDui) {
+        CocoaDiseaseMapper.getDefaultPreventionsResIdOfInfectedDiseases(
+            diagnosisSessionDui.detectedCocoas
+        ).let { context.getString(it).split("\n") }.toImmutableList()
     }
 
     DiagnosisBottomContent(
@@ -75,7 +74,7 @@ fun DiagnosisDiseaseTabScreen(
             .background(color = Color.White, shape = RoundedCornerShape(8.dp))
             .padding(16.dp),
         preventions = preventions,
-        solution = solutionStringResId?.let { stringResource(it) } ?: "",
+        solution = stringResource(solutionResId),
         isLoadingProvider = isLoadingProvider
     )
 

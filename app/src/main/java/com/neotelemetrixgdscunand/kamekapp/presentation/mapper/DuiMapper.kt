@@ -1,11 +1,14 @@
 package com.neotelemetrixgdscunand.kamekapp.presentation.mapper
 
+import com.neotelemetrixgdscunand.kamekapp.domain.model.AnalysisSession
 import com.neotelemetrixgdscunand.kamekapp.domain.model.NewsDetails
 import com.neotelemetrixgdscunand.kamekapp.domain.model.NewsItem
 import com.neotelemetrixgdscunand.kamekapp.domain.model.ShopItem
+import com.neotelemetrixgdscunand.kamekapp.presentation.dui.DiagnosisSessionDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsDetailsDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.dui.NewsItemDui
 import com.neotelemetrixgdscunand.kamekapp.presentation.dui.ShopItemDui
+import kotlinx.collections.immutable.toImmutableList
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -57,6 +60,17 @@ object DuiMapper {
             title = shopItem.title,
             price = "Rp${shopItem.price}",
             targetUrl = shopItem.targetUrl
+        )
+    }
+
+    fun mapDiagnosisSessionToDui(analysisSession: AnalysisSession): DiagnosisSessionDui {
+        return DiagnosisSessionDui(
+            id = analysisSession.id,
+            title = analysisSession.title,
+            imageUrlOrPath = analysisSession.imageUrlOrPath,
+            date = analysisSession.date,
+            predictedPrice = analysisSession.predictedPrice,
+            detectedCocoas = analysisSession.detectedCocoas.toImmutableList()
         )
     }
 }

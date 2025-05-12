@@ -28,15 +28,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
+import com.neotelemetrixgdscunand.kamekapp.domain.model.CocoaDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Maroon55
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Orange80
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.SecondaryDescription
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.TitleShimmeringLoading
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DescriptionShimmeringLoading
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.component.DescriptionShimmeringLoading
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap
@@ -45,8 +45,8 @@ import kotlinx.collections.immutable.toImmutableMap
 fun PriceAnalysisContent(
     modifier: Modifier = Modifier,
     isInitiallyExpanded: Boolean = true,
-    groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
-        mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
+    groupedDetectedDisease: ImmutableMap<CocoaDisease, ImmutableList<DetectedCocoa>> =
+        mutableMapOf<CocoaDisease, ImmutableList<DetectedCocoa>>().toImmutableMap(),
     damageLevelCategory: DamageLevelCategory = DamageLevelCategory.High,
     onDetectedCacaoImageClicked: (Int) -> Unit = { }
 ) {

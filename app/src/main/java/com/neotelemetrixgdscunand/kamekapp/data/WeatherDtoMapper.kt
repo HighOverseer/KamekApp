@@ -48,7 +48,7 @@ object WeatherDtoMapper {
             currentTemperature = weatherForecastOverviewDto.currentTemperature?.toInt() ?: 0,
             windVelocity = weatherForecastOverviewDto.windVelocity?.toInt() ?: 0,
             humidity = weatherForecastOverviewDto.humidity ?: 0,
-            rainfall = weatherForecastOverviewDto.rainfall ?: 0,
+            rainfall = weatherForecastOverviewDto.rainfall?.toInt() ?: 0,
             type = mapWeatherTypeIdToWeatherType(weatherForecastOverviewDto.typeId ?: 0)
         )
     }

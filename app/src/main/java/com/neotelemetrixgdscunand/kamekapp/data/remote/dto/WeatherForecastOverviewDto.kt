@@ -14,7 +14,7 @@ data class WeatherForecastOverviewDto(
     val windVelocity: Float? = null,
 
     @field:SerializedName("rainfall")
-    val rainfall: Int? = null,
+    val rainfall: Float? = null,
 
     @field:SerializedName("humidity")
     val humidity: Int? = null,

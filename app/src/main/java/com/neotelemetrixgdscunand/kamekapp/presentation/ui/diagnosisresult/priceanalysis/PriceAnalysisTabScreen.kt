@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
+import com.neotelemetrixgdscunand.kamekapp.domain.model.CocoaDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.component.PriceAnalysisContent
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.priceanalysis.component.PriceAnalysisInformationPreviewSection
@@ -28,8 +28,8 @@ import kotlinx.collections.immutable.toImmutableMap
 fun PriceAnalysisTabScreen(
     modifier: Modifier = Modifier,
     isLoadingProvider: () -> Boolean = { false },
-    groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
-        emptyMap<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
+    groupedDetectedDisease: ImmutableMap<CocoaDisease, ImmutableList<DetectedCocoa>> =
+        emptyMap<CocoaDisease, ImmutableList<DetectedCocoa>>().toImmutableMap(),
     navigateToCacaoImageDetail: (Int) -> Unit = { }
 ) {
     if (isLoadingProvider()) {

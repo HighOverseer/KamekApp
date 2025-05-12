@@ -6,7 +6,7 @@ import com.neotelemetrixgdscunand.kamekapp.domain.common.LocationError
 import com.neotelemetrixgdscunand.kamekapp.domain.common.Result
 import com.neotelemetrixgdscunand.kamekapp.domain.data.LocationManager
 import com.neotelemetrixgdscunand.kamekapp.domain.data.NewsRepository
-import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
+import com.neotelemetrixgdscunand.kamekapp.domain.data.CocoaAnalysisRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.WeatherRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DiagnosisSessionPreview
 import com.neotelemetrixgdscunand.kamekapp.domain.model.Location
@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: Repository,
+    private val cocoaAnalysisRepository: CocoaAnalysisRepository,
     private val weatherRepository: WeatherRepository,
     private val locationManager: LocationManager,
     private val weatherMapper: WeatherDuiMapper,
@@ -52,7 +52,7 @@ class HomeViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     val diagnosisHistory: StateFlow<ImmutableList<DiagnosisSessionPreview>> =
-        repository.getAllSavedDiagnosisSessionPreviews()
+        cocoaAnalysisRepository.getAllSavedDiagnosisSessionPreviews()
             .map {
                 it.toImmutableList()
             }

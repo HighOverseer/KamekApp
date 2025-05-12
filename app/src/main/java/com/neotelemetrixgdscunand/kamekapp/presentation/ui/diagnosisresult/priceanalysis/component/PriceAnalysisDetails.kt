@@ -27,15 +27,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neotelemetrixgdscunand.kamekapp.R
-import com.neotelemetrixgdscunand.kamekapp.domain.model.CacaoDisease
+import com.neotelemetrixgdscunand.kamekapp.domain.model.CocoaDisease
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelCategory
 import com.neotelemetrixgdscunand.kamekapp.domain.model.DamageLevelSubCategory
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Black10
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey90
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.KamekAppTheme
 import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.component.PrimaryDescription
-import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.compoenent.DetectedCacaoImageGrid
+import com.neotelemetrixgdscunand.kamekapp.presentation.ui.diagnosisresult.diseasediagnosis.component.DetectedCacaoImageGrid
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
@@ -45,8 +45,8 @@ import kotlinx.collections.immutable.toImmutableMap
 fun PriceAnalysisDetails(
     modifier: Modifier = Modifier,
     isInitiallyExpanded: Boolean = false,
-    groupedDetectedDisease: ImmutableMap<CacaoDisease, ImmutableList<DetectedCacao>> =
-        mutableMapOf<CacaoDisease, ImmutableList<DetectedCacao>>().toImmutableMap(),
+    groupedDetectedDisease: ImmutableMap<CocoaDisease, ImmutableList<DetectedCocoa>> =
+        mutableMapOf<CocoaDisease, ImmutableList<DetectedCocoa>>().toImmutableMap(),
     subDamageLevelSubCategory: DamageLevelSubCategory = DamageLevelCategory.Low.secondSubLevelCategory,
     onDetectedCacaoImageClicked: (Int) -> Unit = { }
 ) {
@@ -102,7 +102,7 @@ fun PriceAnalysisDetails(
             Spacer(Modifier.height(16.dp))
 
             DetectedCacaoImageGrid(
-                detectedCacaos = groupedDetectedDiseaseKeys.firstOrNull()?.let {
+                detectedCocoas = groupedDetectedDiseaseKeys.firstOrNull()?.let {
                     val a = groupedDetectedDisease[it]
                     a
                 } ?: persistentListOf(),

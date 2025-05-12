@@ -1,14 +1,14 @@
 package com.neotelemetrixgdscunand.kamekapp.di
 
 import com.neotelemetrixgdscunand.kamekapp.data.utils.CapturedImageFileHandlerImpl
-import com.neotelemetrixgdscunand.kamekapp.data.utils.ImageDetectorHelperImpl
+import com.neotelemetrixgdscunand.kamekapp.data.utils.CocoaImageDetectorHelperImpl
 import com.neotelemetrixgdscunand.kamekapp.data.utils.LocationManagerImpl
 import com.neotelemetrixgdscunand.kamekapp.data.utils.ModelLabelExtractorImpl
 import com.neotelemetrixgdscunand.kamekapp.domain.common.PasswordValidator
 import com.neotelemetrixgdscunand.kamekapp.domain.common.UsernameValidator
 import com.neotelemetrixgdscunand.kamekapp.domain.data.LocationManager
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CaptureImageFileHandler
-import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ImageDetectorHelper
+import com.neotelemetrixgdscunand.kamekapp.domain.presentation.CocoaImageDetectorHelper
 import com.neotelemetrixgdscunand.kamekapp.domain.presentation.ModelLabelExtractor
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.PasswordValidatorImpl
 import com.neotelemetrixgdscunand.kamekapp.presentation.utils.UsernameValidatorImpl
@@ -23,7 +23,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 abstract class PresentationModule {
 
     @Binds
-    abstract fun bindImageDetectorHelper(imageDetectorHelperImpl: ImageDetectorHelperImpl): ImageDetectorHelper
+    abstract fun bindImageDetectorHelper(imageDetectorHelperImpl: CocoaImageDetectorHelperImpl): CocoaImageDetectorHelper
 
     @Binds
     @ViewModelScoped

@@ -1,15 +1,15 @@
 package com.neotelemetrixgdscunand.kamekapp.di
 
 import com.neotelemetrixgdscunand.kamekapp.data.AuthRepositoryImpl
+import com.neotelemetrixgdscunand.kamekapp.data.CocoaAnalysisRepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.NewsRepositoryImpl
-import com.neotelemetrixgdscunand.kamekapp.data.RepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.ShopRepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.WeatherRepositoryImpl
 import com.neotelemetrixgdscunand.kamekapp.data.local.AuthPreferenceImpl
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthPreference
 import com.neotelemetrixgdscunand.kamekapp.domain.data.AuthRepository
+import com.neotelemetrixgdscunand.kamekapp.domain.data.CocoaAnalysisRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.NewsRepository
-import com.neotelemetrixgdscunand.kamekapp.domain.data.Repository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.ShopRepository
 import com.neotelemetrixgdscunand.kamekapp.domain.data.WeatherRepository
 import dagger.Binds
@@ -24,7 +24,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindRepository(repository: RepositoryImpl): Repository
+    abstract fun bindRepository(repository: CocoaAnalysisRepositoryImpl): CocoaAnalysisRepository
 
     @Binds
     @Singleton

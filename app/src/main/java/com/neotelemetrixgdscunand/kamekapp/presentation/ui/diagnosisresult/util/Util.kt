@@ -19,7 +19,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import com.neotelemetrixgdscunand.kamekapp.R
 import com.neotelemetrixgdscunand.kamekapp.domain.model.BoundingBox
-import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCacao
+import com.neotelemetrixgdscunand.kamekapp.domain.model.DetectedCocoa
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey63
 import com.neotelemetrixgdscunand.kamekapp.presentation.theme.Grey67
 import kotlinx.collections.immutable.ImmutableList
@@ -194,7 +194,7 @@ fun Float.roundOffDecimal(n: Int = 3): Float {
     return Math.round(this * rounder) / rounder
 }
 
-fun DetectedCacao.getBoundingBoxWithItsNameAsTheLabel(
+fun DetectedCocoa.getBoundingBoxWithItsNameAsTheLabel(
     context: Context
 ): BoundingBox {
     return boundingBox.run {
